@@ -1,25 +1,23 @@
-import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import { Route, RouterProvider, createBrowserRouter, createRoutesFromElements } from 'react-router-dom';
+import Welcome from 'screens/Welcome'; 
+import Login from 'screens/Login';
+import NoMatch from 'screens/NoMatch';
 
 function App() {
+  let router = createBrowserRouter(
+    createRoutesFromElements(
+      <>
+        <Route path="/" element={<Welcome/>} />
+        <Route path="/login" element={<Login/>} />
+        <Route path="*" element={<NoMatch/>} />
+      </>
+    )
+  )
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <RouterProvider router={router} />
+    </>
   );
 }
 
