@@ -1,4 +1,4 @@
-import './App.css';
+import './App.scss';
 import { Route, RouterProvider, createBrowserRouter, createRoutesFromElements } from 'react-router-dom';
 import Welcome from 'screens/Welcome'; 
 import Login from 'screens/Login';
