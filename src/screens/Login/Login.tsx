@@ -1,12 +1,14 @@
 import { FC, useEffect, useState } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { Button, Form } from 'react-bootstrap';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import styles from './Login.module.scss';
 import { login } from 'api/auth';
-import { getAuthenticatedUser, setAuthenticatedUser, storeToken } from 'util/auth';
+import { isLoggedIn, storeToken } from 'util/auth';
 import { getUserData } from 'api/user';
-import { QueryKeys } from 'api/QueryKeys'; 
+import { QueryKeys } from 'api/QueryKeys';
+import { useAppDispatch } from 'redux/hooks';
+import { setUser } from 'redux/reducers/userSlice';
 
 interface LoginProps {}
 
@@ -14,9 +16,10 @@ const Login: FC<LoginProps> = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (getAuthenticatedUser()) {
+    if (isLoggedIn()) {
       navigate('/home');
     }
   }, [navigate]);
@@ -48,7 +51,7 @@ const Login: FC<LoginProps> = () => {
           email: data.data.email,
           role: data.data.role.name,
         };
-        setAuthenticatedUser(authUser);
+        dispatch(setUser(authUser));
         navigate('/home');
       }
     },
