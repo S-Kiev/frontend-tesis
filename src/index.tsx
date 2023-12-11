@@ -1,5 +1,6 @@
 import ReactDOM from 'react-dom/client';
 import './index.scss';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
