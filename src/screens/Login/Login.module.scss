@@ -1,25 +1,14 @@
-@import '../../colors.scss';
+.logo {
+  width: 140px;
+  margin-bottom: 20px;
+}
 
-.gradientCustom2 {
-  /* fallback for old browsers */
-  background: #fccb90;
-
-  /* Chrome 10-25, Safari 5.1-6 */
-  background: $gradient_primary_webkit;
-
-  /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-  background: $gradient_primary;
+.loginImg {
+  width: 110%;
 }
 
 @media (min-width: 768px) {
-  .gradientForm {
+  .form {
     height: 100vh !important;
-  }
-}
-
-@media (min-width: 769px) {
-  .gradientCustom2 {
-    border-top-right-radius: 0.3rem;
-    border-bottom-right-radius: 0.3rem;
   }
 }
