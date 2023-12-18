@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { Alert, Button, Form } from 'react-bootstrap';
+import { Alert, Button, Form, InputGroup } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import styles from './Login.module.scss';
 import { login } from 'api/auth';
@@ -14,6 +14,8 @@ import loginImg from 'assets/LoginImg.jpg';
 import * as yup from 'yup';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { ReactComponent as PasswordEye } from 'assets/PasswordEye.svg';
+import { useRevealPassword } from 'customHooks/useRevealPassword';
 
 interface LoginProps {}
 
@@ -35,6 +37,7 @@ const Login: FC<LoginProps> = () => {
   const [showAlert, setShowAlert] = useState(false);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const { revealPassword, togglePassword } = useRevealPassword();
   const {
     register,
     handleSubmit,
@@ -62,7 +65,6 @@ const Login: FC<LoginProps> = () => {
     },
     onError: (error: any) => {
       if (error.response && error.response.status) {
-        //TODO Validation
         setShowAlert(true);
       }
     },
@@ -124,16 +126,23 @@ const Login: FC<LoginProps> = () => {
                         />
                         <Form.Control.Feedback type="invalid">{errors.email?.message}</Form.Control.Feedback>
                       </Form.Group>
-                      <Form.Group className="form-outline mb-4" controlId="formBasicPassword">
+                      <Form.Group className="form-outline mb-4">
                         <Form.Label>Contraseña</Form.Label>
-                        <Form.Control
-                          {...register('password')}
-                          type="password"
-                          placeholder={'Ingrese su contraseña' || ''}
-                          disabled={isLoading}
-                          isInvalid={!!errors.password}
-                        />
-                        <Form.Control.Feedback type="invalid">{errors.password?.message}</Form.Control.Feedback>
+                        <InputGroup>
+                          <Form.Control
+                            {...register('password')}
+                            placeholder={'Ingrese su contraseña' || ''}
+                            disabled={isLoading}
+                            isInvalid={!!errors.password}
+                            type={revealPassword ? 'text' : 'password'}
+                          />
+                          <InputGroup.Text>
+                            <i onClick={togglePassword} className={styles.passwordEye}>
+                              <PasswordEye />
+                            </i>
+                          </InputGroup.Text>
+                          <Form.Control.Feedback type="invalid">{errors.password?.message}</Form.Control.Feedback>
+                        </InputGroup>
                       </Form.Group>
                       <div className="text-center pt-3 mb-5 pb-1">
                         <Button
