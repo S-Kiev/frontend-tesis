@@ -13,7 +13,7 @@ const Layout: FC<LayoutProps> = () => {
 
   if (!isLoggedIn()) {
     resetStorageData();
-    window.location.pathname = '/';
+    window.location.pathname = '/login';
   }
 
   const handleCollapsedChange = () => {

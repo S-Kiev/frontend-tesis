@@ -1,14 +1,37 @@
 import { Link, Outlet } from 'react-router-dom';
 import { Menu, MenuItem, SubMenu, Sidebar } from 'react-pro-sidebar';
-import { List } from 'react-bootstrap-icons';
+import { List, ChevronDoubleLeft, ChevronDoubleRight } from 'react-bootstrap-icons';
 import styles from '../sidebar/sidebar.module.scss';
 import { Button } from 'react-bootstrap';
 
 const SidebarMenu = ({ collapsed, toggled, handleToggleSidebar, handleCollapsedChange }) => {
   return (
     <div style={{ display: 'flex', height: '100vh' }}>
-      <Sidebar className="app" onBackdropClick={() => handleToggleSidebar(false)} toggled={toggled} breakPoint="md">
+      <Sidebar
+        className="app"
+        onBackdropClick={() => handleToggleSidebar(false)}
+        toggled={toggled}
+        breakPoint="md"
+        collapsed={collapsed}
+      >
         <Menu>
+          {collapsed ? (
+            <MenuItem icon={<ChevronDoubleRight />} onClick={handleCollapsedChange}></MenuItem>
+          ) : (
+            <MenuItem suffix={<ChevronDoubleLeft />} onClick={handleCollapsedChange}>
+              <div
+                style={{
+                  padding: '9px',
+                  textTransform: 'uppercase',
+                  fontWeight: 'bold',
+                  fontSize: 15,
+                  letterSpacing: '1px',
+                }}
+              >
+                QUICKPA
+              </div>
+            </MenuItem>
+          )}
           <MenuItem component={<Link to="/app/home" className="link" />} className="menu1">
             <h2>QUICKPAY</h2>
           </MenuItem>
