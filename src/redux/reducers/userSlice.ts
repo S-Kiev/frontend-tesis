@@ -8,6 +8,7 @@ interface UserData {
   email: string;
   role: Role;
 }
+
 export interface UserState {
   value: UserData | null;
 }

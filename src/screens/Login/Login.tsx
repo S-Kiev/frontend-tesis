@@ -9,7 +9,7 @@ import { getUserData } from 'api/user';
 import { QueryKeys } from 'api/QueryKeys';
 import { useAppDispatch } from 'redux/hooks';
 import { setUser } from 'redux/reducers/userSlice';
-import logo from 'assets/EnergiaNaturalB192.png';
+import logo from 'assets/EnergiaNaturalNA.png';
 import loginImg from 'assets/LoginImg.jpg';
 
 interface LoginProps {}
