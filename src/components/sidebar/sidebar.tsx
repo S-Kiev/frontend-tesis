@@ -4,6 +4,13 @@ import { List, ChevronDoubleLeft, ChevronDoubleRight } from 'react-bootstrap-ico
 import styles from '../sidebar/sidebar.module.scss';
 import { Button } from 'react-bootstrap';
 
+/*
+PENDIENTES:
+- Diseño sidebar
+- Hacer NavBar para cierre sesion y usuario 
+- Probar backend mas reciente y registar cambios en mi strapi local 
+*/
+
 const SidebarMenu = ({ collapsed, toggled, handleToggleSidebar, handleCollapsedChange }) => {
   return (
     <div style={{ display: 'flex', height: '100vh' }}>
@@ -28,12 +35,12 @@ const SidebarMenu = ({ collapsed, toggled, handleToggleSidebar, handleCollapsedC
                   letterSpacing: '1px',
                 }}
               >
-                QUICKPA
+                APP
               </div>
             </MenuItem>
           )}
           <MenuItem component={<Link to="/app/home" className="link" />} className="menu1">
-            <h2>QUICKPAY</h2>
+            <h2>APP</h2>
           </MenuItem>
           <MenuItem component={<Link to="dashboard" className="link" />}>Dashboard</MenuItem>
           <MenuItem> Invoices </MenuItem>
