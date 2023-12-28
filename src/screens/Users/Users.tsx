@@ -6,6 +6,7 @@ import { useQuery } from '@tanstack/react-query';
 import { QueryKeys } from 'api/QueryKeys';
 import { getUsersData } from 'api/users';
 import UsersTable from 'components/usersTable/usersTable';
+import Search from 'components/search/search';
 
 interface UsersProps {}
 
@@ -35,6 +36,8 @@ const Users: FC<UsersProps> = () => {
       <Button variant="success" onClick={() => navigate('/app/users/create')} className="d-lg-none mt-3">
         + Crear nuevo usuario
       </Button>
+
+      <Search placeholder="Buscar por nombre de Usuario" onChange={e => setSearch(e)} width={300} />
       <UsersTable usersData={data?.data || []} />
       {/*data?.data.length === 0 && !loading && !filterActive ? (
   <div className={styles.errorFilters}>

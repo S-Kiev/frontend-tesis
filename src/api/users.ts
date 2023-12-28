@@ -6,7 +6,7 @@ export const getUsersData = async (page: number, pageSize: number, search: strin
     params: {
       'pagination[page]': page,
       'pagination[pageSize]': pageSize,
-      'filters[username][$contains]': search,
+      'filters[username][$containsi]': search,
     },
   });
 };

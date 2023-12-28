@@ -1,15 +1,18 @@
+@import 'colors.scss';
+
 .inputgroup {
   width: 20vw !important;
 }
 
 .input {
   box-shadow: none !important;
-  border-color: grey;
-  border-radius: 5px;
+  border-color: $neutral_600;
+  border-radius: 5px !important;
 }
 
 .input:focus {
-  border-color: grey;
+  border-color: $neutral_600;
+  border-radius: 5px !important;
 }
 
 .inputClearButton {

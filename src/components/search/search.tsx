@@ -1,7 +1,7 @@
 import { ChangeEvent, FC, useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
-import styles from './Search.module.css';
+import styles from './search.module.scss';
 import { XCircle } from 'react-bootstrap-icons';
 
 interface SearchProps {
@@ -24,7 +24,7 @@ const Search: FC<SearchProps> = ({ onChange, placeholder, width }) => {
   };
 
   return (
-    <InputGroup style={{ maxWidth: width }} className={styles.inputgroup}>
+    <InputGroup style={{ width: width, minWidth: width }} className={styles.inputgroup}>
       <Form.Control
         className={styles.input}
         name="searchValue"
