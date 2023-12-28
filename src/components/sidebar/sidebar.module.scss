@@ -1,7 +1,3 @@
-.btnToggle {
-  display: none;
-}
-
 .titleText {
   padding: 9px;
   font-weight: bold;
@@ -17,10 +13,4 @@
 .main {
   display: flex;
   padding: 10px;
-}
-
-@media (max-width: 768px) {
-  .btnToggle {
-    display: flex;
-  }
 }

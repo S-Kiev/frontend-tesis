@@ -1,7 +1,6 @@
 import { Link, Outlet } from 'react-router-dom';
-import { Menu, MenuItem, SubMenu, Sidebar } from 'react-pro-sidebar';
+import { Menu, MenuItem, Sidebar } from 'react-pro-sidebar';
 import {
-  List,
   ChevronDoubleLeft,
   ChevronDoubleRight,
   HouseDoorFill,
@@ -13,16 +12,8 @@ import {
   BoxSeamFill,
 } from 'react-bootstrap-icons';
 import styles from '../sidebar/sidebar.module.scss';
-import { Button } from 'react-bootstrap';
 import NavBar from 'components/navBar/navBar';
 import logo from 'assets/EnergiaNaturalB64.png';
-
-/*
-PENDIENTES:
-- Diseño sidebar
-- Hacer NavBar para cierre sesion y usuario 
-background: '#FAFCFE'
-*/
 
 const SidebarMenu = ({ collapsed, toggled, handleToggleSidebar, handleCollapsedChange }) => {
   return (
@@ -69,11 +60,8 @@ const SidebarMenu = ({ collapsed, toggled, handleToggleSidebar, handleCollapsedC
         </Menu>
       </Sidebar>
       <div className={`col ${styles.conteiner}`}>
-        <NavBar />
+        <NavBar toggled={toggled} handleToggleSidebar={handleToggleSidebar} />
         <main className={styles.main}>
-          <Button className={styles.btnToggle} onClick={() => handleToggleSidebar(!toggled)}>
-            <List size={50} />
-          </Button>
           <Outlet />
         </main>
       </div>

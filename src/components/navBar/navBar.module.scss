@@ -1,13 +1,26 @@
 @import 'colors.scss';
 
+.btnToggle {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .btnToggle {
+    display: flex;
+  }
+
+  .container {
+    justify-content: space-between !important;
+  }
+}
+
 .container {
   height: 50px;
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-between;
-  padding: 0px 32px;
+  justify-content: end;
+  padding: 0px 14px;
   background-color: $dark;
   box-shadow: $elevation_400;
 }
-//rgb(160, 213, 178)

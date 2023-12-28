@@ -1,0 +1,94 @@
+@import 'colors';
+
+.toggleContainer {
+  position: relative;
+  width: 200px;
+  height: 40px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0;
+  overflow: hidden;
+  background: $dark !important;
+  border: none;
+
+  &:hover {
+    background: $neutral_900 !important;
+    border: none;
+  }
+  &:active,
+  &:focus-visible {
+    background-color: $dark !important;
+    border: none !important;
+  }
+
+  &::after {
+    display: none;
+  }
+
+  .avatar {
+    flex-shrink: 0;
+    margin-right: 10px;
+  }
+
+  .name {
+    font-weight: 600;
+    font-size: 13.33px;
+    line-height: 125%;
+    color: $light;
+    margin: 0px 5px 0px 0px;
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    text-align: start;
+  }
+
+  .email {
+    font-weight: 400;
+    font-size: 11.11px;
+    line-height: 125%;
+    color: $light;
+    margin: 0;
+  }
+}
+
+.menu {
+  border: none;
+  width: 280px;
+  left: 0px !important;
+  box-sizing: border-box;
+  box-shadow: 0px 8px 32px rgba(0, 0, 0, 0.09);
+
+  .infoItem {
+    background-color: $neutral_200;
+    font-weight: 400;
+    font-size: 13.11px;
+    line-height: 125%;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    p {
+      margin: 0px 0px 6px 0px;
+    }
+    cursor: default;
+  }
+
+  .clickableItem {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    height: 40px;
+    background-color: $neutral;
+    font-weight: 400;
+    font-size: 13.3px;
+    line-height: 125%;
+    margin: auto;
+    &:hover {
+      font-weight: 500;
+    }
+  }
+}

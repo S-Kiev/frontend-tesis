@@ -1,13 +1,18 @@
 import { FC } from 'react';
 import styles from './navBar.module.scss';
+import { List } from 'react-bootstrap-icons';
+import UserInfoDropdown from './userInfoDropdown';
 
-const NavBar: FC = ({}) => {
+interface NavBarProps {
+  toggled: boolean;
+  handleToggleSidebar: (value: boolean) => void;
+}
+
+const NavBar: FC<NavBarProps> = ({ toggled, handleToggleSidebar }) => {
   return (
     <header className={styles.container}>
-      <nav className="d-flex flex-row justify-content-end align-items-center">
-        <p>Hola</p>
-        {/*<UserInfoDropdown isInForm={isInForm} />*/}
-      </nav>
+      <List size={50} className={styles.btnToggle} onClick={() => handleToggleSidebar(!toggled)} color="white" />
+      <UserInfoDropdown />
     </header>
   );
 };

@@ -10,6 +10,7 @@ import Treatments from './Treatments/Treatments';
 import ConsultingsRooms from './ConsultingsRooms/ConsultingsRooms';
 import Customers from './Customers/Customers';
 import Users from './Users/Users';
+import { boolean } from 'yup';
 
 interface LayoutProps {}
 
@@ -26,7 +27,7 @@ const Layout: FC<LayoutProps> = () => {
     setCollapsed(!collapsed);
   };
 
-  const handleToggleSidebar = value => {
+  const handleToggleSidebar = (value: boolean) => {
     setToggled(value);
   };
 
