@@ -6,12 +6,14 @@ import { useAppSelector } from 'redux/hooks';
 import { selectUser } from 'redux/reducers/userSlice';
 import { roleNameMapper } from 'util/roleNameMapper';
 import { LogoutModal } from 'components/modals/logoutModal';
+import { useNavigate } from 'react-router-dom';
 
 interface UserInfoDropdownProps {}
 
-const UserInfoDropdown: FC<UserInfoDropdownProps> = ({}) => {
+const UserInfoDropdown: FC<UserInfoDropdownProps> = () => {
   const [logoutModalOpen, setLogoutModalOpen] = useState(false);
   const user = useAppSelector(selectUser);
+  const navigate = useNavigate();
 
   return (
     <>
@@ -34,7 +36,12 @@ const UserInfoDropdown: FC<UserInfoDropdownProps> = ({}) => {
               </p>
             </div>
           </Dropdown.Item>
-          <Dropdown.Item className={styles.clickableItem} onClick={() => {}}>
+          <Dropdown.Item
+            className={styles.clickableItem}
+            onClick={() => {
+              navigate('/app/user');
+            }}
+          >
             <div className="d-flex justify-content-start align-items-center gap-1">
               <GearFill />
               Configurar usuario

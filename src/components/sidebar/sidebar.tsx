@@ -14,8 +14,13 @@ import {
 import styles from '../sidebar/sidebar.module.scss';
 import NavBar from 'components/navBar/navBar';
 import logo from 'assets/EnergiaNaturalB64.png';
+import { useSelector } from 'react-redux';
+import { selectUser } from 'redux/reducers/userSlice';
+import { Role } from 'models/Roles';
 
 const SidebarMenu = ({ collapsed, toggled, handleToggleSidebar, handleCollapsedChange }) => {
+  const user = useSelector(selectUser);
+
   return (
     <div style={{ display: 'flex', height: '100vh' }}>
       <Sidebar
@@ -54,9 +59,11 @@ const SidebarMenu = ({ collapsed, toggled, handleToggleSidebar, handleCollapsedC
           <MenuItem component={<Link to="/app/customers" />} icon={<PeopleFill />}>
             Clientes
           </MenuItem>
-          <MenuItem component={<Link to="/app/users" />} icon={<PersonFillGear />}>
-            Usuarios
-          </MenuItem>
+          {user?.role === Role.superAdmin && (
+            <MenuItem component={<Link to="/app/users" />} icon={<PersonFillGear />}>
+              Usuarios
+            </MenuItem>
+          )}
         </Menu>
       </Sidebar>
       <div className={`col ${styles.conteiner}`}>

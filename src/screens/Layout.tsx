@@ -10,7 +10,7 @@ import Treatments from './Treatments/Treatments';
 import ConsultingsRooms from './ConsultingsRooms/ConsultingsRooms';
 import Customers from './Customers/Customers';
 import Users from './Users/Users';
-import { boolean } from 'yup';
+import User from './User/User';
 
 interface LayoutProps {}
 
@@ -52,6 +52,7 @@ const Layout: FC<LayoutProps> = () => {
           <Route path="consultingsRooms" element={<ConsultingsRooms />} />
           <Route path="customers" element={<Customers />} />
           <Route path="users" element={<Users />} />
+          <Route path="user" element={<User />} />
         </Route>
 
         <Route path="*" element={<NoMatch />} />
