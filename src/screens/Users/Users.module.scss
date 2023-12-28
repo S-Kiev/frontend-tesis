@@ -1,0 +1,28 @@
+@import 'colors.scss';
+
+.container {
+  height: calc(100vh - 50px);
+  padding: 10px;
+}
+
+.header {
+  display: flex;
+  height: 15%;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 24px;
+  padding-right: 32px;
+  border-bottom: 1.5px solid $neutral_300;
+
+  .headline {
+    font-weight: 500;
+    font-size: 27.65px;
+    line-height: 41.47px;
+  }
+
+  p {
+    margin: 0;
+    color: $text_secondary;
+    margin-bottom: 16px;
+  }
+}
