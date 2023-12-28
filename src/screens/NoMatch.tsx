@@ -7,4 +7,5 @@ const NoMatch: FC<NoMatchProps> = () => {
       <div>No Match</div>
   );
 };
+
 export default NoMatch;
