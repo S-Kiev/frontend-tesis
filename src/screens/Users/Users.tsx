@@ -1,12 +1,24 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import styles from './Users.module.scss';
 import { useNavigate } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
+import { useQuery } from '@tanstack/react-query';
+import { QueryKeys } from 'api/QueryKeys';
+import { getUsersData } from 'api/users';
 
 interface UsersProps {}
 
 const Users: FC<UsersProps> = () => {
+  const [page, setPage] = useState(1);
+  const [search, setSearch] = useState('');
   const navigate = useNavigate();
+
+  const { data, status, error, isLoading } = useQuery({
+    queryKey: [QueryKeys.Users, page, search],
+    queryFn: () => getUsersData(page, 10, search),
+  });
+
+  console.log(data);
 
   return (
     <div className={styles.container}>
