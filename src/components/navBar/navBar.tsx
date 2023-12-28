@@ -11,7 +11,7 @@ interface NavBarProps {
 const NavBar: FC<NavBarProps> = ({ toggled, handleToggleSidebar }) => {
   return (
     <header className={styles.container}>
-      <List size={50} className={styles.btnToggle} onClick={() => handleToggleSidebar(!toggled)} color="white" />
+      <List size={40} className={styles.btnToggle} onClick={() => handleToggleSidebar(!toggled)} color="white" />
       <UserInfoDropdown />
     </header>
   );

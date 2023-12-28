@@ -6,11 +6,9 @@ import { useAppSelector } from 'redux/hooks';
 import { selectUser } from 'redux/reducers/userSlice';
 import { roleNameMapper } from 'util/roleNameMapper';
 
-interface UserInfoDropdownProps {
-  isInForm?: boolean;
-}
+interface UserInfoDropdownProps {}
 
-const UserInfoDropdown: FC<UserInfoDropdownProps> = props => {
+const UserInfoDropdown: FC<UserInfoDropdownProps> = ({}) => {
   const [logoutModalOpen, setLogoutModalOpen] = useState(false);
   const user = useAppSelector(selectUser);
 
@@ -27,10 +25,9 @@ const UserInfoDropdown: FC<UserInfoDropdownProps> = props => {
             <div className="d-flex flex-row justify-content-start align-items-center">
               <p className={styles.name}>{user?.username || ''}</p> <ChevronDown color="white" />
             </div>
-            <p className={styles.email}>Email: {user?.email}</p>
+            <p className={styles.email}>{user?.email}</p>
           </div>
         </Dropdown.Toggle>
-
         <Dropdown.Menu align={'start'} className={styles.menu}>
           <Dropdown.Item className={styles.infoItem}>
             <div>
