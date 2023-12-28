@@ -1,6 +1,8 @@
 import TableHeader from 'components/tableHeader/tableHeader';
 import { FC } from 'react';
 import { Table } from 'react-bootstrap';
+import RowUsersTable from './rowUsersTable';
+import styles from './usersTable.module.scss';
 
 interface UsersTableProps {
   usersData: any;
@@ -16,12 +18,12 @@ const UsersTable: FC<UsersTableProps> = ({ usersData }) => {
   ];
 
   return (
-    <Table>
+    <Table responsive="md">
       <TableHeader headersList={headersList} />
       <tbody>
-        {/*usersData.map(element => (
-
-        ))*/}
+        {usersData.map(element => (
+          <RowUsersTable userData={element} />
+        ))}
       </tbody>
     </Table>
   );
