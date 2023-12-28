@@ -19,7 +19,7 @@ const Home: FC<HomeProps> = () => {
   return (
     <div>
       Home
-      <Button className="btn" onClick={logOut}>
+      <Button className="btn" onClick={logOut} variant="success">
         Cerrar sesión
       </Button>
     </div>

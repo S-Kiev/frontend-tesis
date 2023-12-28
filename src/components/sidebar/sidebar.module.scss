@@ -2,6 +2,23 @@
   display: none;
 }
 
+.titleText {
+  padding: 9px;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.conteiner {
+  width: calc(100% - 210px);
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.main {
+  display: flex;
+  padding: 10px;
+}
+
 @media (max-width: 768px) {
   .btnToggle {
     display: flex;

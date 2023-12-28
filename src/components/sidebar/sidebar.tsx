@@ -1,14 +1,27 @@
 import { Link, Outlet } from 'react-router-dom';
 import { Menu, MenuItem, SubMenu, Sidebar } from 'react-pro-sidebar';
-import { List, ChevronDoubleLeft, ChevronDoubleRight } from 'react-bootstrap-icons';
+import {
+  List,
+  ChevronDoubleLeft,
+  ChevronDoubleRight,
+  HouseDoorFill,
+  CalendarWeek,
+  PersonFillGear,
+  PeopleFill,
+  Clipboard2Fill,
+  BandaidFill,
+  BoxSeamFill,
+} from 'react-bootstrap-icons';
 import styles from '../sidebar/sidebar.module.scss';
 import { Button } from 'react-bootstrap';
+import NavBar from 'components/navBar/navBar';
+import logo from 'assets/EnergiaNaturalB64.png';
 
 /*
 PENDIENTES:
 - Diseño sidebar
 - Hacer NavBar para cierre sesion y usuario 
-- Probar backend mas reciente y registar cambios en mi strapi local 
+background: '#FAFCFE'
 */
 
 const SidebarMenu = ({ collapsed, toggled, handleToggleSidebar, handleCollapsedChange }) => {
@@ -26,49 +39,44 @@ const SidebarMenu = ({ collapsed, toggled, handleToggleSidebar, handleCollapsedC
             <MenuItem icon={<ChevronDoubleRight />} onClick={handleCollapsedChange}></MenuItem>
           ) : (
             <MenuItem suffix={<ChevronDoubleLeft />} onClick={handleCollapsedChange}>
-              <div
-                style={{
-                  padding: '9px',
-                  textTransform: 'uppercase',
-                  fontWeight: 'bold',
-                  fontSize: 15,
-                  letterSpacing: '1px',
-                }}
-              >
-                APP
+              <div className="d-flex flex-row align-items-center">
+                <img src={logo} alt="logo" style={{ height: '30px' }} />
+                <div className={styles.titleText}>Energía Natural</div>
               </div>
             </MenuItem>
           )}
-          <MenuItem component={<Link to="/app/home" className="link" />} className="menu1">
-            <h2>APP</h2>
+          <MenuItem component={<Link to="/app/home" className="link" />} icon={<HouseDoorFill />}>
+            Home
           </MenuItem>
-          <MenuItem component={<Link to="dashboard" className="link" />}>Dashboard</MenuItem>
-          <MenuItem> Invoices </MenuItem>
-          <SubMenu label="Charts">
-            <MenuItem> Timeline Chart </MenuItem>
-            <MenuItem>Bubble Chart</MenuItem>
-          </SubMenu>
-          <SubMenu label="Wallets">
-            <MenuItem>Current Wallet</MenuItem>
-            <MenuItem>Savings Wallet</MenuItem>
-          </SubMenu>
-          <MenuItem component={<Link to="transactions" className="link" />}>Transactions</MenuItem>
-          <SubMenu label="Settings">
-            <MenuItem> Account </MenuItem>
-            <MenuItem> Privacy </MenuItem>
-            <MenuItem>Notifications</MenuItem>
-          </SubMenu>
-          <MenuItem> Logout </MenuItem>
+          <MenuItem component={<Link to="/app/consultations" />} icon={<CalendarWeek />}>
+            Consultas
+          </MenuItem>
+          <MenuItem component={<Link to="/app/equipments" />} icon={<BoxSeamFill />}>
+            Equipos
+          </MenuItem>
+          <MenuItem component={<Link to="/app/treatments" />} icon={<BandaidFill />}>
+            Tratamientos
+          </MenuItem>
+          <MenuItem component={<Link to="/app/consultingsRooms" />} icon={<Clipboard2Fill />}>
+            Consultorios
+          </MenuItem>
+          <MenuItem component={<Link to="/app/customers" />} icon={<PeopleFill />}>
+            Clientes
+          </MenuItem>
+          <MenuItem component={<Link to="/app/users" />} icon={<PersonFillGear />}>
+            Usuarios
+          </MenuItem>
         </Menu>
       </Sidebar>
-      <main style={{ display: 'flex', padding: 10 }}>
-        <div>
+      <div className={`col ${styles.conteiner}`}>
+        <NavBar />
+        <main className={styles.main}>
           <Button className={styles.btnToggle} onClick={() => handleToggleSidebar(!toggled)}>
             <List size={50} />
           </Button>
           <Outlet />
-        </div>
-      </main>
+        </main>
+      </div>
     </div>
   );
 };
