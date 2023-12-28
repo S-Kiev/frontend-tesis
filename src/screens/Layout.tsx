@@ -11,6 +11,7 @@ import ConsultingsRooms from './ConsultingsRooms/ConsultingsRooms';
 import Customers from './Customers/Customers';
 import Users from './Users/Users';
 import User from './User/User';
+import UserCreate from './UserCreate/UserCreate';
 
 interface LayoutProps {}
 
@@ -52,6 +53,7 @@ const Layout: FC<LayoutProps> = () => {
           <Route path="consultingsRooms" element={<ConsultingsRooms />} />
           <Route path="customers" element={<Customers />} />
           <Route path="users" element={<Users />} />
+          <Route path="users/create" element={<UserCreate />} />
           <Route path="user" element={<User />} />
         </Route>
 

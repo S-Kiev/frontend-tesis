@@ -39,34 +39,7 @@ const Users: FC<UsersProps> = () => {
               value={search}
               placeHolder="Buscar por nombre, email o ID"
             />
-            <CustomDatePickerRange
-              label=""
-              startDate={startDate}
-              setStartDate={setStartDate}
-              endDate={endDate}
-              setEndDate={setEndDate}
-              customPlaceholder={startDate ? null : 'Seleccionar fecha'}
-              setFilterByDate={setFilterByDate}
-              dateFormat={'dd-MMM - dd-MMM, yy'}
-              maxDate={new Date()}
-              name="date"
-            />
           </div>
-          <Button
-            onClick={toggleFilters}
-            style={{ alignSelf: 'flex-end' }}
-            size="medium"
-            type="secondary"
-            iconPosition="left"
-            Icon={FilterIcon}
-            text="Filtrar"
-          />
-          <FiltersModalUsers
-            isOpen={showFilters}
-            toggleModal={toggleFilters}
-            setFilters={setFilters}
-            filters={filters}
-          />
         </div>
       </div>
     ) : null*/}
@@ -83,7 +56,6 @@ const Users: FC<UsersProps> = () => {
           <img src={SearchIcon} alt="lupas" />
           <h3 className="mt-3">No encontramos resultados</h3>
           <p className="mb-3">Puedes intentarlo nuevamente modificando los filtros seleccionados</p>
-          <Button size="large" text="Ver filtros" type="secondary" onClick={toggleFilters} />
         </div>
       )
       )*/}
