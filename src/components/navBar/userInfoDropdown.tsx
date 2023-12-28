@@ -5,16 +5,13 @@ import { ChevronDown, PersonCircle, BoxArrowRight, GearFill } from 'react-bootst
 import { useAppSelector } from 'redux/hooks';
 import { selectUser } from 'redux/reducers/userSlice';
 import { roleNameMapper } from 'util/roleNameMapper';
+import { LogoutModal } from 'components/modals/logoutModal';
 
 interface UserInfoDropdownProps {}
 
 const UserInfoDropdown: FC<UserInfoDropdownProps> = ({}) => {
   const [logoutModalOpen, setLogoutModalOpen] = useState(false);
   const user = useAppSelector(selectUser);
-
-  const toggleSignoutModal = () => {
-    setLogoutModalOpen(!logoutModalOpen);
-  };
 
   return (
     <>
@@ -43,7 +40,7 @@ const UserInfoDropdown: FC<UserInfoDropdownProps> = ({}) => {
               Configurar usuario
             </div>
           </Dropdown.Item>
-          <Dropdown.Item className={styles.clickableItem} onClick={() => setLogoutModalOpen(!logoutModalOpen)}>
+          <Dropdown.Item className={styles.clickableItem} onClick={() => setLogoutModalOpen(true)}>
             <div className="d-flex justify-content-start align-items-center gap-1">
               <BoxArrowRight />
               Cerrar sesión
@@ -51,7 +48,7 @@ const UserInfoDropdown: FC<UserInfoDropdownProps> = ({}) => {
           </Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>
-      {/*<LogoutModal isOpen={logoutModalOpen} toggleModal={toggleSignoutModal} isInForm={isInForm} />*/}
+      <LogoutModal show={logoutModalOpen} showModal={setLogoutModalOpen} />
     </>
   );
 };
