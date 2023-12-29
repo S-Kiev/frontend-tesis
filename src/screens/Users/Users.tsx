@@ -11,13 +11,12 @@ import Search from 'components/search/search';
 interface UsersProps {}
 
 const Users: FC<UsersProps> = () => {
-  const [page, setPage] = useState(1);
   const [search, setSearch] = useState('');
   const navigate = useNavigate();
 
   const { data, status, error, isLoading } = useQuery({
-    queryKey: [QueryKeys.Users, page, search],
-    queryFn: () => getUsersData(page, 10, search),
+    queryKey: [QueryKeys.Users, search],
+    queryFn: () => getUsersData(search),
   });
 
   console.log(data);

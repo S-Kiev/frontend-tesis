@@ -19,6 +19,7 @@
     "react": "^18.2.0",
     "react-bootstrap": "^2.9.1",
     "react-bootstrap-icons": "^1.10.3",
+    "react-debounce-input": "^3.3.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.48.2",
     "react-pro-sidebar": "^1.1.0-alpha.1",

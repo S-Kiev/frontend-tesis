@@ -2,7 +2,8 @@ import { ChangeEvent, FC, useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import styles from './search.module.scss';
-import { XCircle } from 'react-bootstrap-icons';
+import { XCircle, Search as SearchIcon } from 'react-bootstrap-icons';
+import { DebounceInput } from 'react-debounce-input';
 
 interface SearchProps {
   onChange: (param: string) => void;
@@ -24,16 +25,23 @@ const Search: FC<SearchProps> = ({ onChange, placeholder, width }) => {
   };
 
   return (
-    <InputGroup style={{ width: width, minWidth: width }} className={styles.inputgroup}>
-      <Form.Control
-        className={styles.input}
-        name="searchValue"
-        onChange={handleInputChange}
-        value={searchValue}
-        placeholder={placeholder || ''}
-      />
-      {searchValue !== '' && <XCircle className={styles.inputClearButton} onClick={clearSearch} size={20} />}
-    </InputGroup>
+    <div className="d-flex align-items-center gap-2">
+      <SearchIcon />
+      <InputGroup
+        style={{ width: width, minWidth: width }}
+        className={`${styles.inputGroup} d-flex ${styles.borderRadius}`}
+      >
+        <DebounceInput
+          placeholder={placeholder || ''}
+          value={searchValue}
+          name="searchValue"
+          className={styles.input}
+          onChange={handleInputChange}
+          debounceTimeout={400}
+        />
+        {searchValue !== '' && <XCircle className={styles.inputClearButton} onClick={clearSearch} size={20} />}
+      </InputGroup>
+    </div>
   );
 };
 
