@@ -11,10 +11,10 @@ import { useAppDispatch } from 'redux/hooks';
 import { setUser } from 'redux/reducers/userSlice';
 import logo from 'assets/EnergiaNaturalNA.png';
 import loginImg from 'assets/LoginImg.jpg';
+import { Eye, EyeSlash } from 'react-bootstrap-icons';
 import * as yup from 'yup';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { ReactComponent as PasswordEye } from 'assets/PasswordEye.svg';
 import { useRevealPassword } from 'customHooks/useRevealPassword';
 
 interface LoginProps {}
@@ -54,7 +54,7 @@ const Login: FC<LoginProps> = () => {
 
   useEffect(() => {
     if (isLoggedIn()) {
-      navigate('/home');
+      navigate('/app/home');
     }
   }, [navigate]);
 
@@ -85,7 +85,7 @@ const Login: FC<LoginProps> = () => {
           role: data.data.role.name,
         };
         dispatch(setUser(authUser));
-        navigate('/home');
+        navigate('/app/home');
       }
     },
   });
@@ -138,7 +138,7 @@ const Login: FC<LoginProps> = () => {
                           />
                           <InputGroup.Text>
                             <i onClick={togglePassword} className={styles.passwordEye}>
-                              <PasswordEye />
+                              {revealPassword ? <Eye /> : <EyeSlash />}
                             </i>
                           </InputGroup.Text>
                           <Form.Control.Feedback type="invalid">{errors.password?.message}</Form.Control.Feedback>
