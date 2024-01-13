@@ -31,10 +31,12 @@ export const LogoutModal: FC<LogoutModalProps> = ({ show, showModal }) => {
       <Modal onHide={() => showModal(false)} show={show} centered>
         <Modal.Header closeButton>
           <Modal.Title>
-            <DoorOpenFill /> ¿Cerrar sesión?
+            <DoorOpenFill /> Cierre de sesión
           </Modal.Title>
         </Modal.Header>
-        <Modal.Body>Tendrá que volver a iniciar sesión para ingresar a la aplicación.</Modal.Body>
+        <Modal.Body>
+          ¿Está seguro que quiere cerrar la sesión? Tendrá que volver a iniciar sesión para ingresar a la aplicación.
+        </Modal.Body>
         <Modal.Footer>
           <Button onClick={() => showModal(false)} variant="secondary">
             No, volver atrás
