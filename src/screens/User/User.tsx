@@ -21,72 +21,110 @@ const User: FC<UserProps> = () => {
 
   const {
     data: userData,
-    error,
-    isLoading,
+    error: errorUserData,
+    isLoading: isLoadingUserData,
   } = useQuery({
     queryKey: [QueryKeys.UserDataPorfile, id],
     queryFn: () => getUserData(id || ''),
   });
 
-  const { data } = useQuery({
+  const { data, error, isLoading } = useQuery({
     queryKey: [QueryKeys.User, id],
     queryFn: () => getUser(id || ''),
   });
 
-  console.log(userData);
-  console.log(data);
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <div>
-          <h2 className={styles.headline}>
-            {`${userData?.data?.data?.attributes.name} ${userData?.data?.data?.attributes.lastname}` || '---'}
-          </h2>
-          <p>{data?.data?.email || '---'}</p>
-        </div>
-        {user?.role === Role.superAdmin ? (
-          <Button variant="success" onClick={() => {}} className="d-none d-lg-block">
-            <KeyFill style={{ marginRight: '5px' }} />
-            Cambiar estado
-          </Button>
-        ) : (
-          <Button variant="success" onClick={() => navigate(`/app/user/${id}/config`)} className="d-none d-lg-block">
-            <PencilSquare style={{ marginRight: '5px' }} />
-            Editar usuario
-          </Button>
-        )}
-      </div>
-      {user?.role === Role.superAdmin ? (
-        <Button variant="success" onClick={() => {}} className="d-lg-none mt-3">
-          <KeyFill style={{ marginRight: '5px' }} />
-          Cambiar estado
-        </Button>
-      ) : (
-        <Button variant="success" onClick={() => navigate(`/app/user/${id}/config`)} className="d-lg-none mt-3">
-          <PencilSquare style={{ marginRight: '5px' }} />
-          Editar usuario
-        </Button>
-      )}
-      {error ? (
-        <div className={styles.errorFilters}>
-          <CloudLightningRain size={80} />
-          <h3 className="mt-3">Ups, ha ocurrido un error</h3>
-          <h5 className="mb-3 text-center">Vuelve a cargar la pagina por favor</h5>
-        </div>
-      ) : null}
-      {isLoading ? (
+      {isLoading || isLoadingUserData ? (
         <div className="d-flex align-items-center justify-content-center" style={{ marginTop: '200px' }}>
           <DotLoader color="rgb(159,213,177)" />
         </div>
-      ) : null}
-      <div className={`d-flex align-items-center ${styles.card} flex-column flex-lg-row`}>
-        <div className={styles.cardUser}>
-          <UserDataCard type="user" data={userData?.data?.data?.attributes} />
-        </div>
-        <div className={styles.cardAccount}>
-          <UserDataCard type="account" data={data?.data} />
-        </div>
-      </div>
+      ) : (
+        <>
+          {error || errorUserData ? (
+            <div className={styles.errorFilters}>
+              <CloudLightningRain size={80} />
+              <h3 className="mt-3">Ups, ha ocurrido un error</h3>
+              <h5 className="mb-3 text-center">Vuelve a cargar la pagina por favor</h5>
+            </div>
+          ) : (
+            <>
+              <div className={styles.header}>
+                <div>
+                  <h2 className={styles.headline}>
+                    {`${userData ? userData?.data?.data[0]?.attributes?.name : '---'} ${
+                      userData ? userData?.data?.data[0]?.attributes?.lastname : '---'
+                    }`}
+                  </h2>
+                  <p>{data?.data?.email || '---'}</p>
+                </div>
+                {user?.role === Role.superAdmin ? (
+                  <>
+                    {data?.data?.role.name === Role.collaborator && (
+                      <Button variant="success" onClick={() => {}} className="d-none d-lg-block">
+                        <KeyFill style={{ marginRight: '5px' }} />
+                        Cambiar estado
+                      </Button>
+                    )}
+                    {user.id === data?.data?.id && (
+                      <Button
+                        variant="success"
+                        onClick={() => navigate(`/app/user/${id}/config`)}
+                        className="d-none d-lg-block"
+                      >
+                        <PencilSquare style={{ marginRight: '5px' }} />
+                        Editar usuario
+                      </Button>
+                    )}
+                  </>
+                ) : (
+                  <Button
+                    variant="success"
+                    onClick={() => navigate(`/app/user/${id}/config`)}
+                    className="d-none d-lg-block"
+                  >
+                    <PencilSquare style={{ marginRight: '5px' }} />
+                    Editar usuario
+                  </Button>
+                )}
+              </div>
+              {user?.role === Role.superAdmin ? (
+                <>
+                  {data?.data?.role.name === Role.collaborator && (
+                    <Button variant="success" onClick={() => {}} className="d-lg-none mt-3">
+                      <KeyFill style={{ marginRight: '5px' }} />
+                      Cambiar estado
+                    </Button>
+                  )}
+                  {user.id === data?.data?.id && (
+                    <Button
+                      variant="success"
+                      onClick={() => navigate(`/app/user/${id}/config`)}
+                      className="d-lg-none mt-3"
+                    >
+                      <PencilSquare style={{ marginRight: '5px' }} />
+                      Editar usuario
+                    </Button>
+                  )}
+                </>
+              ) : (
+                <Button variant="success" onClick={() => navigate(`/app/user/${id}/config`)} className="d-lg-none mt-3">
+                  <PencilSquare style={{ marginRight: '5px' }} />
+                  Editar usuario
+                </Button>
+              )}
+              <div className={`d-flex align-items-center ${styles.card} flex-column flex-lg-row`}>
+                <div className={styles.cardUser}>
+                  <UserDataCard type="user" data={userData?.data?.data[0]?.attributes} />
+                </div>
+                <div className={styles.cardAccount}>
+                  <UserDataCard type="account" data={data?.data} />
+                </div>
+              </div>
+            </>
+          )}
+        </>
+      )}
     </div>
   );
 };
