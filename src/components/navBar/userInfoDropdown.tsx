@@ -1,7 +1,7 @@
 import { FC, useState } from 'react';
 import Dropdown from 'react-bootstrap/Dropdown';
 import styles from './userInfoDropdown.module.scss';
-import { ChevronDown, PersonCircle, BoxArrowRight, GearFill } from 'react-bootstrap-icons';
+import { ChevronDown, PersonCircle, BoxArrowRight, GearFill, PersonFill } from 'react-bootstrap-icons';
 import { useAppSelector } from 'redux/hooks';
 import { selectUser } from 'redux/reducers/userSlice';
 import { roleNameMapper } from 'util/roleNameMapper';
@@ -39,7 +39,18 @@ const UserInfoDropdown: FC<UserInfoDropdownProps> = () => {
           <Dropdown.Item
             className={styles.clickableItem}
             onClick={() => {
-              navigate('/app/user');
+              navigate(`/app/my/user/${user?.id}`);
+            }}
+          >
+            <div className="d-flex justify-content-start align-items-center gap-1">
+              <PersonFill />
+              Mi usuario
+            </div>
+          </Dropdown.Item>
+          <Dropdown.Item
+            className={styles.clickableItem}
+            onClick={() => {
+              navigate(`/app/my/user/${user?.id}/config`);
             }}
           >
             <div className="d-flex justify-content-start align-items-center gap-1">
