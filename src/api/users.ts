@@ -8,3 +8,11 @@ export const getUsersData = async (search: string) => {
     },
   });
 };
+
+export const getUserData = async (id: string) => {
+  return await axiosDefaultConfig.get(routes.GET_USER_DATA.replace('{id}', id));
+};
+
+export const getUser = async (id: string) => {
+  return await axiosDefaultConfig.get(routes.GET_USER.replace('{id}', id));
+};

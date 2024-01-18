@@ -39,7 +39,7 @@ const UserInfoDropdown: FC<UserInfoDropdownProps> = () => {
           <Dropdown.Item
             className={styles.clickableItem}
             onClick={() => {
-              navigate(`/app/my/user/${user?.id}`);
+              navigate(`/app/user/${user?.id}`);
             }}
           >
             <div className="d-flex justify-content-start align-items-center gap-1">
@@ -50,7 +50,7 @@ const UserInfoDropdown: FC<UserInfoDropdownProps> = () => {
           <Dropdown.Item
             className={styles.clickableItem}
             onClick={() => {
-              navigate(`/app/my/user/${user?.id}/config`);
+              navigate(`/app/user/${user?.id}/config`);
             }}
           >
             <div className="d-flex justify-content-start align-items-center gap-1">
