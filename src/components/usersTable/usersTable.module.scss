@@ -41,3 +41,23 @@ p.opacity07 {
 .pointer {
   cursor: pointer;
 }
+
+.divPopup {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.popup {
+  width: 150px;
+
+  .option {
+    display: flex;
+    align-items: center;
+
+    p {
+      margin-left: 13px;
+      white-space: nowrap;
+    }
+  }
+}

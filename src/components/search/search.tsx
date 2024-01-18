@@ -37,7 +37,7 @@ const Search: FC<SearchProps> = ({ onChange, placeholder, width }) => {
           name="searchValue"
           className={styles.input}
           onChange={handleInputChange}
-          debounceTimeout={400}
+          debounceTimeout={300}
         />
         {searchValue !== '' && <XCircle className={styles.inputClearButton} onClick={clearSearch} size={20} />}
       </InputGroup>

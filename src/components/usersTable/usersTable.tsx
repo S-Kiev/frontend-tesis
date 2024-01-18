@@ -2,7 +2,6 @@ import TableHeader from 'components/tableHeader/tableHeader';
 import { FC } from 'react';
 import { Table } from 'react-bootstrap';
 import RowUsersTable from './rowUsersTable';
-import styles from './usersTable.module.scss';
 
 interface UsersTableProps {
   usersData: any;

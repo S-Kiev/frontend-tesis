@@ -7,7 +7,7 @@ import { QueryKeys } from 'api/QueryKeys';
 import { getUsersData } from 'api/users';
 import UsersTable from 'components/usersTable/usersTable';
 import Search from 'components/search/search';
-import { PersonFillSlash, SendSlash } from 'react-bootstrap-icons';
+import { PersonFillSlash, SendSlash, CloudLightningRain } from 'react-bootstrap-icons';
 import { DotLoader } from 'react-spinners';
 
 interface UsersProps {}
@@ -21,7 +21,6 @@ const Users: FC<UsersProps> = () => {
     queryFn: () => getUsersData(search),
   });
 
-  console.log(data);
   return (
     <div className={styles.container}>
       <div className={styles.header}>
@@ -50,13 +49,18 @@ const Users: FC<UsersProps> = () => {
           ) : null}
         </>
       )}
-      {/*error ? <LoadErrorModal toggleModal={toggleErrorModal} isOpen={showErrorModal} /> : null*/}
+      {error ? (
+        <div className={styles.errorFilters}>
+          <CloudLightningRain size={80} />
+          <h3 className="mt-3">Ups, ha ocurrido un error</h3>
+          <h5 className="mb-3 text-center">Vuelve a cargar la pagina por favor</h5>
+        </div>
+      ) : null}
       {isLoading ? (
         <div className="d-flex align-items-center justify-content-center" style={{ marginTop: '200px' }}>
           <DotLoader color="rgb(159,213,177)" />
         </div>
       ) : null}
-
       {!isLoading && !error && data && data?.data.length !== 0 ? (
         <UsersTable usersData={data?.data || []} />
       ) : (

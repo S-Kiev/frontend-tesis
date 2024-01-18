@@ -4,6 +4,10 @@ import { useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
 import { roleNameMapper } from 'util/roleNameMapper';
 import UserStatus from 'components/userStatus/userStatus';
+import { ThreeDotsVertical, Eye, KeyFill } from 'react-bootstrap-icons';
+import { useSelector } from 'react-redux';
+import { selectUser } from 'redux/reducers/userSlice';
+import Tooltip from 'components/Popup/tooltip';
 
 interface RowUsersTableProps {
   userData: any;
@@ -39,42 +43,22 @@ const RowUsersTable: FC<RowUsersTableProps> = ({ userData }) => {
         </p>
       </td>
       <td>
-        {/*<div className={styles.divPopup}>
+        <div className={styles.divPopup}>
           <Tooltip
-            classname={${styles.popup}}
-            clickableChild={<img src={Kebab} alt="opciones de usuarios" />}
+            classname={`${styles.popup}`}
+            clickableChild={<ThreeDotsVertical />}
             customStyle={{ position: 'absolute', right: 10, zIndex: 1000 }}
           >
-            <div className={styles.option} onClick={() => navigate(/users/${userRequest.domainUserId})}>
-              <img src={EyeIcon} alt="Ver detalle icono" />
+            <div className={styles.option} onClick={() => navigate(`/app/user/${userData.id}`)}>
+              <Eye />
               <p>Ver detalle</p>
             </div>
-            {role !== Role.Super_Admin &&
-            role !== Role.Ifi &&
-            role !== Role.AFD &&
-            userRequest.statusId !== UserStatusEnum.Baja ? (
-              <div
-                className={${styles.option} my-3}
-                onClick={() => navigate(/users/${userRequest.domainUserId}/edituser)}
-              >
-                <img src={EditIcon} alt="Editar icono" />
-                <p>Editar</p>
-              </div>
-            ) : null}
-            {userRequest.statusId !== UserStatusEnum.Baja ? (
-              <>
-                <div className={${styles.option} my-3} onClick={() => setDisableModal(true)}>
-                  <img src={CloseIcon} alt="Inhabilitar icono" />
-                  <p>Inhabilitar</p>
-                </div>
-                <div className={styles.option} onClick={() => openRemovalModal()}>
-                  <img src={TrashIcon} alt="Eliminar icono" />
-                  <p>Eliminar</p>
-                </div>
-              </>
-            ) : null}
+            <div className={`${styles.option} mt-3`} onClick={() => {}}>
+              <KeyFill />
+              <p>Cambiar estado</p>
+            </div>
           </Tooltip>
-            </div>*/}
+        </div>
       </td>
       {/*<UserDisableModal isOpen={disableModal} toggleModal={toggleDisableModal} id={userRequest.domainUserId} />*/}
     </tr>

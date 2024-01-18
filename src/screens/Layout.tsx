@@ -54,7 +54,7 @@ const Layout: FC<LayoutProps> = () => {
           <Route path="customers" element={<Customers />} />
           <Route path="users" element={<Users />} />
           <Route path="users/create" element={<UserCreate />} />
-          <Route path="user" element={<User />} />
+          <Route path="user/:id" element={<User />} />
         </Route>
 
         <Route path="*" element={<NoMatch />} />
