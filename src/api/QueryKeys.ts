@@ -1,3 +1,4 @@
 export enum QueryKeys {
-    UserData = 'UserData',
+  UserData = 'UserData',
+  Users = 'Users',
 }

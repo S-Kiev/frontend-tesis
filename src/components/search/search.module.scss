@@ -1,0 +1,49 @@
+@import 'colors.scss';
+
+.inputClearButton {
+  position: absolute;
+  right: 15px;
+  z-index: 10;
+  cursor: pointer;
+  top: 9px;
+}
+
+.borderRadius {
+  border-radius: 4px;
+}
+
+input,
+.inputGroup {
+  width: 360px;
+  height: 40px;
+  background: linear-gradient(0deg, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.25)), $neutral_200;
+  border-radius: 8px;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 18px;
+
+  &::placeholder {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 18px;
+  }
+
+  &:focus {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 18px;
+    background: linear-gradient(0deg, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.25)), $neutral_200;
+    border: 1px solid $neutral_300;
+    border-radius: 8px;
+    box-shadow: none;
+    border-radius: 8px !important;
+  }
+
+  .input {
+    height: 98%;
+    border-radius: 8px !important;
+    border: 1px solid $neutral_300;
+    padding-left: 10px;
+    padding-right: 45px;
+  }
+}

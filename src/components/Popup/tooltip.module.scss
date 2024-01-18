@@ -1,0 +1,29 @@
+@import '../../colors.scss';
+
+.popup {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  width: max-content;
+
+  .popupContent {
+    visibility: hidden;
+    background-color: $neutral;
+    text-align: center;
+    border-radius: 8px;
+    box-shadow: $elevation_100;
+    padding: 12px 18px;
+    position: absolute;
+    z-index: 1;
+    top: 100%;
+  }
+
+  .show {
+    visibility: visible;
+  }
+}
+
+button {
+  background-color: transparent;
+  border: none;
+}

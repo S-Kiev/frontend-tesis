@@ -110,7 +110,7 @@ const Login: FC<LoginProps> = () => {
                     </div>
                     <p>Por favor, ingrese a su cuenta</p>
                     {showAlert && (
-                      <Alert variant="danger" onClose={() => setShowAlert(false)} dismissible>
+                      <Alert variant="danger" onClose={() => setShowAlert(false)} dismissible className="mt-2">
                         No se pudo iniciar sesión. Por favor verifique el email y la contraseña ingresados.
                       </Alert>
                     )}
@@ -119,7 +119,7 @@ const Login: FC<LoginProps> = () => {
                         <Form.Label>Email</Form.Label>
                         <Form.Control
                           {...register('email')}
-                          type="email"
+                          type="text"
                           placeholder={'Ingrese su email' || ''}
                           disabled={isLoading}
                           isInvalid={!!errors.email}
