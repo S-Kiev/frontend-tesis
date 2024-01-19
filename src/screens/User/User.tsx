@@ -8,7 +8,7 @@ import { useQuery } from '@tanstack/react-query';
 import { QueryKeys } from 'api/QueryKeys';
 import { getUser, getUserData } from 'api/users';
 import { Role } from 'models/Roles';
-import { CloudLightningRain, KeyFill, PencilSquare } from 'react-bootstrap-icons';
+import { CloudLightningRain, KeyFill, PencilSquare, ChevronLeft } from 'react-bootstrap-icons';
 import { DotLoader } from 'react-spinners';
 import UserDataCard from 'components/userDataCard/userDataCard';
 
@@ -35,7 +35,7 @@ const User: FC<UserProps> = () => {
 
   return (
     <div className={styles.container}>
-      {isLoading || isLoadingUserData ? (
+      {isLoading && isLoadingUserData ? (
         <div className="d-flex align-items-center justify-content-center" style={{ marginTop: '200px' }}>
           <DotLoader color="rgb(159,213,177)" />
         </div>
@@ -50,13 +50,22 @@ const User: FC<UserProps> = () => {
           ) : (
             <>
               <div className={styles.header}>
-                <div>
-                  <h2 className={styles.headline}>
-                    {`${userData ? userData?.data?.data[0]?.attributes?.name : '---'} ${
-                      userData ? userData?.data?.data[0]?.attributes?.lastname : '---'
-                    }`}
-                  </h2>
-                  <p>{data?.data?.email || '---'}</p>
+                <div className="d-flex align-items-center justify-content-center">
+                  <ChevronLeft
+                    size={35}
+                    className={styles.pointer}
+                    onClick={() => {
+                      navigate(-1);
+                    }}
+                  />
+                  <div className={styles.titleConteiner}>
+                    <h2 className={styles.headline}>
+                      {`${userData ? userData?.data?.data[0]?.attributes?.name : '---'} ${
+                        userData ? userData?.data?.data[0]?.attributes?.lastname : '---'
+                      }`}
+                    </h2>
+                    <p>{data?.data?.email || '---'}</p>
+                  </div>
                 </div>
                 {user?.role === Role.superAdmin ? (
                   <>
