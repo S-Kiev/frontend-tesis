@@ -12,11 +12,15 @@ import { CloudLightningRain, KeyFill, PencilSquare, ChevronLeft } from 'react-bo
 import { DotLoader } from 'react-spinners';
 import UserDataCard from 'components/userDataCard/userDataCard';
 import { AlertModal } from 'components/modals/alertModal';
+import { toast } from 'react-toastify';
+import SuccessToast from 'components/toast/successToast';
+import ErrorToast from 'components/toast/errorToast';
 
 interface UserProps {}
 
 const User: FC<UserProps> = () => {
   const [showBlockedModal, setShowBlockedModal] = useState(false);
+  const [isDisabled, setIsDisabled] = useState(false);
   const navigate = useNavigate();
   const user = useSelector(selectUser);
   const { id } = useParams();
@@ -43,6 +47,20 @@ const User: FC<UserProps> = () => {
       queryClient.invalidateQueries({
         queryKey: [QueryKeys.User, id],
       });
+      toast(<SuccessToast message={`Usuario ${data?.data?.blocked ? 'habilitado' : 'bloqueado'} con éxito`} hour />, {
+        style: { borderRadius: '10px' },
+      });
+      setIsDisabled(false);
+      setShowBlockedModal(false);
+    },
+    onError: () => {
+      toast(
+        <ErrorToast message={`Ha ocurrido un error al ${data?.data?.blocked ? 'habilitar' : 'bloquear'} el usuario`} />,
+        {
+          style: { borderRadius: '10px' },
+        },
+      );
+      setIsDisabled(false);
     },
   });
 
@@ -171,6 +189,8 @@ const User: FC<UserProps> = () => {
         confirmBtn="Aceptar"
         cancelBtn="Cancelar"
         onAction={() => blockedUserMutation.mutate({ userId: id || '', blocked: !data?.data?.blocked })}
+        isDisabled={isDisabled}
+        setIsDisabled={setIsDisabled}
       />
     </div>
   );
