@@ -5,9 +5,10 @@ import RowUsersTable from './rowUsersTable';
 
 interface UsersTableProps {
   usersData: any;
+  search: string;
 }
 
-const UsersTable: FC<UsersTableProps> = ({ usersData }) => {
+const UsersTable: FC<UsersTableProps> = ({ usersData, search }) => {
   const headersList: { title: string; col: number }[] = [
     { title: 'Usuario', col: 0 },
     { title: 'Rol', col: 1 },
@@ -21,7 +22,7 @@ const UsersTable: FC<UsersTableProps> = ({ usersData }) => {
       <TableHeader headersList={headersList} />
       <tbody>
         {usersData.map(element => (
-          <RowUsersTable userData={element} />
+          <RowUsersTable userData={element} search={search} />
         ))}
       </tbody>
     </Table>
