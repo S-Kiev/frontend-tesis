@@ -3,4 +3,5 @@ export enum QueryKeys {
   Users = 'Users',
   User = 'User',
   UserDataPorfile = 'UserDataPorfile',
+  PutUser = 'PutUser',
 }

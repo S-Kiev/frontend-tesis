@@ -4,9 +4,9 @@ import styles from './User.module.scss';
 import { useNavigate, useParams } from 'react-router-dom';
 import { selectUser } from 'redux/reducers/userSlice';
 import { useSelector } from 'react-redux';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { QueryKeys } from 'api/QueryKeys';
-import { getUser, getUserData } from 'api/users';
+import { changeStateUser, getUser, getUserData } from 'api/users';
 import { Role } from 'models/Roles';
 import { CloudLightningRain, KeyFill, PencilSquare, ChevronLeft } from 'react-bootstrap-icons';
 import { DotLoader } from 'react-spinners';
@@ -32,6 +32,20 @@ const User: FC<UserProps> = () => {
     queryKey: [QueryKeys.User, id],
     queryFn: () => getUser(id || ''),
   });
+
+  const blockedUserMutation = useMutation({
+    mutationFn: changeStateUser,
+    mutationKey: [QueryKeys.PutUser, id],
+    onSuccess: () => {
+      /*queryClient.invalidateQueries({
+        queryKey: [QueryKeys.TestPlan, currentProject?.id.toString(), testPlanId, 'testPlanEdit'],
+      });*/
+    },
+  });
+
+  const handleChangeStateUser = async () => {
+    blockedUserMutation.mutate({ userId: id || '', blocked: !data?.data?.blocked });
+  };
 
   return (
     <div className={styles.container}>
