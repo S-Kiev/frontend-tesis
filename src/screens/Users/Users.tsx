@@ -62,7 +62,7 @@ const Users: FC<UsersProps> = () => {
         </div>
       ) : null}
       {!isLoading && !error && data && data?.data.length !== 0 ? (
-        <UsersTable usersData={data?.data || []} />
+        <UsersTable usersData={data?.data || []} search={search} />
       ) : (
         !error &&
         !isLoading &&

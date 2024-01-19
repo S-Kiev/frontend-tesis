@@ -14,7 +14,7 @@ axiosDefaultConfig.interceptors.request.use(
       const newConf = {
         ...config,
         headers: {
-          Accept: 'application/json, text/plain, /',
+          Accept: 'application/json, text/plain, */*',
           'Content-Type': 'application/json',
           Authorization: `Bearer ${getToken()}`,
         },

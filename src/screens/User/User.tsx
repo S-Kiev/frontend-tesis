@@ -1,23 +1,30 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { Button } from 'react-bootstrap';
 import styles from './User.module.scss';
 import { useNavigate, useParams } from 'react-router-dom';
 import { selectUser } from 'redux/reducers/userSlice';
 import { useSelector } from 'react-redux';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { QueryKeys } from 'api/QueryKeys';
-import { getUser, getUserData } from 'api/users';
+import { changeStateUser, getUser, getUserData } from 'api/users';
 import { Role } from 'models/Roles';
-import { CloudLightningRain, KeyFill, PencilSquare } from 'react-bootstrap-icons';
+import { CloudLightningRain, KeyFill, PencilSquare, ChevronLeft } from 'react-bootstrap-icons';
 import { DotLoader } from 'react-spinners';
 import UserDataCard from 'components/userDataCard/userDataCard';
+import { AlertModal } from 'components/modals/alertModal';
+import { toast } from 'react-toastify';
+import SuccessToast from 'components/toast/successToast';
+import ErrorToast from 'components/toast/errorToast';
 
 interface UserProps {}
 
 const User: FC<UserProps> = () => {
+  const [showBlockedModal, setShowBlockedModal] = useState(false);
+  const [isDisabled, setIsDisabled] = useState(false);
   const navigate = useNavigate();
   const user = useSelector(selectUser);
   const { id } = useParams();
+  const queryClient = useQueryClient();
 
   const {
     data: userData,
@@ -33,9 +40,33 @@ const User: FC<UserProps> = () => {
     queryFn: () => getUser(id || ''),
   });
 
+  const blockedUserMutation = useMutation({
+    mutationFn: changeStateUser,
+    mutationKey: [QueryKeys.PutUser, id],
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [QueryKeys.User, id],
+      });
+      toast(<SuccessToast message={`Usuario ${data?.data?.blocked ? 'habilitado' : 'bloqueado'} con éxito`} hour />, {
+        style: { borderRadius: '10px' },
+      });
+      setIsDisabled(false);
+      setShowBlockedModal(false);
+    },
+    onError: () => {
+      toast(
+        <ErrorToast message={`Ha ocurrido un error al ${data?.data?.blocked ? 'habilitar' : 'bloquear'} el usuario`} />,
+        {
+          style: { borderRadius: '10px' },
+        },
+      );
+      setIsDisabled(false);
+    },
+  });
+
   return (
     <div className={styles.container}>
-      {isLoading || isLoadingUserData ? (
+      {isLoading && isLoadingUserData ? (
         <div className="d-flex align-items-center justify-content-center" style={{ marginTop: '200px' }}>
           <DotLoader color="rgb(159,213,177)" />
         </div>
@@ -50,18 +81,33 @@ const User: FC<UserProps> = () => {
           ) : (
             <>
               <div className={styles.header}>
-                <div>
-                  <h2 className={styles.headline}>
-                    {`${userData ? userData?.data?.data[0]?.attributes?.name : '---'} ${
-                      userData ? userData?.data?.data[0]?.attributes?.lastname : '---'
-                    }`}
-                  </h2>
-                  <p>{data?.data?.email || '---'}</p>
+                <div className="d-flex align-items-center justify-content-center">
+                  <ChevronLeft
+                    size={35}
+                    className={styles.pointer}
+                    onClick={() => {
+                      navigate(-1);
+                    }}
+                  />
+                  <div className={styles.titleConteiner}>
+                    <h2 className={styles.headline}>
+                      {`${userData ? userData?.data?.data[0]?.attributes?.name : '---'} ${
+                        userData ? userData?.data?.data[0]?.attributes?.lastname : '---'
+                      }`}
+                    </h2>
+                    <p>{data?.data?.email || '---'}</p>
+                  </div>
                 </div>
                 {user?.role === Role.superAdmin ? (
                   <>
                     {data?.data?.role.name === Role.collaborator && (
-                      <Button variant="success" onClick={() => {}} className="d-none d-lg-block">
+                      <Button
+                        variant="success"
+                        onClick={() => {
+                          setShowBlockedModal(true);
+                        }}
+                        className="d-none d-lg-block"
+                      >
                         <KeyFill style={{ marginRight: '5px' }} />
                         Cambiar estado
                       </Button>
@@ -91,7 +137,13 @@ const User: FC<UserProps> = () => {
               {user?.role === Role.superAdmin ? (
                 <>
                   {data?.data?.role.name === Role.collaborator && (
-                    <Button variant="success" onClick={() => {}} className="d-lg-none mt-3">
+                    <Button
+                      variant="success"
+                      onClick={() => {
+                        setShowBlockedModal(true);
+                      }}
+                      className="d-lg-none mt-3"
+                    >
                       <KeyFill style={{ marginRight: '5px' }} />
                       Cambiar estado
                     </Button>
@@ -125,6 +177,21 @@ const User: FC<UserProps> = () => {
           )}
         </>
       )}
+      <AlertModal
+        show={showBlockedModal}
+        showModal={setShowBlockedModal}
+        title={data?.data?.blocked ? 'Habilitar usuario' : 'Bloquear usuario'}
+        body={
+          <>
+            ¿Está seguro que quiere <strong>{`${data?.data?.blocked ? 'habilitar' : 'bloquear'}`}</strong> este usuario?
+          </>
+        }
+        confirmBtn="Aceptar"
+        cancelBtn="Cancelar"
+        onAction={() => blockedUserMutation.mutate({ userId: id || '', blocked: !data?.data?.blocked })}
+        isDisabled={isDisabled}
+        setIsDisabled={setIsDisabled}
+      />
     </div>
   );
 };
