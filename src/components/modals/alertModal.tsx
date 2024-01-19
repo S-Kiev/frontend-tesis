@@ -12,6 +12,8 @@ interface AlertModalProps {
   cancelBtn: string;
   showModal: (state: boolean) => void;
   onAction: Function;
+  confirmBtnVariant?: string;
+  cancelBtnVariant?: string;
   onSuccessMsg?: string;
   onErrorMsg?: string;
   hideAlertIcon?: boolean;
@@ -28,6 +30,8 @@ export const AlertModal: FC<AlertModalProps> = ({
   onSuccessMsg,
   onErrorMsg,
   hideAlertIcon,
+  confirmBtnVariant,
+  cancelBtnVariant,
 }) => {
   const [isDisabled, setIsDisabled] = useState(false);
 
@@ -57,10 +61,18 @@ export const AlertModal: FC<AlertModalProps> = ({
         </Modal.Header>
         <Modal.Body>{body}</Modal.Body>
         <Modal.Footer>
-          <Button disabled={isDisabled} onClick={() => showModal(false)} variant="danger">
+          <Button
+            disabled={isDisabled}
+            onClick={() => showModal(false)}
+            variant={cancelBtnVariant ? cancelBtnVariant : 'secondary'}
+          >
             {cancelBtn}
           </Button>
-          <Button disabled={isDisabled} onClick={handleAction} variant="primary">
+          <Button
+            disabled={isDisabled}
+            onClick={handleAction}
+            variant={confirmBtnVariant ? confirmBtnVariant : 'danger'}
+          >
             <div>
               {isDisabled && <Spinner className="me-1" size="sm" />}
               <span>{confirmBtn}</span>

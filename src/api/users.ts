@@ -19,8 +19,6 @@ export const getUser = async (id: string) => {
 
 export const changeStateUser = async (userBlocked: { userId: string; blocked: boolean }) => {
   return await axiosDefaultConfig.put(routes.PUT_USER.replace('{id}', userBlocked.userId), {
-    data: {
-      blocked: userBlocked.blocked,
-    },
+    blocked: userBlocked.blocked,
   });
 };

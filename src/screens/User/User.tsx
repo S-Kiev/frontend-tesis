@@ -1,23 +1,26 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { Button } from 'react-bootstrap';
 import styles from './User.module.scss';
 import { useNavigate, useParams } from 'react-router-dom';
 import { selectUser } from 'redux/reducers/userSlice';
 import { useSelector } from 'react-redux';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { QueryKeys } from 'api/QueryKeys';
 import { changeStateUser, getUser, getUserData } from 'api/users';
 import { Role } from 'models/Roles';
 import { CloudLightningRain, KeyFill, PencilSquare, ChevronLeft } from 'react-bootstrap-icons';
 import { DotLoader } from 'react-spinners';
 import UserDataCard from 'components/userDataCard/userDataCard';
+import { AlertModal } from 'components/modals/alertModal';
 
 interface UserProps {}
 
 const User: FC<UserProps> = () => {
+  const [showBlockedModal, setShowBlockedModal] = useState(false);
   const navigate = useNavigate();
   const user = useSelector(selectUser);
   const { id } = useParams();
+  const queryClient = useQueryClient();
 
   const {
     data: userData,
@@ -37,15 +40,11 @@ const User: FC<UserProps> = () => {
     mutationFn: changeStateUser,
     mutationKey: [QueryKeys.PutUser, id],
     onSuccess: () => {
-      /*queryClient.invalidateQueries({
-        queryKey: [QueryKeys.TestPlan, currentProject?.id.toString(), testPlanId, 'testPlanEdit'],
-      });*/
+      queryClient.invalidateQueries({
+        queryKey: [QueryKeys.User, id],
+      });
     },
   });
-
-  const handleChangeStateUser = async () => {
-    blockedUserMutation.mutate({ userId: id || '', blocked: !data?.data?.blocked });
-  };
 
   return (
     <div className={styles.container}>
@@ -84,7 +83,13 @@ const User: FC<UserProps> = () => {
                 {user?.role === Role.superAdmin ? (
                   <>
                     {data?.data?.role.name === Role.collaborator && (
-                      <Button variant="success" onClick={() => {}} className="d-none d-lg-block">
+                      <Button
+                        variant="success"
+                        onClick={() => {
+                          setShowBlockedModal(true);
+                        }}
+                        className="d-none d-lg-block"
+                      >
                         <KeyFill style={{ marginRight: '5px' }} />
                         Cambiar estado
                       </Button>
@@ -114,7 +119,13 @@ const User: FC<UserProps> = () => {
               {user?.role === Role.superAdmin ? (
                 <>
                   {data?.data?.role.name === Role.collaborator && (
-                    <Button variant="success" onClick={() => {}} className="d-lg-none mt-3">
+                    <Button
+                      variant="success"
+                      onClick={() => {
+                        setShowBlockedModal(true);
+                      }}
+                      className="d-lg-none mt-3"
+                    >
                       <KeyFill style={{ marginRight: '5px' }} />
                       Cambiar estado
                     </Button>
@@ -148,6 +159,19 @@ const User: FC<UserProps> = () => {
           )}
         </>
       )}
+      <AlertModal
+        show={showBlockedModal}
+        showModal={setShowBlockedModal}
+        title={data?.data?.blocked ? 'Habilitar usuario' : 'Bloquear usuario'}
+        body={
+          <>
+            ¿Está seguro que quiere <strong>{`${data?.data?.blocked ? 'habilitar' : 'bloquear'}`}</strong> este usuario?
+          </>
+        }
+        confirmBtn="Aceptar"
+        cancelBtn="Cancelar"
+        onAction={() => blockedUserMutation.mutate({ userId: id || '', blocked: !data?.data?.blocked })}
+      />
     </div>
   );
 };
