@@ -1,10 +1,12 @@
 import { FC } from 'react';
-import { ChevronLeft } from 'react-bootstrap-icons';
+import { ChevronLeft, CloudLightningRain } from 'react-bootstrap-icons';
 import { useNavigate, useParams } from 'react-router-dom';
 import styles from './MyUserConfig.module.scss';
 import { useQuery } from '@tanstack/react-query';
 import { QueryKeys } from 'api/QueryKeys';
 import { getUser, getUserData } from 'api/users';
+import UserEditForm from 'components/userEdit/userEditForm';
+import { DotLoader } from 'react-spinners';
 
 interface MyUserConfigProps {}
 
@@ -28,22 +30,42 @@ const MyUserConfig: FC<MyUserConfigProps> = () => {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <div className="d-flex align-items-center">
-          <ChevronLeft
-            size={35}
-            className={styles.pointer}
-            onClick={() => {
-              navigate(-1);
-            }}
-          />
-          <div className={styles.titleConteiner}>
-            <h2 className={styles.headline}>Editar mi usuario</h2>
-            <p>Modifica tu usuario de la aplicacion de Energía Natural</p>
-          </div>
+      {isLoading && isLoadingUserData ? (
+        <div className="d-flex align-items-center justify-content-center" style={{ marginTop: '300px' }}>
+          <DotLoader color="rgb(159,213,177)" />
         </div>
-      </div>
-      <div className={styles.form}>{/*<UserCreateForm />*/}</div>
+      ) : (
+        <>
+          {error || errorUserData ? (
+            <div className={styles.error}>
+              <CloudLightningRain size={80} />
+              <h3 className="mt-3">Ups, ha ocurrido un error</h3>
+              <h5 className="mb-3 text-center">Vuelve a cargar la pagina por favor</h5>
+            </div>
+          ) : (
+            <>
+              <div className={styles.header}>
+                <div className="d-flex align-items-center">
+                  <ChevronLeft
+                    size={35}
+                    className={styles.pointer}
+                    onClick={() => {
+                      navigate(-1);
+                    }}
+                  />
+                  <div className={styles.titleConteiner}>
+                    <h2 className={styles.headline}>Editar mi usuario</h2>
+                    <p>Modifica tu usuario de la aplicacion de Energía Natural</p>
+                  </div>
+                </div>
+              </div>
+              <div className={styles.form}>
+                <UserEditForm user={data?.data?.data[0]?.attributes} userData={userData?.data} />
+              </div>
+            </>
+          )}
+        </>
+      )}
     </div>
   );
 };

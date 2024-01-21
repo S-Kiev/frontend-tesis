@@ -67,13 +67,13 @@ const User: FC<UserProps> = () => {
   return (
     <div className={styles.container}>
       {isLoading && isLoadingUserData ? (
-        <div className="d-flex align-items-center justify-content-center" style={{ marginTop: '200px' }}>
+        <div className="d-flex align-items-center justify-content-center" style={{ marginTop: '300px' }}>
           <DotLoader color="rgb(159,213,177)" />
         </div>
       ) : (
         <>
           {error || errorUserData ? (
-            <div className={styles.errorFilters}>
+            <div className={styles.error}>
               <CloudLightningRain size={80} />
               <h3 className="mt-3">Ups, ha ocurrido un error</h3>
               <h5 className="mb-3 text-center">Vuelve a cargar la pagina por favor</h5>
