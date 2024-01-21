@@ -1,3 +1,4 @@
+import { User, UserData } from 'models/User';
 import { routes } from './apiRoutes';
 import { axiosDefaultConfig } from './axiosConfig';
 
@@ -20,5 +21,21 @@ export const getUser = async (id: string) => {
 export const changeStateUser = async (userBlocked: { userId: string; blocked: boolean }) => {
   return await axiosDefaultConfig.put(routes.PUT_USER.replace('{id}', userBlocked.userId), {
     blocked: userBlocked.blocked,
+  });
+};
+
+export const createUser = async (user: User) => {
+  return await axiosDefaultConfig.post(routes.POST_USER, {
+    username: user.username,
+    email: user.email,
+    password: user.password,
+    role: user.role,
+    confirmed: user.confirmed,
+  });
+};
+
+export const createUserData = async (userData: UserData) => {
+  return await axiosDefaultConfig.post(routes.POST_USER_DATA, {
+    data: userData,
   });
 };
