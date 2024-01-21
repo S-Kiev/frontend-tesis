@@ -3,26 +3,6 @@
 .userForm {
   max-width: 450px;
   padding-bottom: 30px;
-
-  .passwordForm {
-    margin-bottom: 20px;
-    border-radius: 8px;
-    box-shadow: $elevation_200;
-    background-color: white;
-
-    .passwordConteiner {
-      padding: 15px 20px 10px 20px;
-    }
-
-    h3 {
-      color: $text_primary;
-      line-height: 20px;
-      font-weight: 400;
-      font-size: 20px;
-      padding-bottom: 10px;
-      border-bottom: 1.5px solid $neutral_300;
-    }
-  }
 }
 
 .pointer {

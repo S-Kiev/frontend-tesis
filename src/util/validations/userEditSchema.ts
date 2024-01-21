@@ -7,20 +7,6 @@ const MAX50 = 'Máximo de 50 caracteres superado';
 export const userEditSchema = {
   username: yup.string().trim().required(REQUIREDMESSAGE).max(50, MAX50),
   email: yup.string().email('Debe ingresar un email válido').required(REQUIREDMESSAGE),
-  currentPassword: yup.string().trim().required(REQUIREDMESSAGE),
-  newPassword: yup
-    .string()
-    .trim()
-    .required(REQUIREDMESSAGE)
-    .min(8, VALIDPASSWORD)
-    .matches(/\d/, VALIDPASSWORD)
-    .matches(/[A-Z]/, VALIDPASSWORD)
-    .matches(/[^\w]/, VALIDPASSWORD),
-  confirmPassword: yup
-    .string()
-    .trim()
-    .required(REQUIREDMESSAGE)
-    .oneOf([yup.ref('password')], 'Las contraseñas no coinciden'),
   name: yup
     .string()
     .trim()
@@ -42,3 +28,20 @@ export const userEditSchema = {
   city: yup.number().required(REQUIREDMESSAGE),
   address: yup.string().trim().required(REQUIREDMESSAGE).max(100, 'Máximo de 100 caracteres superado'),
 };
+
+/*
+currentPassword: yup.string().trim(),
+  newPassword: yup
+    .string()
+    .trim()
+    .required(REQUIREDMESSAGE)
+    .min(8, VALIDPASSWORD)
+    .matches(/\d/, VALIDPASSWORD)
+    .matches(/[A-Z]/, VALIDPASSWORD)
+    .matches(/[^\w]/, VALIDPASSWORD),
+  confirmPassword: yup
+    .string()
+    .trim()
+    .required(REQUIREDMESSAGE)
+    .oneOf([yup.ref('password')], 'Las contraseñas no coinciden'),
+    */
