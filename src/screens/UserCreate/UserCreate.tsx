@@ -26,7 +26,7 @@ const UserCreate: FC<UserCreateProps> = () => {
           </div>
         </div>
       </div>
-      <div>
+      <div className={styles.createForm}>
         <UserCreateForm />
       </div>
     </div>
