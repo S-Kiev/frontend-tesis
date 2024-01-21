@@ -60,7 +60,7 @@ const MyUserConfig: FC<MyUserConfigProps> = () => {
                 </div>
               </div>
               <div className={styles.form}>
-                <UserEditForm user={data?.data?.data[0]?.attributes} userData={userData?.data} />
+                <UserEditForm user={userData?.data} userData={data?.data?.data[0]?.attributes} />
               </div>
             </>
           )}

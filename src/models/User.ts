@@ -15,3 +15,46 @@ export interface UserData {
   address: string;
   userId: number;
 }
+
+export interface UserGet {
+  id: number;
+  username: string;
+  email: string;
+  provider: string;
+  confirmed: boolean;
+  blocked: boolean;
+  createdAt: string;
+  updatedAt: string;
+  role: {
+    id: number;
+    name: string;
+    description: string;
+    type: string;
+    createdAt: string;
+    updatedAt: string;
+  };
+}
+
+export interface UserDataGet {
+  name: string;
+  lastname: string;
+  document: string;
+  cellphone: string;
+  address: string;
+  deactivationDate: string | null;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
+  userId: number;
+  city: {
+    data: {
+      id: number;
+      attributes: {
+        cityName: string;
+        createdAt: string;
+        updatedAt: string;
+        publishedAt: string;
+      };
+    };
+  };
+}

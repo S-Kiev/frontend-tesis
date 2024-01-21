@@ -3,12 +3,11 @@ import { useMutation } from '@tanstack/react-query';
 import { Button, Form, InputGroup, OverlayTrigger, Spinner, Tooltip } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import styles from './userEditForm.module.scss';
-import { Eye, EyeSlash, QuestionCircleFill } from 'react-bootstrap-icons';
+import { Eye, EyeSlash, Key, QuestionCircleFill } from 'react-bootstrap-icons';
 import * as yup from 'yup';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useRevealPassword } from 'customHooks/useRevealPassword';
-import { userSchema } from 'util/validations/userShema';
 import Select from 'react-select';
 import { useGetCities } from 'customHooks/useGetCities';
 import PhoneInput from 'react-phone-number-input';
@@ -17,17 +16,20 @@ import { createUser, createUserData } from 'api/users';
 import { toast } from 'react-toastify';
 import ErrorToast from 'components/toast/errorToast';
 import SuccessToast from 'components/toast/successToast';
+import { UserDataGet, UserGet } from 'models/User';
+import { userEditSchema } from 'util/validations/userEditSchema';
 
 interface UserEditFormProps {
-  user: any;
-  userData: any;
+  user: UserGet;
+  userData: UserDataGet;
 }
 
-const schema = yup.object().shape(userSchema);
+const schema = yup.object().shape(userEditSchema);
 
 const UserEditForm: FC<UserEditFormProps> = ({ user, userData }) => {
   const [isDisabled, setIsDisabled] = useState<boolean>(false);
   const { revealPassword, togglePassword } = useRevealPassword();
+  const { revealPassword: revealNewPassword, togglePassword: toggleNewPassword } = useRevealPassword();
   const { data: dataCities, isLoading: isLoadingCities } = useGetCities();
   const navigate = useNavigate();
   const {
@@ -41,9 +43,10 @@ const UserEditForm: FC<UserEditFormProps> = ({ user, userData }) => {
     mode: 'onBlur',
     resolver: yupResolver(schema),
     defaultValues: {
-      username: '',
-      email: '',
-      password: '',
+      username: user.username,
+      email: user.email,
+      currentPassword: '',
+      newPassword: '',
       confirmPassword: '',
       name: '',
       lastname: '',
@@ -53,11 +56,15 @@ const UserEditForm: FC<UserEditFormProps> = ({ user, userData }) => {
       address: '',
     },
   });
+  /*Agregar campo contraseña actual y nueva contraseña:
+  Formulario 
+  Validacion
+  Endpoint */
 
   console.log(user);
   console.log(userData);
 
-  const mutationUser = useMutation({
+  /*const mutationUser = useMutation({
     mutationFn: createUser,
     onSuccess: (data: any) => {
       const userId: number = data.data.id;
@@ -95,12 +102,13 @@ const UserEditForm: FC<UserEditFormProps> = ({ user, userData }) => {
       });
       setIsDisabled(false);
     },
-  });
+  });*/
 
   const onSubmit = async (dataForm: {
     username: string;
     email: string;
-    password: string;
+    currentPassword: string;
+    newPassword: string;
     confirmPassword: string;
     name: string;
     lastname: string;
@@ -110,13 +118,13 @@ const UserEditForm: FC<UserEditFormProps> = ({ user, userData }) => {
     address: string;
   }) => {
     setIsDisabled(true);
-    mutationUser.mutate({
+    /*mutationUser.mutate({
       username: dataForm.username,
       email: dataForm.email,
       password: dataForm.password,
       role: 4,
       confirmed: true,
-    });
+    });*/
   };
 
   return (
@@ -145,61 +153,87 @@ const UserEditForm: FC<UserEditFormProps> = ({ user, userData }) => {
         />
         <Form.Control.Feedback type="invalid">{errors.email?.message}</Form.Control.Feedback>
       </Form.Group>
-      <Form.Group className="form-outline mb-4">
-        <Form.Label>
-          Contraseña <strong className="text-danger me-2">*</strong>
-          <OverlayTrigger
-            placement="right"
-            delay={{ show: 250, hide: 400 }}
-            overlay={
-              <Tooltip>
-                Una contraseña debe tener:
-                <ul>
-                  <li>Un mínimo de 8 caracteres.</li>
-                  <li>Contener al menos una mayúscula.</li>
-                  <li>Contener al menos un número.</li>
-                  <li>Contener al menos un carácter especial. Por ejemplo: “@”, “.”, “*”,“$”.</li>
-                </ul>
-              </Tooltip>
-            }
-          >
-            <QuestionCircleFill className={styles.pointer} />
-          </OverlayTrigger>
-        </Form.Label>
-        <InputGroup>
-          <Form.Control
-            {...register('password')}
-            placeholder={'Ingrese la contraseña' || ''}
-            isInvalid={!!errors.password}
-            type={revealPassword ? 'text' : 'password'}
-          />
-          <InputGroup.Text>
-            <i onClick={togglePassword} className={styles.pointer}>
-              {revealPassword ? <Eye /> : <EyeSlash />}
-            </i>
-          </InputGroup.Text>
-          <Form.Control.Feedback type="invalid">{errors.password?.message}</Form.Control.Feedback>
-        </InputGroup>
-      </Form.Group>
-      <Form.Group className="form-outline mb-4">
-        <Form.Label>
-          Confirmación contraseña <strong className="text-danger me-2">*</strong>
-        </Form.Label>
-        <InputGroup>
-          <Form.Control
-            {...register('confirmPassword')}
-            placeholder={'Ingrese la contraseña nuevamente' || ''}
-            isInvalid={!!errors.confirmPassword}
-            type={revealPassword ? 'text' : 'password'}
-          />
-          <InputGroup.Text>
-            <i onClick={togglePassword} className={styles.pointer}>
-              {revealPassword ? <Eye /> : <EyeSlash />}
-            </i>
-          </InputGroup.Text>
-          <Form.Control.Feedback type="invalid">{errors.confirmPassword?.message}</Form.Control.Feedback>
-        </InputGroup>
-      </Form.Group>
+      <div className={styles.passwordForm}>
+        <div className={styles.passwordConteiner}>
+          <h3>
+            Cambio de contraseña <Key />
+          </h3>
+          <Form.Group className="form-outline mb-4 mt-3">
+            <Form.Label>
+              Contraseña actual <strong className="text-danger me-2">*</strong>
+            </Form.Label>
+            <InputGroup>
+              <Form.Control
+                {...register('currentPassword')}
+                placeholder={'Contraseña actual' || ''}
+                isInvalid={!!errors.currentPassword}
+                type={revealPassword ? 'text' : 'password'}
+              />
+              <InputGroup.Text>
+                <i onClick={togglePassword} className={styles.pointer}>
+                  {revealPassword ? <Eye /> : <EyeSlash />}
+                </i>
+              </InputGroup.Text>
+              <Form.Control.Feedback type="invalid">{errors.currentPassword?.message}</Form.Control.Feedback>
+            </InputGroup>
+          </Form.Group>
+          <Form.Group className="form-outline mb-4">
+            <Form.Label>
+              Nueva contraseña <strong className="text-danger me-2">*</strong>
+              <OverlayTrigger
+                placement="right"
+                delay={{ show: 250, hide: 400 }}
+                overlay={
+                  <Tooltip>
+                    Una contraseña debe tener:
+                    <ul>
+                      <li>Un mínimo de 8 caracteres.</li>
+                      <li>Contener al menos una mayúscula.</li>
+                      <li>Contener al menos un número.</li>
+                      <li>Contener al menos un carácter especial. Por ejemplo: “@”, “.”, “*”,“$”.</li>
+                    </ul>
+                  </Tooltip>
+                }
+              >
+                <QuestionCircleFill className={styles.pointer} />
+              </OverlayTrigger>
+            </Form.Label>
+            <InputGroup>
+              <Form.Control
+                {...register('newPassword')}
+                placeholder={'Nueva contraseña' || ''}
+                isInvalid={!!errors.newPassword}
+                type={revealNewPassword ? 'text' : 'password'}
+              />
+              <InputGroup.Text>
+                <i onClick={toggleNewPassword} className={styles.pointer}>
+                  {revealNewPassword ? <Eye /> : <EyeSlash />}
+                </i>
+              </InputGroup.Text>
+              <Form.Control.Feedback type="invalid">{errors.newPassword?.message}</Form.Control.Feedback>
+            </InputGroup>
+          </Form.Group>
+          <Form.Group className="form-outline mb-4">
+            <Form.Label>
+              Confirmación contraseña <strong className="text-danger me-2">*</strong>
+            </Form.Label>
+            <InputGroup>
+              <Form.Control
+                {...register('confirmPassword')}
+                placeholder={'Ingrese la nueva contraseña' || ''}
+                isInvalid={!!errors.confirmPassword}
+                type={revealNewPassword ? 'text' : 'password'}
+              />
+              <InputGroup.Text>
+                <i onClick={toggleNewPassword} className={styles.pointer}>
+                  {revealNewPassword ? <Eye /> : <EyeSlash />}
+                </i>
+              </InputGroup.Text>
+              <Form.Control.Feedback type="invalid">{errors.confirmPassword?.message}</Form.Control.Feedback>
+            </InputGroup>
+          </Form.Group>
+        </div>
+      </div>
       <Form.Group className="form-outline mb-4">
         <Form.Label>
           Nombre <strong className="text-danger me-2">*</strong>
@@ -330,14 +364,14 @@ const UserEditForm: FC<UserEditFormProps> = ({ user, userData }) => {
           type="button"
           className="me-3"
           onClick={() => {
-            navigate(`/app/users`);
+            navigate(-1);
           }}
         >
           Cancelar
         </Button>
         <Button variant="success" type="submit" disabled={isDisabled}>
           {isDisabled && <Spinner className="me-1" size="sm" />}
-          <span>Registrar usuario</span>
+          <span>Guardar cambios</span>
         </Button>
       </div>
     </Form>
