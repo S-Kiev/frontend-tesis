@@ -1,6 +1,6 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
-import { Button, Form, InputGroup, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { Button, Form, InputGroup, OverlayTrigger, Spinner, Tooltip } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import styles from './userCreate.module.scss';
 import { Eye, EyeSlash, QuestionCircleFill } from 'react-bootstrap-icons';
@@ -23,8 +23,9 @@ interface UserCreateFormProps {}
 const schema = yup.object().shape(userSchema);
 
 const UserCreateForm: FC<UserCreateFormProps> = () => {
+  const [isDisabled, setIsDisabled] = useState<boolean>(false);
   const { revealPassword, togglePassword } = useRevealPassword();
-  const { data: dataCities, error, isLoading: isLoadingCities } = useGetCities();
+  const { data: dataCities, isLoading: isLoadingCities } = useGetCities();
   const navigate = useNavigate();
   const {
     register,
@@ -66,9 +67,10 @@ const UserCreateForm: FC<UserCreateFormProps> = () => {
       });
     },
     onError: () => {
-      toast(<ErrorToast message={`Ha ocurrido un error al crear el usuario, intente nuevamente`} />, {
+      toast(<ErrorToast message={`Ha ocurrido un error al registrar el usuario, intente nuevamente`} />, {
         style: { borderRadius: '10px' },
       });
+      setIsDisabled(false);
     },
   });
 
@@ -78,11 +80,14 @@ const UserCreateForm: FC<UserCreateFormProps> = () => {
       toast(<SuccessToast message={`Usuario registrado con éxito`} hour />, {
         style: { borderRadius: '10px' },
       });
+      setIsDisabled(false);
+      navigate(`/app/users`);
     },
     onError: () => {
       toast(<ErrorToast message={`Ha ocurrido un error al registrar el usuario, intente nuevamente`} />, {
         style: { borderRadius: '10px' },
       });
+      setIsDisabled(false);
     },
   });
 
@@ -98,6 +103,7 @@ const UserCreateForm: FC<UserCreateFormProps> = () => {
     city: number;
     address: string;
   }) => {
+    setIsDisabled(true);
     mutationUser.mutate({
       username: dataForm.username,
       email: dataForm.email,
@@ -313,15 +319,19 @@ const UserCreateForm: FC<UserCreateFormProps> = () => {
         <Form.Control.Feedback type="invalid">{errors.address?.message}</Form.Control.Feedback>
       </Form.Group>
       <div className="d-flex align-items-center justify-content-end mb-2" style={{ marginTop: '40px' }}>
-        <Button variant="secondary" type="button" className="me-3">
+        <Button
+          variant="secondary"
+          type="button"
+          className="me-3"
+          onClick={() => {
+            navigate(`/app/users`);
+          }}
+        >
           Cancelar
         </Button>
-        <Button
-          variant="success"
-          type="submit"
-          //disabled={isLoading}
-        >
-          Registrar usuario
+        <Button variant="success" type="submit" disabled={isDisabled}>
+          {isDisabled && <Spinner className="me-1" size="sm" />}
+          <span>Registrar usuario</span>
         </Button>
       </div>
     </Form>

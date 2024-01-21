@@ -6,12 +6,15 @@
 
   .header {
     display: flex;
-    height: 15%;
     justify-content: space-between;
     align-items: center;
     padding-left: 24px;
     padding-right: 32px;
     border-bottom: 1.5px solid $neutral_300;
+
+    @media (min-width: 768px) {
+      height: 15%;
+    }
 
     .headline {
       font-weight: 500;
