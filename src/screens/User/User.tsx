@@ -15,11 +15,13 @@ import { AlertModal } from 'components/modals/alertModal';
 import { toast } from 'react-toastify';
 import SuccessToast from 'components/toast/successToast';
 import ErrorToast from 'components/toast/errorToast';
+import { ChangePasswordModal } from 'components/modals/changePasswordModal';
 
 interface UserProps {}
 
 const User: FC<UserProps> = () => {
   const [showBlockedModal, setShowBlockedModal] = useState(false);
+  const [changePasswordModal, setChangePasswordModal] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
   const navigate = useNavigate();
   const user = useSelector(selectUser);
@@ -122,7 +124,13 @@ const User: FC<UserProps> = () => {
                           <PencilSquare style={{ marginRight: '5px' }} />
                           Editar usuario
                         </Button>
-                        <Button variant="success" onClick={() => {}} className="d-none d-lg-block">
+                        <Button
+                          variant="success"
+                          onClick={() => {
+                            setChangePasswordModal(true);
+                          }}
+                          className="d-none d-lg-block"
+                        >
                           <Key style={{ marginRight: '5px' }} />
                           Cambiar contraseña
                         </Button>
@@ -139,7 +147,13 @@ const User: FC<UserProps> = () => {
                       <PencilSquare style={{ marginRight: '5px' }} />
                       Editar usuario
                     </Button>
-                    <Button variant="success" onClick={() => {}} className="d-none d-lg-block">
+                    <Button
+                      variant="success"
+                      onClick={() => {
+                        setChangePasswordModal(true);
+                      }}
+                      className="d-none d-lg-block"
+                    >
                       <Key style={{ marginRight: '5px' }} />
                       Cambiar contraseña
                     </Button>
@@ -170,7 +184,13 @@ const User: FC<UserProps> = () => {
                         <PencilSquare style={{ marginRight: '5px' }} />
                         Editar usuario
                       </Button>
-                      <Button variant="success" onClick={() => {}} className="d-lg-none mt-3">
+                      <Button
+                        variant="success"
+                        onClick={() => {
+                          setChangePasswordModal(true);
+                        }}
+                        className="d-lg-none mt-3"
+                      >
                         <Key style={{ marginRight: '5px' }} />
                         Cambiar contraseña
                       </Button>
@@ -187,7 +207,13 @@ const User: FC<UserProps> = () => {
                     <PencilSquare style={{ marginRight: '5px' }} />
                     Editar usuario
                   </Button>
-                  <Button variant="success" onClick={() => {}} className="d-lg-none mt-3">
+                  <Button
+                    variant="success"
+                    onClick={() => {
+                      setChangePasswordModal(true);
+                    }}
+                    className="d-lg-none mt-3"
+                  >
                     <Key style={{ marginRight: '5px' }} />
                     Cambiar contraseña
                   </Button>
@@ -220,6 +246,7 @@ const User: FC<UserProps> = () => {
         isDisabled={isDisabled}
         setIsDisabled={setIsDisabled}
       />
+      <ChangePasswordModal show={changePasswordModal} showModal={setChangePasswordModal} />
     </div>
   );
 };

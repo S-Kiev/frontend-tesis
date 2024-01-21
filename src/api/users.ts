@@ -58,7 +58,9 @@ export const editPassword = async (passwordData: {
   currentPassword: string;
   passwordConfirmation: string;
 }) => {
-  return await axiosDefaultConfig.post(routes.POST_USER_DATA, {
-    data: passwordData,
+  return await axiosDefaultConfig.post(routes.POST_PASSWORD, {
+    password: passwordData.password,
+    currentPassword: passwordData.currentPassword,
+    passwordConfirmation: passwordData.passwordConfirmation,
   });
 };
