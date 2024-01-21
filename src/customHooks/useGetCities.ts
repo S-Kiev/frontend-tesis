@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { QueryKeys } from 'api/QueryKeys';
 import { getCities } from 'api/cities';
+import { parseCities } from 'util/parseCities';
 
 export const useGetCities = () => {
   const { data, error, isLoading } = useQuery({
@@ -8,5 +9,5 @@ export const useGetCities = () => {
     queryFn: () => getCities(),
   });
 
-  return { data, error, isLoading };
+  return { data: data?.data?.data ? parseCities(data?.data?.data) : undefined, error, isLoading };
 };

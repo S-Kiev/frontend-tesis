@@ -10,6 +10,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useRevealPassword } from 'customHooks/useRevealPassword';
 import { userSchema } from 'util/validations/userShema';
 import Select from 'react-select/dist/declarations/src/Select';
+import { useGetCities } from 'customHooks/useGetCities';
 
 interface UserCreateFormProps {}
 
@@ -19,6 +20,7 @@ const UserCreateForm: FC<UserCreateFormProps> = () => {
   //const [showAlert, setShowAlert] = useState(false);
   //const navigate = useNavigate();
   const { revealPassword, togglePassword } = useRevealPassword();
+  const { data, error, isLoading } = useGetCities();
   const {
     register,
     handleSubmit,
@@ -41,7 +43,7 @@ const UserCreateForm: FC<UserCreateFormProps> = () => {
       address: '',
     },
   });
-
+  console.log(data);
   /*const mutation = useMutation({
     mutationFn: login,
     onSuccess: (data: any) => {
