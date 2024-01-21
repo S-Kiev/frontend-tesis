@@ -29,8 +29,15 @@ export const userEditSchema = {
   address: yup.string().trim().required(REQUIREDMESSAGE).max(100, 'Máximo de 100 caracteres superado'),
 };
 
-/*
-currentPassword: yup.string().trim(),
+export const passwordEditSchema = {
+  currentPassword: yup
+    .string()
+    .trim()
+    .required(REQUIREDMESSAGE)
+    .min(8, VALIDPASSWORD)
+    .matches(/\d/, VALIDPASSWORD)
+    .matches(/[A-Z]/, VALIDPASSWORD)
+    .matches(/[^\w]/, VALIDPASSWORD),
   newPassword: yup
     .string()
     .trim()
@@ -43,5 +50,5 @@ currentPassword: yup.string().trim(),
     .string()
     .trim()
     .required(REQUIREDMESSAGE)
-    .oneOf([yup.ref('password')], 'Las contraseñas no coinciden'),
-    */
+    .oneOf([yup.ref('newPassword')], 'Las contraseñas no coinciden'),
+};

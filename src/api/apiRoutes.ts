@@ -9,4 +9,5 @@ export const routes = {
   POST_USER: 'users',
   POST_USER_DATA: 'users-data',
   PUT_USER_DATA: 'users-data/{id}',
+  POST_PASSWORD: 'auth/change-password',
 };

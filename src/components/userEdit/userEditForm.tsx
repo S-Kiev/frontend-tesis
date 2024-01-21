@@ -94,9 +94,6 @@ const UserEditForm: FC<UserEditFormProps> = ({ user, userData, userId }) => {
   const onSubmit = async (dataForm: {
     username: string;
     email: string;
-    currentPassword?: string;
-    newPassword?: string;
-    confirmPassword?: string;
     name: string;
     lastname: string;
     document: string;
@@ -294,90 +291,3 @@ const UserEditForm: FC<UserEditFormProps> = ({ user, userData, userId }) => {
 };
 
 export default UserEditForm;
-
-/*
-  const { revealPassword, togglePassword } = useRevealPassword();
-  const { revealPassword: revealNewPassword, togglePassword: toggleNewPassword } = useRevealPassword();
-
-<div className={styles.passwordForm}>
-        <div className={styles.passwordConteiner}>
-          <h3>
-            Cambio de contraseña <Key />
-          </h3>
-          <Form.Group className="form-outline mb-4 mt-3">
-            <Form.Label>
-              Contraseña actual <strong className="text-danger me-2">*</strong>
-            </Form.Label>
-            <InputGroup>
-              <Form.Control
-                {...register('currentPassword')}
-                placeholder={'Contraseña actual' || ''}
-                isInvalid={!!errors.currentPassword}
-                type={revealPassword ? 'text' : 'password'}
-              />
-              <InputGroup.Text>
-                <i onClick={togglePassword} className={styles.pointer}>
-                  {revealPassword ? <Eye /> : <EyeSlash />}
-                </i>
-              </InputGroup.Text>
-              <Form.Control.Feedback type="invalid">{errors.currentPassword?.message}</Form.Control.Feedback>
-            </InputGroup>
-          </Form.Group>
-          <Form.Group className="form-outline mb-4">
-            <Form.Label>
-              Nueva contraseña <strong className="text-danger me-2">*</strong>
-              <OverlayTrigger
-                placement="right"
-                delay={{ show: 250, hide: 400 }}
-                overlay={
-                  <Tooltip>
-                    Una contraseña debe tener:
-                    <ul>
-                      <li>Un mínimo de 8 caracteres.</li>
-                      <li>Contener al menos una mayúscula.</li>
-                      <li>Contener al menos un número.</li>
-                      <li>Contener al menos un carácter especial. Por ejemplo: “@”, “.”, “*”,“$”.</li>
-                    </ul>
-                  </Tooltip>
-                }
-              >
-                <QuestionCircleFill className={styles.pointer} />
-              </OverlayTrigger>
-            </Form.Label>
-            <InputGroup>
-              <Form.Control
-                {...register('newPassword')}
-                placeholder={'Nueva contraseña' || ''}
-                isInvalid={!!errors.newPassword}
-                type={revealNewPassword ? 'text' : 'password'}
-              />
-              <InputGroup.Text>
-                <i onClick={toggleNewPassword} className={styles.pointer}>
-                  {revealNewPassword ? <Eye /> : <EyeSlash />}
-                </i>
-              </InputGroup.Text>
-              <Form.Control.Feedback type="invalid">{errors.newPassword?.message}</Form.Control.Feedback>
-            </InputGroup>
-          </Form.Group>
-          <Form.Group className="form-outline mb-4">
-            <Form.Label>
-              Confirmación contraseña <strong className="text-danger me-2">*</strong>
-            </Form.Label>
-            <InputGroup>
-              <Form.Control
-                {...register('confirmPassword')}
-                placeholder={'Ingrese la nueva contraseña' || ''}
-                isInvalid={!!errors.confirmPassword}
-                type={revealNewPassword ? 'text' : 'password'}
-              />
-              <InputGroup.Text>
-                <i onClick={toggleNewPassword} className={styles.pointer}>
-                  {revealNewPassword ? <Eye /> : <EyeSlash />}
-                </i>
-              </InputGroup.Text>
-              <Form.Control.Feedback type="invalid">{errors.confirmPassword?.message}</Form.Control.Feedback>
-            </InputGroup>
-          </Form.Group>
-        </div>
-      </div>
-      */
