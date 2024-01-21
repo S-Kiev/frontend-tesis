@@ -1,9 +1,9 @@
-import { City, CityParse } from 'models/City';
+import { City } from 'models/City';
 
-export const parseCities = (cieties: City[]): CityParse[] => {
+export const parseCities = (cieties: City[]) => {
   return cieties.map(item => {
     const { id, attributes } = item;
     const { cityName } = attributes;
-    return { id, name: cityName } as CityParse;
+    return { value: id, label: cityName };
   });
 };

@@ -3,13 +3,13 @@ import { useMutation } from '@tanstack/react-query';
 import { Button, Form, InputGroup, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import styles from './userCreate.module.scss';
-import { Eye, EyeSlash, QuestionCircleFill } from 'react-bootstrap-icons';
+import { ExclamationCircle, Eye, EyeSlash, QuestionCircleFill } from 'react-bootstrap-icons';
 import * as yup from 'yup';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useRevealPassword } from 'customHooks/useRevealPassword';
 import { userSchema } from 'util/validations/userShema';
-import Select from 'react-select/dist/declarations/src/Select';
+import Select from 'react-select';
 import { useGetCities } from 'customHooks/useGetCities';
 
 interface UserCreateFormProps {}
@@ -20,7 +20,7 @@ const UserCreateForm: FC<UserCreateFormProps> = () => {
   //const [showAlert, setShowAlert] = useState(false);
   //const navigate = useNavigate();
   const { revealPassword, togglePassword } = useRevealPassword();
-  const { data, error, isLoading } = useGetCities();
+  const { data: dataCities, error, isLoading: isLoadingCities } = useGetCities();
   const {
     register,
     handleSubmit,
@@ -39,11 +39,11 @@ const UserCreateForm: FC<UserCreateFormProps> = () => {
       lastname: '',
       document: '',
       cellphone: '',
-      city: '',
+      city: undefined,
       address: '',
     },
   });
-  console.log(data);
+
   /*const mutation = useMutation({
     mutationFn: login,
     onSuccess: (data: any) => {
@@ -65,7 +65,7 @@ const UserCreateForm: FC<UserCreateFormProps> = () => {
     lastname: string;
     document: string;
     cellphone: string;
-    city: string;
+    city: number;
     address: string;
   }) => {
     //const { email, password } = dataForm;
@@ -214,19 +214,43 @@ const UserCreateForm: FC<UserCreateFormProps> = () => {
       //Cellphone
       <Form.Group className="form-outline mb-4">
         <Form.Label>
-          Ciudad/Localidad <strong className="text-danger me-2">*</strong>
+          Ciudad/localidad <strong className="text-danger me-2">*</strong>
         </Form.Label>
-        {/*<Form.Control
-          {...register('address')}
-          type="text"
-          placeholder={'Ingrese la dirección' || ''}
-          //disabled={isLoading}
-          isInvalid={!!errors.city}
+        <Controller
+          name="city"
+          control={control}
+          render={({ field }) => (
+            <Select
+              options={dataCities}
+              isLoading={isLoadingCities}
+              value={dataCities.find(c => c.value === field.value)}
+              onChange={val => field.onChange(val.value)}
+              styles={{
+                control: baseStyles => ({
+                  ...baseStyles,
+                  borderColor: !!errors.city ? '#dc3545' : '#dee2e6',
+                  borderRadius: '0.375rem',
+                  visibility: 'visible',
+                  height: '40px',
+                  fontSize: '14px',
+                  alignContent: 'center',
+                }),
+              }}
+              menuPlacement="auto"
+              isSearchable={false}
+              name="city"
+              isDisabled={isLoadingCities}
+              placeholder={'Seleccione una ciudad/localidad'}
+            ></Select>
+          )}
         />
-        <Controller name='city' control={control} render={({field}) => (
-          <Select value={} onChange={val => field.onChange(val.value)} options={} name='city' placeholder={'Seleccione una ciudad/localidad'}></Select>
-        )}/>
-        <Form.Control.Feedback type="invalid">{errors.city?.message}</Form.Control.Feedback>*/}
+        {errors.city?.message && (
+          <div className="d-flex align-items-center">
+            <span className="text-danger mt-1 ms-2" style={{ fontSize: '0.875em' }}>
+              {errors.city?.message}
+            </span>
+          </div>
+        )}
       </Form.Group>
       <Form.Group className="form-outline mb-4">
         <Form.Label>
