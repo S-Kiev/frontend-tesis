@@ -35,30 +35,8 @@
     }
   }
 
-  .createForm {
+  .form {
     margin: 30px;
-  }
-
-  .error {
-    width: 100%;
-    height: 70%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-
-    h3 {
-      white-space: nowrap;
-      font-size: 23.04px;
-      line-height: 28.8px;
-      font-weight: 400;
-    }
-
-    h5 {
-      color: $text_secondary;
-      line-height: 20px;
-      font-weight: 400;
-    }
   }
 }
 

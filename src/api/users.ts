@@ -1,4 +1,4 @@
-import { User, UserData } from 'models/User';
+import { User, UserData, UserDataEdit } from 'models/User';
 import { routes } from './apiRoutes';
 import { axiosDefaultConfig } from './axiosConfig';
 
@@ -36,6 +36,19 @@ export const createUser = async (user: User) => {
 
 export const createUserData = async (userData: UserData) => {
   return await axiosDefaultConfig.post(routes.POST_USER_DATA, {
+    data: userData,
+  });
+};
+
+export const editUser = async (user: { username: string; email: string; userId: string }) => {
+  return await axiosDefaultConfig.put(routes.PUT_USER.replace('{id}', user.userId), {
+    username: user.username,
+    email: user.email,
+  });
+};
+
+export const editUserData = async (userData: UserDataEdit) => {
+  return await axiosDefaultConfig.put(routes.PUT_USER_DATA.replace('{id}', userData.userId.toString()), {
     data: userData,
   });
 };

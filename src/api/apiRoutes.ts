@@ -8,4 +8,5 @@ export const routes = {
   GET_CITIES: 'cities?pagination[page]=1&pagination[pageSize]=90',
   POST_USER: 'users',
   POST_USER_DATA: 'users-data',
+  PUT_USER_DATA: 'users-data/{id}',
 };
