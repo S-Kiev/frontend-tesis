@@ -1,12 +1,30 @@
 import { FC } from 'react';
 import { ChevronLeft } from 'react-bootstrap-icons';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import styles from './MyUserConfig.module.scss';
+import { useQuery } from '@tanstack/react-query';
+import { QueryKeys } from 'api/QueryKeys';
+import { getUser, getUserData } from 'api/users';
 
 interface MyUserConfigProps {}
 
 const MyUserConfig: FC<MyUserConfigProps> = () => {
   const navigate = useNavigate();
+  const { id } = useParams();
+
+  const { data, error, isLoading } = useQuery({
+    queryKey: [QueryKeys.UserDataPorfile, id],
+    queryFn: () => getUserData(id || ''),
+  });
+
+  const {
+    data: userData,
+    error: errorUserData,
+    isLoading: isLoadingUserData,
+  } = useQuery({
+    queryKey: [QueryKeys.User, id],
+    queryFn: () => getUser(id || ''),
+  });
 
   return (
     <div className={styles.container}>
