@@ -8,7 +8,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { QueryKeys } from 'api/QueryKeys';
 import { changeStateUser, getUser, getUserData } from 'api/users';
 import { Role } from 'models/Roles';
-import { CloudLightningRain, KeyFill, PencilSquare, ChevronLeft } from 'react-bootstrap-icons';
+import { CloudLightningRain, KeyFill, PencilSquare, ChevronLeft, Key } from 'react-bootstrap-icons';
 import { DotLoader } from 'react-spinners';
 import UserDataCard from 'components/userDataCard/userDataCard';
 import { AlertModal } from 'components/modals/alertModal';
@@ -113,25 +113,37 @@ const User: FC<UserProps> = () => {
                       </Button>
                     )}
                     {user.id === data?.data?.id && (
-                      <Button
-                        variant="success"
-                        onClick={() => navigate(`/app/user/${id}/config`)}
-                        className="d-none d-lg-block"
-                      >
-                        <PencilSquare style={{ marginRight: '5px' }} />
-                        Editar usuario
-                      </Button>
+                      <div className="d-flex align-items-center justify-content-center">
+                        <Button
+                          variant="success"
+                          onClick={() => navigate(`/app/user/${id}/config`)}
+                          className="d-none d-lg-block me-3"
+                        >
+                          <PencilSquare style={{ marginRight: '5px' }} />
+                          Editar usuario
+                        </Button>
+                        <Button variant="success" onClick={() => {}} className="d-none d-lg-block">
+                          <Key style={{ marginRight: '5px' }} />
+                          Cambiar contraseña
+                        </Button>
+                      </div>
                     )}
                   </>
                 ) : (
-                  <Button
-                    variant="success"
-                    onClick={() => navigate(`/app/user/${id}/config`)}
-                    className="d-none d-lg-block"
-                  >
-                    <PencilSquare style={{ marginRight: '5px' }} />
-                    Editar usuario
-                  </Button>
+                  <div className="d-flex align-items-center justify-content-center">
+                    <Button
+                      variant="success"
+                      onClick={() => navigate(`/app/user/${id}/config`)}
+                      className="d-none d-lg-block"
+                    >
+                      <PencilSquare style={{ marginRight: '5px' }} />
+                      Editar usuario
+                    </Button>
+                    <Button variant="success" onClick={() => {}} className="d-none d-lg-block">
+                      <Key style={{ marginRight: '5px' }} />
+                      Cambiar contraseña
+                    </Button>
+                  </div>
                 )}
               </div>
               {user?.role === Role.superAdmin ? (
@@ -149,21 +161,37 @@ const User: FC<UserProps> = () => {
                     </Button>
                   )}
                   {user.id === data?.data?.id && (
-                    <Button
-                      variant="success"
-                      onClick={() => navigate(`/app/user/${id}/config`)}
-                      className="d-lg-none mt-3"
-                    >
-                      <PencilSquare style={{ marginRight: '5px' }} />
-                      Editar usuario
-                    </Button>
+                    <div className="d-flex flex-column">
+                      <Button
+                        variant="success"
+                        onClick={() => navigate(`/app/user/${id}/config`)}
+                        className="d-lg-none mt-3"
+                      >
+                        <PencilSquare style={{ marginRight: '5px' }} />
+                        Editar usuario
+                      </Button>
+                      <Button variant="success" onClick={() => {}} className="d-lg-none mt-3">
+                        <Key style={{ marginRight: '5px' }} />
+                        Cambiar contraseña
+                      </Button>
+                    </div>
                   )}
                 </>
               ) : (
-                <Button variant="success" onClick={() => navigate(`/app/user/${id}/config`)} className="d-lg-none mt-3">
-                  <PencilSquare style={{ marginRight: '5px' }} />
-                  Editar usuario
-                </Button>
+                <div className="d-flex flex-column">
+                  <Button
+                    variant="success"
+                    onClick={() => navigate(`/app/user/${id}/config`)}
+                    className="d-lg-none mt-3"
+                  >
+                    <PencilSquare style={{ marginRight: '5px' }} />
+                    Editar usuario
+                  </Button>
+                  <Button variant="success" onClick={() => {}} className="d-lg-none mt-3">
+                    <Key style={{ marginRight: '5px' }} />
+                    Cambiar contraseña
+                  </Button>
+                </div>
               )}
               <div className={`d-flex align-items-center ${styles.card} flex-column flex-lg-row`}>
                 <div className={styles.cardUser}>
