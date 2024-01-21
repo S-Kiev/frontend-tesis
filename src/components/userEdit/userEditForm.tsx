@@ -46,7 +46,7 @@ const UserEditForm: FC<UserEditFormProps> = ({ user, userData, userId }) => {
       name: userData.name,
       lastname: userData.lastname,
       document: userData.document,
-      cellphone: '+' + userData.cellphone,
+      cellphone: userData.cellphone,
       city: userData.city.data.id,
       address: userData.address,
     },
