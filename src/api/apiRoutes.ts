@@ -6,4 +6,6 @@ export const routes = {
   GET_USER_DATA: 'users-data?filters[userId][$eq]={id}&populate=city',
   PUT_USER: 'users/{id}',
   GET_CITIES: 'cities?pagination[page]=1&pagination[pageSize]=90',
+  POST_USER: 'users',
+  POST_USER_DATA: 'users-data',
 };

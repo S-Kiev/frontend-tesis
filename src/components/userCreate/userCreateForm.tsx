@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { Button, Form, InputGroup, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
@@ -13,21 +13,25 @@ import Select from 'react-select';
 import { useGetCities } from 'customHooks/useGetCities';
 import PhoneInput from 'react-phone-number-input';
 import '../../util/styles/phoneNumberInput.scss';
+import { createUser, createUserData } from 'api/users';
+import { toast } from 'react-toastify';
+import ErrorToast from 'components/toast/errorToast';
+import SuccessToast from 'components/toast/successToast';
 
 interface UserCreateFormProps {}
 
 const schema = yup.object().shape(userSchema);
 
 const UserCreateForm: FC<UserCreateFormProps> = () => {
-  //const [showAlert, setShowAlert] = useState(false);
-  //const navigate = useNavigate();
   const { revealPassword, togglePassword } = useRevealPassword();
   const { data: dataCities, error, isLoading: isLoadingCities } = useGetCities();
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     formState: { errors },
     control,
+    getValues,
   } = useForm({
     criteriaMode: 'all',
     mode: 'onBlur',
@@ -46,17 +50,41 @@ const UserCreateForm: FC<UserCreateFormProps> = () => {
     },
   });
 
-  /*const mutation = useMutation({
-    mutationFn: login,
+  const mutationUser = useMutation({
+    mutationFn: createUser,
     onSuccess: (data: any) => {
-      storeToken(data.data.jwt);
+      const userId: number = data.data.id;
+      const userData: any = getValues();
+      mutationUserData.mutate({
+        name: userData.name,
+        lastname: userData.lastname,
+        document: userData.document,
+        cellphone: userData.cellphone,
+        city: userData.city,
+        address: userData.address,
+        userId: userId,
+      });
     },
-    onError: (error: any) => {
-      if (error.response && error.response.status) {
-        setShowAlert(true);
-      }
+    onError: () => {
+      toast(<ErrorToast message={`Ha ocurrido un error al crear el usuario, intente nuevamente`} />, {
+        style: { borderRadius: '10px' },
+      });
     },
-  });*/
+  });
+
+  const mutationUserData = useMutation({
+    mutationFn: createUserData,
+    onSuccess: () => {
+      toast(<SuccessToast message={`Usuario registrado con éxito`} hour />, {
+        style: { borderRadius: '10px' },
+      });
+    },
+    onError: () => {
+      toast(<ErrorToast message={`Ha ocurrido un error al registrar el usuario, intente nuevamente`} />, {
+        style: { borderRadius: '10px' },
+      });
+    },
+  });
 
   const onSubmit = async (dataForm: {
     username: string;
@@ -70,15 +98,15 @@ const UserCreateForm: FC<UserCreateFormProps> = () => {
     city: number;
     address: string;
   }) => {
-    console.log(dataForm);
-    //const { email, password } = dataForm;
-    //mutation.mutate({ identifier: email, password });
+    mutationUser.mutate({
+      username: dataForm.username,
+      email: dataForm.email,
+      password: dataForm.password,
+      role: 4,
+      confirmed: true,
+    });
   };
 
-  /*
-  Estilizar formulario nuevamente 
-  Integrar api
-  */
   return (
     <Form onSubmit={handleSubmit(onSubmit)} className={styles.userForm}>
       <Form.Group className="form-outline mb-4">
@@ -89,7 +117,6 @@ const UserCreateForm: FC<UserCreateFormProps> = () => {
           {...register('username')}
           type="text"
           placeholder={'Ingrese el nombre de usuario' || ''}
-          //disabled={isLoading}
           isInvalid={!!errors.username}
         />
         <Form.Control.Feedback type="invalid">{errors.username?.message}</Form.Control.Feedback>
@@ -102,7 +129,6 @@ const UserCreateForm: FC<UserCreateFormProps> = () => {
           {...register('email')}
           type="text"
           placeholder={'Ingrese el email' || ''}
-          //disabled={isLoading}
           isInvalid={!!errors.email}
         />
         <Form.Control.Feedback type="invalid">{errors.email?.message}</Form.Control.Feedback>
@@ -132,7 +158,6 @@ const UserCreateForm: FC<UserCreateFormProps> = () => {
           <Form.Control
             {...register('password')}
             placeholder={'Ingrese la contraseña' || ''}
-            //disabled={isLoading}
             isInvalid={!!errors.password}
             type={revealPassword ? 'text' : 'password'}
           />
@@ -152,7 +177,6 @@ const UserCreateForm: FC<UserCreateFormProps> = () => {
           <Form.Control
             {...register('confirmPassword')}
             placeholder={'Ingrese la contraseña nuevamente' || ''}
-            //disabled={isLoading}
             isInvalid={!!errors.confirmPassword}
             type={revealPassword ? 'text' : 'password'}
           />
@@ -172,7 +196,6 @@ const UserCreateForm: FC<UserCreateFormProps> = () => {
           {...register('name')}
           type="text"
           placeholder={'Ingrese el nombre' || ''}
-          //disabled={isLoading}
           isInvalid={!!errors.name}
         />
         <Form.Control.Feedback type="invalid">{errors.name?.message}</Form.Control.Feedback>
@@ -185,7 +208,6 @@ const UserCreateForm: FC<UserCreateFormProps> = () => {
           {...register('lastname')}
           type="text"
           placeholder={'Ingrese el apellido' || ''}
-          //disabled={isLoading}
           isInvalid={!!errors.lastname}
         />
         <Form.Control.Feedback type="invalid">{errors.lastname?.message}</Form.Control.Feedback>
@@ -205,7 +227,6 @@ const UserCreateForm: FC<UserCreateFormProps> = () => {
           {...register('document')}
           type="text"
           placeholder={'Ingrese el documento' || ''}
-          //disabled={isLoading}
           isInvalid={!!errors.document}
         />
         <Form.Control.Feedback type="invalid">{errors.document?.message}</Form.Control.Feedback>
@@ -287,25 +308,18 @@ const UserCreateForm: FC<UserCreateFormProps> = () => {
           {...register('address')}
           type="text"
           placeholder={'Ingrese la dirección' || ''}
-          //disabled={isLoading}
           isInvalid={!!errors.address}
         />
         <Form.Control.Feedback type="invalid">{errors.address?.message}</Form.Control.Feedback>
       </Form.Group>
       <div className="d-flex align-items-center justify-content-end mb-2" style={{ marginTop: '40px' }}>
-        <Button
-          variant="secondary"
-          type="button"
-          //disabled={isLoading}
-          className="me-3"
-        >
+        <Button variant="secondary" type="button" className="me-3">
           Cancelar
         </Button>
         <Button
           variant="success"
           type="submit"
           //disabled={isLoading}
-          className=""
         >
           Registrar usuario
         </Button>
