@@ -16,15 +16,17 @@ import ErrorToast from 'components/toast/errorToast';
 import SuccessToast from 'components/toast/successToast';
 import { UserDataGet, UserGet } from 'models/User';
 import { userEditSchema } from 'util/validations/userEditSchema';
+import { editUser, editUserData } from 'api/users';
 
 interface UserEditFormProps {
   user: UserGet;
   userData: UserDataGet;
+  userId: string;
 }
 
 const schema = yup.object().shape(userEditSchema);
 
-const UserEditForm: FC<UserEditFormProps> = ({ user, userData }) => {
+const UserEditForm: FC<UserEditFormProps> = ({ user, userData, userId }) => {
   const [isDisabled, setIsDisabled] = useState<boolean>(false);
   const { data: dataCities, isLoading: isLoadingCities } = useGetCities();
   const navigate = useNavigate();
@@ -49,15 +51,10 @@ const UserEditForm: FC<UserEditFormProps> = ({ user, userData }) => {
       address: userData.address,
     },
   });
-  /*Agregar campo contraseña actual y nueva contraseña:
-  Formulario 
-  Validacion
-  Endpoint */
 
-  /*const mutationUser = useMutation({
-    mutationFn: createUser,
-    onSuccess: (data: any) => {
-      const userId: number = data.data.id;
+  const mutationUser = useMutation({
+    mutationFn: editUser,
+    onSuccess: () => {
       const userData: any = getValues();
       mutationUserData.mutate({
         name: userData.name,
@@ -70,7 +67,7 @@ const UserEditForm: FC<UserEditFormProps> = ({ user, userData }) => {
       });
     },
     onError: () => {
-      toast(<ErrorToast message={`Ha ocurrido un error al registrar el usuario, intente nuevamente`} />, {
+      toast(<ErrorToast message={`Ha ocurrido un error al editar el usuario, intente nuevamente`} />, {
         style: { borderRadius: '10px' },
       });
       setIsDisabled(false);
@@ -78,21 +75,21 @@ const UserEditForm: FC<UserEditFormProps> = ({ user, userData }) => {
   });
 
   const mutationUserData = useMutation({
-    mutationFn: createUserData,
+    mutationFn: editUserData,
     onSuccess: () => {
-      toast(<SuccessToast message={`Usuario registrado con éxito`} hour />, {
+      toast(<SuccessToast message={`Usuario editado con éxito`} hour />, {
         style: { borderRadius: '10px' },
       });
       setIsDisabled(false);
-      navigate(`/app/users`);
+      navigate(`/app/user/${userId}`);
     },
     onError: () => {
-      toast(<ErrorToast message={`Ha ocurrido un error al registrar el usuario, intente nuevamente`} />, {
+      toast(<ErrorToast message={`Ha ocurrido un error al editar el usuario, intente nuevamente`} />, {
         style: { borderRadius: '10px' },
       });
       setIsDisabled(false);
     },
-  });*/
+  });
 
   const onSubmit = async (dataForm: {
     username: string;
@@ -108,14 +105,23 @@ const UserEditForm: FC<UserEditFormProps> = ({ user, userData }) => {
     address: string;
   }) => {
     setIsDisabled(true);
-    console.log(dataForm);
-    /*mutationUser.mutate({
-      username: dataForm.username,
-      email: dataForm.email,
-      password: dataForm.password,
-      role: 4,
-      confirmed: true,
-    });*/
+    if (user.username !== dataForm.username || user.email !== dataForm.email) {
+      mutationUser.mutate({
+        username: dataForm.username,
+        email: dataForm.email,
+        userId: userId,
+      });
+    } else {
+      mutationUserData.mutate({
+        name: dataForm.name,
+        lastname: dataForm.lastname,
+        document: dataForm.document,
+        cellphone: dataForm.cellphone,
+        city: dataForm.city,
+        address: dataForm.address,
+        userId: userId,
+      });
+    }
   };
 
   return (

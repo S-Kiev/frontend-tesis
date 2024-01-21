@@ -16,6 +16,16 @@ export interface UserData {
   userId: number;
 }
 
+export interface UserDataEdit {
+  name?: string;
+  lastname?: string;
+  document?: string;
+  cellphone?: string;
+  city?: number;
+  address?: string;
+  userId: string;
+}
+
 export interface UserGet {
   id: number;
   username: string;
