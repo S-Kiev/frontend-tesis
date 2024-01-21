@@ -1,6 +1,6 @@
 import { FC, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
-import { Button, Form, InputGroup, OverlayTrigger, Spinner, Tooltip } from 'react-bootstrap';
+import { Button, Form, OverlayTrigger, Spinner, Tooltip } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import styles from './userEditForm.module.scss';
 import { QuestionCircleFill } from 'react-bootstrap-icons';
@@ -44,7 +44,7 @@ const UserEditForm: FC<UserEditFormProps> = ({ user, userData }) => {
       name: userData.name,
       lastname: userData.lastname,
       document: userData.document,
-      cellphone: userData.cellphone,
+      cellphone: '+' + userData.cellphone,
       city: userData.city.data.id,
       address: userData.address,
     },
@@ -199,7 +199,6 @@ const UserEditForm: FC<UserEditFormProps> = ({ user, userData }) => {
               placeholder="Ingrese el numero de celular"
               value={field.value}
               onChange={value => field.onChange(value)}
-              defaultCountry="UY"
               international
               countryCallingCodeEditable={false}
               className={!!errors.cellphone ? 'inputPhoneNumberError' : 'inputPhoneNumber'}
