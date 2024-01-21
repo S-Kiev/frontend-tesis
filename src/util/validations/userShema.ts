@@ -36,8 +36,8 @@ export const userSchema = {
     .string()
     .trim()
     .required(REQUIREDMESSAGE)
-    .matches(/\d/, 'El documento deben contener solo números, no se deben ingresar puntos ni guiones'),
-  cellphone: yup.string().trim().required(REQUIREDMESSAGE), //Ajustar una vez sepa salida del campo (!)
+    .matches(/^[0-9]*$/, 'El documento deben contener solo números, no se deben ingresar puntos, espacios ni guiones'),
+  cellphone: yup.string().trim().required(REQUIREDMESSAGE),
   city: yup.number().required(REQUIREDMESSAGE),
   address: yup.string().trim().required(REQUIREDMESSAGE).max(100, 'Máximo de 100 caracteres superado'),
 };

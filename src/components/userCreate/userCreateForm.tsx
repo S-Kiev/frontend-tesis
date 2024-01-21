@@ -3,7 +3,7 @@ import { useMutation } from '@tanstack/react-query';
 import { Button, Form, InputGroup, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import styles from './userCreate.module.scss';
-import { ExclamationCircle, Eye, EyeSlash, QuestionCircleFill } from 'react-bootstrap-icons';
+import { Eye, EyeSlash, QuestionCircleFill } from 'react-bootstrap-icons';
 import * as yup from 'yup';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -11,6 +11,8 @@ import { useRevealPassword } from 'customHooks/useRevealPassword';
 import { userSchema } from 'util/validations/userShema';
 import Select from 'react-select';
 import { useGetCities } from 'customHooks/useGetCities';
+import PhoneInput from 'react-phone-number-input';
+import '../../util/styles/phoneNumberInput.scss';
 
 interface UserCreateFormProps {}
 
@@ -68,16 +70,13 @@ const UserCreateForm: FC<UserCreateFormProps> = () => {
     city: number;
     address: string;
   }) => {
+    console.log(dataForm);
     //const { email, password } = dataForm;
     //mutation.mutate({ identifier: email, password });
   };
 
   /*
-  Agregar telefono 
-  Agregar ciudad 
   Estilizar formulario nuevamente 
-  Revisar validaciones 
-  Agregar validaciones telefono 
   Integrar api
   */
   return (
@@ -211,7 +210,34 @@ const UserCreateForm: FC<UserCreateFormProps> = () => {
         />
         <Form.Control.Feedback type="invalid">{errors.document?.message}</Form.Control.Feedback>
       </Form.Group>
-      //Cellphone
+      <Form.Group className="form-outline mb-4">
+        <Form.Label>
+          Celular <strong className="text-danger me-2">*</strong>
+        </Form.Label>
+        <Controller
+          name="cellphone"
+          control={control}
+          render={({ field }) => (
+            <PhoneInput
+              placeholder="Ingrese el numero de celular"
+              value={field.value}
+              onChange={value => field.onChange(value)}
+              defaultCountry="UY"
+              international
+              countryCallingCodeEditable={false}
+              className={!!errors.cellphone ? 'inputPhoneNumberError' : 'inputPhoneNumber'}
+            />
+          )}
+        />
+        {errors.cellphone?.message && (
+          <div className="d-flex align-items-center">
+            <span className="text-danger mt-1 ms-2" style={{ fontSize: '0.875em' }}>
+              {errors.cellphone?.message}
+            </span>
+          </div>
+        )}
+      </Form.Group>
+
       <Form.Group className="form-outline mb-4">
         <Form.Label>
           Ciudad/localidad <strong className="text-danger me-2">*</strong>
@@ -237,11 +263,12 @@ const UserCreateForm: FC<UserCreateFormProps> = () => {
                 }),
               }}
               menuPlacement="auto"
-              isSearchable={false}
+              isSearchable
+              noOptionsMessage={() => 'No hay opciones'}
               name="city"
               isDisabled={isLoadingCities}
               placeholder={'Seleccione una ciudad/localidad'}
-            ></Select>
+            />
           )}
         />
         {errors.city?.message && (
