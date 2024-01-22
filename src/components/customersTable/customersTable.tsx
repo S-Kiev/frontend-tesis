@@ -2,6 +2,7 @@ import TableHeader from 'components/tableHeader/tableHeader';
 import { CustomerData } from 'models/Customer';
 import { FC } from 'react';
 import { Table } from 'react-bootstrap';
+import RowCustomersTable from './rowCustomersTable';
 
 interface CustomersTableProps {
   customersData: CustomerData[] | [];
@@ -19,11 +20,11 @@ const CustomersTable: FC<CustomersTableProps> = ({ customersData, search }) => {
   return (
     <Table responsive="md">
       <TableHeader headersList={headersList} />
-      {/*<tbody>
+      <tbody>
         {customersData.map(element => (
-          <RowUsersTable userData={element} search={search} />
+          <RowCustomersTable customerData={element} search={search} />
         ))}
-        </tbody>*/}
+      </tbody>
     </Table>
   );
 };

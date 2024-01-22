@@ -1,3 +1,5 @@
+@import 'colors.scss';
+
 .titleTd {
   vertical-align: middle;
 }
@@ -9,25 +11,12 @@ p {
   margin: 0;
 }
 
-p.nonLine {
-  white-space: nowrap;
-}
-
 p.fw600 {
   font-weight: 600;
 }
 
 p.opacity07 {
   opacity: 0.7;
-}
-
-.opacity04 {
-  opacity: 0.4;
-}
-
-.date {
-  width: 120px;
-  font-size: 13px;
 }
 
 .textEllipsis {
@@ -58,6 +47,14 @@ p.opacity07 {
     p {
       margin-left: 13px;
       white-space: nowrap;
+    }
+  }
+
+  .optionDelete {
+    @extend .option;
+
+    p {
+      color: $danger;
     }
   }
 }

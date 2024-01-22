@@ -9,12 +9,16 @@ import { CloudLightningRain, PersonFillSlash, SendSlash } from 'react-bootstrap-
 import Search from 'components/search/search';
 import { DotLoader } from 'react-spinners';
 import CustomersTable from 'components/customersTable/customersTable';
+import { Role } from 'models/Roles';
+import { useSelector } from 'react-redux';
+import { selectUser } from 'redux/reducers/userSlice';
 
 interface CustomersProps {}
 
 const Customers: FC<CustomersProps> = () => {
-  const [search, setSearch] = useState(''); //Hacer busque por nombre y apellido
+  const [search, setSearch] = useState(''); //Hacer busque por nombre y apellido + Agregar paginado
   const navigate = useNavigate();
+  const user = useSelector(selectUser);
 
   const { data, error, isLoading } = useQuery({
     queryKey: [QueryKeys.Customers, search],
@@ -28,13 +32,17 @@ const Customers: FC<CustomersProps> = () => {
           <h2 className={styles.headline}>Clientes</h2>
           <p>Listado de todos los clientes existentes en el sistema</p>
         </div>
-        <Button variant="success" onClick={() => navigate('/app/customers/create')} className="d-none d-lg-block">
+        {user?.role === Role.collaborator && (
+          <Button variant="success" onClick={() => navigate('/app/customers/create')} className="d-none d-lg-block">
+            + Crear nuevo cliente
+          </Button>
+        )}
+      </div>
+      {user?.role === Role.collaborator && (
+        <Button variant="success" onClick={() => navigate('/app/customers/create')} className="d-lg-none mt-3">
           + Crear nuevo cliente
         </Button>
-      </div>
-      <Button variant="success" onClick={() => navigate('/app/customers/create')} className="d-lg-none mt-3">
-        + Crear nuevo cliente
-      </Button>
+      )}
       {data?.data.length === 0 && !isLoading && search.length === 0 ? (
         <div className={styles.errorFilters}>
           <PersonFillSlash size={80} />
