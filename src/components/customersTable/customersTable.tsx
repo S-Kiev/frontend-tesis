@@ -5,7 +5,7 @@ import { Table } from 'react-bootstrap';
 import RowCustomersTable from './rowCustomersTable';
 
 interface CustomersTableProps {
-  customersData: CustomerData[] | [];
+  customersData: CustomerData[];
   search: string;
 }
 

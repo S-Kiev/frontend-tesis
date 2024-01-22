@@ -16,7 +16,7 @@ import { selectUser } from 'redux/reducers/userSlice';
 interface CustomersProps {}
 
 const Customers: FC<CustomersProps> = () => {
-  const [search, setSearch] = useState(''); //Hacer busque por nombre y apellido + Agregar paginado
+  const [search, setSearch] = useState(''); // Agregar paginado
   const navigate = useNavigate();
   const user = useSelector(selectUser);
 
@@ -43,7 +43,7 @@ const Customers: FC<CustomersProps> = () => {
           + Crear nuevo cliente
         </Button>
       )}
-      {data?.data.length === 0 && !isLoading && search.length === 0 ? (
+      {data?.data?.data.length === 0 && !isLoading && search.length === 0 ? (
         <div className={styles.errorFilters}>
           <PersonFillSlash size={80} />
           <h3 className="mt-3">Aún no existen clientes</h3>
@@ -69,8 +69,8 @@ const Customers: FC<CustomersProps> = () => {
           <DotLoader color="rgb(159,213,177)" />
         </div>
       ) : null}
-      {!isLoading && !error && data && data?.data.length !== 0 ? (
-        <CustomersTable customersData={data?.data?.data || []} search={search} />
+      {!isLoading && !error && data && data?.data?.data.length !== 0 ? (
+        <CustomersTable customersData={data?.data?.data} search={search} />
       ) : (
         !error &&
         !isLoading &&
