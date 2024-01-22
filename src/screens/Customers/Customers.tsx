@@ -8,6 +8,7 @@ import { Button } from 'react-bootstrap';
 import { CloudLightningRain, PersonFillSlash, SendSlash } from 'react-bootstrap-icons';
 import Search from 'components/search/search';
 import { DotLoader } from 'react-spinners';
+import CustomersTable from 'components/customersTable/customersTable';
 
 interface CustomersProps {}
 
@@ -61,7 +62,7 @@ const Customers: FC<CustomersProps> = () => {
         </div>
       ) : null}
       {!isLoading && !error && data && data?.data.length !== 0 ? (
-        <>{/*<UsersTable usersData={data?.data || []} search={search} />*/}</>
+        <CustomersTable customersData={data?.data?.data || []} search={search} />
       ) : (
         !error &&
         !isLoading &&
