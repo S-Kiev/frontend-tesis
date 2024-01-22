@@ -12,19 +12,22 @@ import CustomersTable from 'components/customersTable/customersTable';
 import { Role } from 'models/Roles';
 import { useSelector } from 'react-redux';
 import { selectUser } from 'redux/reducers/userSlice';
+import PaginationComponent from 'components/pagination/pagination';
+import { defaultPageSize } from 'api/paginationConfig';
 
 interface CustomersProps {}
 
 const Customers: FC<CustomersProps> = () => {
-  const [search, setSearch] = useState(''); // Agregar paginado
+  const [search, setSearch] = useState<string>('');
+  const [page, setPage] = useState<number>(1);
   const navigate = useNavigate();
   const user = useSelector(selectUser);
 
   const { data, error, isLoading } = useQuery({
-    queryKey: [QueryKeys.Customers, search],
-    queryFn: () => getCustomers(search),
+    queryKey: [QueryKeys.Customers, search, page],
+    queryFn: () => getCustomers(page, search),
   });
-
+  console.log(data?.data?.meta?.pagination);
   return (
     <div className={styles.container}>
       <div className={styles.header}>
@@ -70,7 +73,19 @@ const Customers: FC<CustomersProps> = () => {
         </div>
       ) : null}
       {!isLoading && !error && data && data?.data?.data.length !== 0 ? (
-        <CustomersTable customersData={data?.data?.data} search={search} />
+        <>
+          <CustomersTable customersData={data?.data?.data} search={search} />
+          {data?.data?.meta?.pagination?.total > defaultPageSize && (
+            <div className="d-flex justify-content-center mt-4">
+              <PaginationComponent
+                data={data?.data?.meta?.pagination}
+                changePage={(e: any) => {
+                  setPage(e.page);
+                }}
+              />
+            </div>
+          )}
+        </>
       ) : (
         !error &&
         !isLoading &&
