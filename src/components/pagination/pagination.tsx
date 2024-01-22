@@ -58,13 +58,11 @@ const PaginationComponent = ({ data, changePage }: Props) => {
   }, [data]);
 
   return (
-    <div>
-      <Pagination>
-        <Pagination.Prev onClick={() => prevPage()} disabled={1 === actualPage} />
-        {items}
-        <Pagination.Next onClick={() => nextPage()} disabled={data.pageCount === actualPage} />
-      </Pagination>
-    </div>
+    <Pagination>
+      <Pagination.Prev onClick={() => prevPage()} disabled={1 === actualPage} />
+      {items}
+      <Pagination.Next onClick={() => nextPage()} disabled={data.pageCount === actualPage} />
+    </Pagination>
   );
 };
 

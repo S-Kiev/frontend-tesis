@@ -3,7 +3,7 @@ import { Role } from 'models/Roles';
 export const roleNameMapper = (role: Role) => {
   switch (role) {
     case Role.collaborator:
-      return 'Collaborador';
+      return 'Colaborador';
     case Role.superAdmin:
       return 'Super Admin';
     default:
