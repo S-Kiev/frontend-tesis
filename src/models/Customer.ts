@@ -21,10 +21,10 @@ export interface CustomerCreateData {
   name: string;
   lastname: string;
   document: string;
-  birthdate: Date | null | string;
+  birthdate: undefined | string;
   cellphone: string;
   email: string;
-  city: number | null;
+  city: number | undefined;
   address: string;
   howDidYouKnow: string;
   profession: string;

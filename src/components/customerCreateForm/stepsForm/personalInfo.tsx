@@ -31,11 +31,11 @@ const PersonalInfo: FC<PersonalInfoProps> = ({ setStep, customerData, setCustome
     mode: 'onBlur',
     resolver: yupResolver(schema),
     defaultValues: {
-      name: '',
-      lastname: '',
-      document: '',
-      birthdate: '',
-      profession: '',
+      name: customerData.name,
+      lastname: customerData.lastname,
+      document: customerData.document,
+      birthdate: customerData.birthdate,
+      profession: customerData.profession,
     },
   });
 

@@ -27,17 +27,18 @@ const ContactInfo: FC<ContactInfoProps> = ({ setStep, customerData, setCustomerD
     handleSubmit,
     formState: { errors },
     control,
+    getValues,
   } = useForm({
     criteriaMode: 'all',
     mode: 'onBlur',
     resolver: yupResolver(schema),
     defaultValues: {
-      cellphone: '',
-      email: '',
-      city: undefined,
-      address: '',
-      emergencyPhone: '',
-      howDidYouKnow: '',
+      cellphone: customerData.cellphone,
+      email: customerData.email,
+      city: customerData.city,
+      address: customerData.address,
+      emergencyPhone: customerData.emergencyPhone,
+      howDidYouKnow: customerData.howDidYouKnow,
     },
   });
 
@@ -224,6 +225,16 @@ const ContactInfo: FC<ContactInfoProps> = ({ setStep, customerData, setCustomerD
           type="button"
           className="me-3"
           onClick={() => {
+            const data = getValues();
+            setCustomerData({
+              ...customerData,
+              cellphone: data.cellphone.slice(1, -1),
+              email: data.email || '',
+              city: data.city,
+              address: data.address,
+              emergencyPhone: data.emergencyPhone.slice(1, -1),
+              howDidYouKnow: data.howDidYouKnow,
+            });
             setStep(1);
           }}
         >
