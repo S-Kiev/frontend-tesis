@@ -3,10 +3,11 @@ import { FC } from 'react';
 import styles from '../customerCreateForm.module.scss';
 import * as yup from 'yup';
 import { informedConsentSchema } from 'util/validations/customerShema';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Alert, Button, Form } from 'react-bootstrap';
 import { ExclamationTriangleFill } from 'react-bootstrap-icons';
+import FileUploader from 'components/fileUploader/fileUploader';
 
 interface InformedConsentProps {
   setStep: (state: number) => void;
@@ -30,6 +31,7 @@ const InformedConsent: FC<InformedConsentProps> = ({
     handleSubmit,
     formState: { errors },
     getValues,
+    control,
   } = useForm({
     criteriaMode: 'all',
     mode: 'onBlur',
@@ -61,6 +63,27 @@ const InformedConsent: FC<InformedConsentProps> = ({
           </p>
         </Alert>
       )}
+      <Form.Group className="form-outline mb-4">
+        <Form.Label>Consentimiento informado</Form.Label>
+        <Controller
+          name="informedConsent"
+          control={control}
+          render={({ field }) => (
+            <FileUploader
+              acceptTypes={{
+                'application/pdf': ['.pdf'],
+                'image/jpeg': ['.jpeg', '.jpg'],
+                'image/png': ['.png'],
+              }}
+              label="Consentimiento informado"
+              fileUploaded={field.value}
+              onFileChange={field.onChange}
+              error={errors.informedConsent ? errors.informedConsent?.message?.toString() : false}
+              customId="informed-consent-upload"
+            />
+          )}
+        />
+      </Form.Group>
       <div className="d-flex align-items-center justify-content-end mb-2" style={{ marginTop: '40px' }}>
         <Button
           variant="secondary"
