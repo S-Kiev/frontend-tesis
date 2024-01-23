@@ -1,8 +1,16 @@
 @import 'colors.scss';
 
+.title {
+  font-weight: 500;
+  font-size: 22px;
+  line-height: 41.47px;
+  margin-top: 8px;
+}
+
 .customerForm {
   max-width: 450px;
   padding-bottom: 30px;
+  margin-top: 20px;
 }
 
 .pointer {
