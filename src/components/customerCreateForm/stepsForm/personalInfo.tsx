@@ -4,12 +4,15 @@ import { Button, Form } from 'react-bootstrap';
 import styles from '../customerCreateForm.module.scss';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
+import * as yup from 'yup';
+import { personalInfoSchema } from 'util/validations/customerShema';
 
 interface PersonalInfoProps {
   setStep: (state: number) => void;
   customerData: CustomerCreateData;
   setCustomerData: (state: CustomerCreateData) => void;
 }
+const schema = yup.object().shape(personalInfoSchema);
 
 const PersonalInfo: FC<PersonalInfoProps> = ({ setStep, customerData, setCustomerData }) => {
   const navigate = useNavigate();
