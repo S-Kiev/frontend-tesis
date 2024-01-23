@@ -74,7 +74,7 @@ const RowUsersTable: FC<RowUsersTableProps> = ({ userData, search }) => {
           <Tooltip
             classname={`${styles.popup}`}
             clickableChild={<ThreeDotsVertical />}
-            customStyle={{ position: 'absolute', right: 10, zIndex: 1000 }}
+            customStyle={{ position: 'absolute', right: 25, zIndex: 1000 }}
           >
             <div className={styles.option} onClick={() => navigate(`/app/user/${userData?.id}`)}>
               <Eye />

@@ -34,7 +34,7 @@ const UserDataCard: FC<UserDataCardProps> = ({ type, data }) => {
         </div>
         <div className={styles.text}>
           <p>{dataField(type, 'Celular', 'Rol')}</p>
-          <strong>{dataField(type, data?.cellphone || '---', roleNameMapper(data?.role?.name) || '---')}</strong>
+          <strong>{dataField(type, `+${data?.cellphone}` || '---', roleNameMapper(data?.role?.name) || '---')}</strong>
         </div>
         {type === 'user' && (
           <div className={styles.text}>

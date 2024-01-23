@@ -60,7 +60,7 @@ const UserCreateForm: FC<UserCreateFormProps> = () => {
         name: userData.name,
         lastname: userData.lastname,
         document: userData.document,
-        cellphone: userData.cellphone,
+        cellphone: userData.cellphone.slice(1, -1),
         city: userData.city,
         address: userData.address,
         userId: userId,
