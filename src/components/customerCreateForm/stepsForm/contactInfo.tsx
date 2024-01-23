@@ -33,11 +33,12 @@ const ContactInfo: FC<ContactInfoProps> = ({ setStep, customerData, setCustomerD
     mode: 'onBlur',
     resolver: yupResolver(schema),
     defaultValues: {
-      cellphone: customerData.cellphone,
+      cellphone: customerData.cellphone !== '' ? '+' + customerData.cellphone : customerData.cellphone,
       email: customerData.email,
       city: customerData.city,
       address: customerData.address,
-      emergencyPhone: customerData.emergencyPhone,
+      emergencyPhone:
+        customerData.emergencyPhone !== '' ? '+' + customerData.emergencyPhone : customerData.emergencyPhone,
       howDidYouKnow: customerData.howDidYouKnow,
     },
   });

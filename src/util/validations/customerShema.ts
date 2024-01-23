@@ -42,17 +42,16 @@ export const medicalInfoSchema = {
     .string()
     .trim()
     .matches(/^[a-zA-ZáéíóúÁÉÍÓÚÑñ: ’]*$/, 'El nombre no puede contener numeros ni caracteres especiales'),
-  emergencyPhone: yup.string().trim(),
   suffersIllness: yup.string().trim().max(500, MAX500),
-  columnProblem: yup.boolean(),
+  columnProblem: yup.boolean().required(REQUIREDMESSAGE),
   operation: yup.string().trim().max(500, MAX500),
-  heartProblem: yup.boolean(),
+  heartProblem: yup.boolean().required(REQUIREDMESSAGE),
   cancer: yup.string().trim().max(500, MAX500),
-  diu: yup.boolean(),
-  metalImplants: yup.boolean(),
-  hypertensive: yup.boolean(),
-  varicoseVeins: yup.boolean(),
-  coagulationProblems: yup.boolean(),
+  diu: yup.boolean().required(REQUIREDMESSAGE),
+  metalImplants: yup.boolean().required(REQUIREDMESSAGE),
+  hypertensive: yup.boolean().required(REQUIREDMESSAGE),
+  varicoseVeins: yup.boolean().required(REQUIREDMESSAGE),
+  coagulationProblems: yup.boolean().required(REQUIREDMESSAGE),
   comments: yup.string().trim().max(500, MAX500),
 };
 
