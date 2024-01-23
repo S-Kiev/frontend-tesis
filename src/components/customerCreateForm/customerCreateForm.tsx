@@ -38,6 +38,7 @@ const CustomerCreateForm: FC<CustomerCreateFormProps> = () => {
     comments: '',
   });
   console.log(step);
+  console.log(customerData);
   switch (step) {
     case 1:
       return <PersonalInfo setStep={setStep} customerData={customerData} setCustomerData={setCustomerData} />;

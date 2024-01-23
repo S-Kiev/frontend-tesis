@@ -9,12 +9,14 @@ import { personalInfoSchema } from 'util/validations/customerShema';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { QuestionCircleFill } from 'react-bootstrap-icons';
 import DatePicker from 'react-datepicker';
+import '../../../util/styles/datepicker.scss';
 
 interface PersonalInfoProps {
   setStep: (state: number) => void;
   customerData: CustomerCreateData;
   setCustomerData: (state: CustomerCreateData) => void;
 }
+
 const schema = yup.object().shape(personalInfoSchema);
 
 const PersonalInfo: FC<PersonalInfoProps> = ({ setStep, customerData, setCustomerData }) => {
@@ -42,19 +44,19 @@ const PersonalInfo: FC<PersonalInfoProps> = ({ setStep, customerData, setCustome
   };
 
   const onSubmit = async (dataForm: {
-    name?: string;
-    lastname?: string;
-    document?: string;
-    birthdate?: string;
+    name: string;
+    lastname: string;
+    document: string;
+    birthdate: string;
     profession?: string;
   }) => {
     setCustomerData({
       ...customerData,
-      name: dataForm.name || 'sas',
-      lastname: dataForm.lastname || 'sas',
-      document: dataForm.document || '342432',
-      birthdate: dataForm.birthdate || 'dsad',
-      profession: dataForm.profession || 'dsadad',
+      name: dataForm.name,
+      lastname: dataForm.lastname,
+      document: dataForm.document,
+      birthdate: dataForm.birthdate,
+      profession: dataForm.profession || '',
     });
     setStep(2);
   };
@@ -113,12 +115,18 @@ const PersonalInfo: FC<PersonalInfoProps> = ({ setStep, customerData, setCustome
           control={control}
           render={({ field }) => (
             <DatePicker
+              showIcon
+              showYearDropdown
+              yearDropdownItemNumber={100}
+              showMonthDropdown
+              scrollableYearDropdown
               placeholderText="Ingrese la fecha de nacimiento"
               dateFormat="dd-MM-yyyy"
               locale="es"
               selected={dateParse(field.value)}
               onChange={date => field.onChange(date)}
               maxDate={new Date()}
+              wrapperClassName={errors.birthdate?.message ? styles.datepickerError : styles.datepicker}
             />
           )}
         />
