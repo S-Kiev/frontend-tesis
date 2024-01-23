@@ -1,5 +1,9 @@
 import { CustomerCreateData } from 'models/Customer';
 import { FC, useState } from 'react';
+import PersonalInfo from './stepsForm/personalInfo';
+import ContactInfo from './stepsForm/contactInfo';
+import MedicalInfo from './stepsForm/medicalInfo';
+import InformedConsent from './stepsForm/informedConsent';
 
 interface CustomerCreateFormProps {}
 
@@ -36,13 +40,13 @@ const CustomerCreateForm: FC<CustomerCreateFormProps> = () => {
 
   switch (step) {
     case 1:
-      return <div>Paso 1</div>;
+      return <PersonalInfo setStep={setStep} customerData={customerData} setCustomerData={setCustomerData} />;
     case 2:
-      return <div>Paso 2</div>;
+      return <ContactInfo setStep={setStep} customerData={customerData} setCustomerData={setCustomerData} />;
     case 3:
-      return <div>Paso 3</div>;
+      return <MedicalInfo setStep={setStep} customerData={customerData} setCustomerData={setCustomerData} />;
     case 4:
-      return <div>Paso 4</div>;
+      return <InformedConsent setStep={setStep} customerData={customerData} setCustomerData={setCustomerData} />;
     default:
       return <div>Error</div>;
   }
