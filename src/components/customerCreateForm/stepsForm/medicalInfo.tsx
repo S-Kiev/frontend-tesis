@@ -3,20 +3,29 @@ import { FC } from 'react';
 import styles from '../customerCreateForm.module.scss';
 import * as yup from 'yup';
 import { medicalInfoSchema } from 'util/validations/customerShema';
-import { Button, Form } from 'react-bootstrap';
+import { Alert, Button, Form } from 'react-bootstrap';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import Switch from 'react-switch';
+import { ExclamationTriangleFill } from 'react-bootstrap-icons';
 
 interface MedicalInfoProps {
   setStep: (state: number) => void;
   customerData: CustomerCreateData;
   setCustomerData: (state: CustomerCreateData) => void;
+  alertMedicalInfo: boolean;
+  setAlertMedicalInfo: (state: boolean) => void;
 }
 
 const schema = yup.object().shape(medicalInfoSchema);
 
-const MedicalInfo: FC<MedicalInfoProps> = ({ setStep, customerData, setCustomerData }) => {
+const MedicalInfo: FC<MedicalInfoProps> = ({
+  setStep,
+  customerData,
+  setCustomerData,
+  alertMedicalInfo,
+  setAlertMedicalInfo,
+}) => {
   const {
     register,
     handleSubmit,
@@ -83,6 +92,18 @@ const MedicalInfo: FC<MedicalInfoProps> = ({ setStep, customerData, setCustomerD
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)} className={styles.customerForm}>
+      {alertMedicalInfo && (
+        <Alert variant="warning" onClose={() => setAlertMedicalInfo(false)} dismissible>
+          <Alert.Heading className="d-flex align-items-center">
+            <ExclamationTriangleFill className="me-2" /> Cuidado
+          </Alert.Heading>
+          <p>
+            Ningún dato de esta sección es requerido para avanzar en el alta del cliente. Pero{' '}
+            <strong>a pesar de no ser datos obligatorios se recomienda su ingreso</strong> de ser posible ahora, sino
+            recordar hacerlo luego ya que son datos importantes del mismo.
+          </p>
+        </Alert>
+      )}
       <Form.Group className="form-outline mb-4">
         <Form.Label>Razón de la primera visita</Form.Label>
         <Form.Control

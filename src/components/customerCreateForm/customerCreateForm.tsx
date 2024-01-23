@@ -12,6 +12,8 @@ interface CustomerCreateFormProps {}
 
 const CustomerCreateForm: FC<CustomerCreateFormProps> = () => {
   const [step, setStep] = useState<number>(1);
+  const [alertMedicalInfo, setAlertMedicalInfo] = useState<boolean>(true);
+  const [alertInformedConsent, setAlertInformedConsent] = useState<boolean>(true);
   const [customerData, setCustomerData] = useState<CustomerCreateData>({
     name: '',
     lastname: '',
@@ -73,7 +75,13 @@ const CustomerCreateForm: FC<CustomerCreateFormProps> = () => {
             <h3 className={styles.title}>Información médica</h3>
           </div>
           <ProgressBar variant="success" now={75} striped />
-          <MedicalInfo setStep={setStep} customerData={customerData} setCustomerData={setCustomerData} />
+          <MedicalInfo
+            setStep={setStep}
+            customerData={customerData}
+            setCustomerData={setCustomerData}
+            alertMedicalInfo={alertMedicalInfo}
+            setAlertMedicalInfo={setAlertMedicalInfo}
+          />
         </>
       );
     case 4:
@@ -84,7 +92,13 @@ const CustomerCreateForm: FC<CustomerCreateFormProps> = () => {
             <h3 className={styles.title}>Consentimiento informado</h3>
           </div>
           <ProgressBar variant="success" now={100} striped />
-          <InformedConsent setStep={setStep} customerData={customerData} setCustomerData={setCustomerData} />
+          <InformedConsent
+            setStep={setStep}
+            customerData={customerData}
+            setCustomerData={setCustomerData}
+            alertInformedConsent={alertInformedConsent}
+            setAlertInformedConsent={setAlertInformedConsent}
+          />
         </>
       );
     default:
