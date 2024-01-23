@@ -264,7 +264,6 @@ const UserCreateForm: FC<UserCreateFormProps> = () => {
           </div>
         )}
       </Form.Group>
-
       <Form.Group className="form-outline mb-4">
         <Form.Label>
           Ciudad/localidad <strong className="text-danger me-2">*</strong>

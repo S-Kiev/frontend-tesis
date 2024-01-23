@@ -37,7 +37,7 @@ const CustomerCreateForm: FC<CustomerCreateFormProps> = () => {
     coagulationProblems: false,
     comments: '',
   });
-
+  console.log(step);
   switch (step) {
     case 1:
       return <PersonalInfo setStep={setStep} customerData={customerData} setCustomerData={setCustomerData} />;

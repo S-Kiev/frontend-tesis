@@ -21,7 +21,7 @@ export interface CustomerCreateData {
   name: string;
   lastname: string;
   document: string;
-  birthdate: Date | null;
+  birthdate: Date | null | string;
   cellphone: string;
   email: string;
   city: number | null;
