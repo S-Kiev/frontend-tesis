@@ -2,6 +2,7 @@ import { FC } from 'react';
 import { ChevronLeft } from 'react-bootstrap-icons';
 import { useNavigate } from 'react-router-dom';
 import styles from './CustomerCreate.module.scss';
+import CustomerCreateForm from 'components/customerCreateForm/customerCreateForm';
 
 interface CustomerCreateProps {}
 
@@ -25,7 +26,9 @@ const CustomerCreate: FC<CustomerCreateProps> = () => {
           </div>
         </div>
       </div>
-      <div className={styles.form}>{/*<UserCreateForm />*/}</div>
+      <div className={styles.form}>
+        <CustomerCreateForm />
+      </div>
     </div>
   );
 };
