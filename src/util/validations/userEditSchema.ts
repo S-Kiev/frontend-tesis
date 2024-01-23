@@ -11,7 +11,7 @@ export const userEditSchema = {
     .string()
     .trim()
     .required(REQUIREDMESSAGE)
-    .matches(/^[a-zA-ZáéíóúÁÉÍÓÚÑñ: ’]*$/, 'El nombre no puede contener numeros ni caracteres especiales') //Revisar todos los regex
+    .matches(/^[a-zA-ZáéíóúÁÉÍÓÚÑñ: ’]*$/, 'El nombre no puede contener numeros ni caracteres especiales')
     .max(50, MAX50),
   lastname: yup
     .string()
