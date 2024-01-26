@@ -15,4 +15,5 @@ export const routes = {
   POST_CUSTOMER_PERSONAL_INFO: 'customer-personal-informations',
   POST_CUSTOMER_MEDICAL_INFO: 'customer-medical-informations',
   GET_TREATMENTS: 'treatments?sort=createdAt:desc',
+  GET_EQUIPMENTS: 'equipments?sort=createdAt:desc',
 };

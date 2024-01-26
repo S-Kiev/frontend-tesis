@@ -5,6 +5,14 @@ import { useNavigate } from 'react-router-dom';
 import { selectUser } from 'redux/reducers/userSlice';
 import styles from './Equipments.module.scss';
 import { Role } from 'models/Roles';
+import { QueryKeys } from 'api/QueryKeys';
+import { useQuery } from '@tanstack/react-query';
+import { getEquipments } from 'api/equipment';
+import { CloudLightningRain, DatabaseSlash, SendSlash } from 'react-bootstrap-icons';
+import Search from 'components/search/search';
+import { DotLoader } from 'react-spinners';
+import PaginationComponent from 'components/pagination/pagination';
+import { defaultPageSize } from 'api/paginationConfig';
 
 interface EquipmentsProps {}
 
@@ -14,11 +22,11 @@ const Equipments: FC<EquipmentsProps> = () => {
   const navigate = useNavigate();
   const user = useSelector(selectUser);
 
-  /*const { data, error, isLoading } = useQuery({
+  const { data, error, isLoading } = useQuery({
     queryKey: [QueryKeys.Treatments, search, page],
-    queryFn: () => getTreatments(page, search),
+    queryFn: () => getEquipments(page, search),
   });
-  console.log(data);*/
+  console.log(data);
 
   return (
     <div className={styles.container}>
@@ -38,16 +46,16 @@ const Equipments: FC<EquipmentsProps> = () => {
           + Crear nuevo equipo
         </Button>
       )}
-      {/*{data?.data?.data.length === 0 && !isLoading && search.length === 0 ? (
+      {data?.data?.data.length === 0 && !isLoading && search.length === 0 ? (
         <div className={styles.errorFilters}>
           <DatabaseSlash size={80} />
-          <h3 className="mt-3">Aún no existen tratamientos</h3>
+          <h3 className="mt-3">Aún no existen equipos</h3>
         </div>
       ) : (
         <>
           {!error ? (
             <div className={styles.filters}>
-              <Search placeholder="Buscar por nombre o id tratamiento" onChange={e => setSearch(e)} width={300} />
+              <Search placeholder="Buscar por nombre o id equipo" onChange={e => setSearch(e)} width={300} />
             </div>
           ) : null}
         </>
@@ -66,7 +74,7 @@ const Equipments: FC<EquipmentsProps> = () => {
       ) : null}
       {!isLoading && !error && data && data?.data?.data.length !== 0 ? (
         <>
-          <TreatmentsTable treatmentsData={data?.data?.data} search={search} />
+          {/*<TreatmentsTable treatmentsData={data?.data?.data} search={search} />*/}
           {data?.data?.meta?.pagination?.total > defaultPageSize && (
             <div className="d-flex justify-content-center mt-4">
               <PaginationComponent
@@ -88,7 +96,7 @@ const Equipments: FC<EquipmentsProps> = () => {
             <h5 className="mb-3 text-center">Puedes intentarlo nuevamente modificando la busqueda</h5>
           </div>
         )
-        )}*/}
+      )}
     </div>
   );
 };
