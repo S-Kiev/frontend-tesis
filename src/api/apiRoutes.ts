@@ -11,4 +11,7 @@ export const routes = {
   PUT_USER_DATA: 'users-data/{id}',
   POST_PASSWORD: 'auth/change-password',
   GET_CUSTOMERS: 'customer-personal-informations?sort=createdAt:desc',
+  UPLOAD_FILE: 'upload',
+  POST_CUSTOMER_PERSONAL_INFO: 'customer-personal-informations',
+  POST_CUSTOMER_MEDICAL_INFO: 'customer-medical-informations',
 };

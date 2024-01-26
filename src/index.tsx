@@ -10,6 +10,10 @@ import { persistor, store } from 'redux/store';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import 'react-phone-number-input/style.css';
+import 'react-datepicker/dist/react-datepicker.css';
+import { registerLocale } from 'react-datepicker';
+import es from 'date-fns/locale/es';
+registerLocale('es', es);
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 

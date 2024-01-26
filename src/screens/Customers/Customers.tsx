@@ -27,7 +27,7 @@ const Customers: FC<CustomersProps> = () => {
     queryKey: [QueryKeys.Customers, search, page],
     queryFn: () => getCustomers(page, search),
   });
-  console.log(data?.data?.meta?.pagination);
+
   return (
     <div className={styles.container}>
       <div className={styles.header}>

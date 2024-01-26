@@ -1,3 +1,4 @@
+import { CustomerMedicalInfo, CustomerPersonalInfo } from 'models/Customer';
 import { routes } from './apiRoutes';
 import { axiosDefaultConfig } from './axiosConfig';
 import { defaultPageSize } from './paginationConfig';
@@ -10,5 +11,17 @@ export const getCustomers = async (page: number, search: string) => {
       'pagination[page]': page,
       'pagination[pageSize]': defaultPageSize,
     },
+  });
+};
+
+export const createCustomerPersonalInfo = async (personalInfo: CustomerPersonalInfo) => {
+  return await axiosDefaultConfig.post(routes.POST_CUSTOMER_PERSONAL_INFO, {
+    data: personalInfo,
+  });
+};
+
+export const createCustomerMedicalInfo = async (medicalInfo: CustomerMedicalInfo) => {
+  return await axiosDefaultConfig.post(routes.POST_CUSTOMER_MEDICAL_INFO, {
+    data: medicalInfo,
   });
 };

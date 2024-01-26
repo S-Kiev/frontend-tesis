@@ -60,7 +60,7 @@ const UserCreateForm: FC<UserCreateFormProps> = () => {
         name: userData.name,
         lastname: userData.lastname,
         document: userData.document,
-        cellphone: userData.cellphone,
+        cellphone: userData.cellphone.slice(1, -1),
         city: userData.city,
         address: userData.address,
         userId: userId,
@@ -264,7 +264,6 @@ const UserCreateForm: FC<UserCreateFormProps> = () => {
           </div>
         )}
       </Form.Group>
-
       <Form.Group className="form-outline mb-4">
         <Form.Label>
           Ciudad/localidad <strong className="text-danger me-2">*</strong>

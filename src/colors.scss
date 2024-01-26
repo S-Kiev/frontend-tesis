@@ -25,11 +25,13 @@ $primary_900: rgba(30, 78, 174, 1);
 $primary_green: rgba(59, 143, 55, 1);
 $secondary: rgba(0, 185, 107, 1);
 $secondary_100: rgba(232, 245, 232, 1);
+$secondary_200: rgb(203, 245, 203);
 $secondary_800: rgba(0, 167, 94, 1); //#00A75E
 $secondary_900: rgba(0, 134, 71, 1);
 
 $success: rgba(8, 135, 93, 1);
 $success_100: rgba(237, 253, 248, 1);
+$success_200: #4db178;
 $success_800: #04724d;
 $success_900: #066042;
 
@@ -47,6 +49,8 @@ $danger_900: #981b25;
 $info: #0dcaf0;
 $light: #f8f9fa;
 $dark: #212529;
+
+$accent_1_light: #56a2f8;
 
 //Text
 $text_primary: #111112;
