@@ -27,7 +27,6 @@ const InformedConsent: FC<InformedConsentProps> = ({
   setAlertInformedConsent,
 }) => {
   const {
-    register,
     handleSubmit,
     formState: { errors },
     getValues,

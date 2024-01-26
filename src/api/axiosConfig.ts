@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosRequestConfig } from 'axios';
 import { getToken, resetStorageData } from 'util/auth';
 
 const axiosDefaultConfig = axios.create({
@@ -8,6 +8,12 @@ const axiosDefaultConfig = axios.create({
   },
 });
 
+const customContentType = (config: AxiosRequestConfig) => {
+  if (config.method === 'post' && config.url?.includes('upload')) {
+    return 'multipart/form-data';
+  } else return 'application/json';
+};
+
 axiosDefaultConfig.interceptors.request.use(
   function (config: any) {
     if (!config.url?.includes('auth/local')) {
@@ -15,7 +21,7 @@ axiosDefaultConfig.interceptors.request.use(
         ...config,
         headers: {
           Accept: 'application/json, text/plain, */*',
-          'Content-Type': 'application/json',
+          'Content-Type': customContentType(config),
           Authorization: `Bearer ${getToken()}`,
         },
       };
