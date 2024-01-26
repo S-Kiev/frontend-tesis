@@ -22,6 +22,12 @@ import Treatment from './Treatment/Treatment';
 import EquipmentCreate from './EquipmentCreate/EquipmentCreate';
 import Equipment from './Equipment/Equipment';
 import EquipmentEdit from './EquipmentEdit/EquipmentEdit';
+import ConsultingRoomCreate from './ConsultingRoomCreate/ConsultingRoomCreate';
+import ConsultingRoom from './ConsultingRoom/ConsultingRoom';
+import ConsultingRoomEdit from './ConsultingRoomEdit/ConsultingRoomEdit';
+import ConsultationCreate from './ConsultationCreate/ConsultationCreate';
+import Consultation from './Consultation/Consultation';
+import ConsultationEdit from './ConsultationEdit/ConsultationEdit';
 
 interface LayoutProps {}
 
@@ -58,6 +64,9 @@ const Layout: FC<LayoutProps> = () => {
         >
           <Route path="home" element={<Home />} />
           <Route path="consultations" element={<Consultations />} />
+          <Route path="consultations/create" element={<ConsultationCreate />} />
+          <Route path="consultations/:id" element={<Consultation />} />
+          <Route path="consultations/:id/edit" element={<ConsultationEdit />} />
           <Route path="equipments" element={<Equipments />} />
           <Route path="equipments/create" element={<EquipmentCreate />} />
           <Route path="equipments/:id" element={<Equipment />} />
@@ -67,6 +76,9 @@ const Layout: FC<LayoutProps> = () => {
           <Route path="treatments/:id" element={<Treatment />} />
           <Route path="treatments/:id/edit" element={<TreatmentsEdit />} />
           <Route path="consultingsRooms" element={<ConsultingsRooms />} />
+          <Route path="consultingsRooms/create" element={<ConsultingRoomCreate />} />
+          <Route path="consultingsRooms/:id" element={<ConsultingRoom />} />
+          <Route path="consultingsRooms/:id/edit" element={<ConsultingRoomEdit />} />
           <Route path="customers" element={<Customers />} />
           <Route path="customers/create" element={<CustomerCreate />} />
           <Route path="customers/:id" element={<Customer />} />

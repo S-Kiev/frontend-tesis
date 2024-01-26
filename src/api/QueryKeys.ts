@@ -8,4 +8,5 @@ export enum QueryKeys {
   Customers = 'Customers',
   Treatments = 'Treatments',
   Equipments = 'Equipments',
+  ConsultingsRooms = 'ConsultingsRooms',
 }
