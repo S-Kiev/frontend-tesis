@@ -24,10 +24,9 @@ const Equipments: FC<EquipmentsProps> = () => {
   const user = useSelector(selectUser);
 
   const { data, error, isLoading } = useQuery({
-    queryKey: [QueryKeys.Treatments, search, page],
+    queryKey: [QueryKeys.Equipments, search, page],
     queryFn: () => getEquipments(page, search),
   });
-  console.log(data);
 
   return (
     <div className={styles.container}>
