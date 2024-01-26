@@ -12,6 +12,7 @@ import { BuildingFillSlash, CloudLightningRain } from 'react-bootstrap-icons';
 import { DotLoader } from 'react-spinners';
 import { defaultPageSize } from 'api/paginationConfig';
 import PaginationComponent from 'components/pagination/pagination';
+import ConsultingRoomTable from 'components/consultingRoomTable/consultingRoomTable';
 
 interface ConsultingsRoomsProps {}
 
@@ -24,7 +25,7 @@ const ConsultingsRooms: FC<ConsultingsRoomsProps> = () => {
     queryKey: [QueryKeys.ConsultingsRooms, page],
     queryFn: () => getConsultingsRooms(page),
   });
-  console.log(data);
+
   return (
     <div className={styles.container}>
       <div className={styles.header}>
@@ -67,7 +68,7 @@ const ConsultingsRooms: FC<ConsultingsRoomsProps> = () => {
       ) : null}
       {!isLoading && !error && data && data?.data?.data.length !== 0 && (
         <>
-          {/*<TreatmentsTable treatmentsData={data?.data?.data} search={search} />*/}
+          <ConsultingRoomTable consultingsRoomsData={data?.data?.data} />
           {data?.data?.meta?.pagination?.total > defaultPageSize && (
             <div className="d-flex justify-content-center mt-4">
               <PaginationComponent

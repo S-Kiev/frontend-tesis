@@ -1,3 +1,5 @@
+import { ConsultingRoomStatusEnum } from './ConsultingRoomStatus';
+
 export interface ConsultingRoomData {
   id: number;
   attributes: {
@@ -7,6 +9,6 @@ export interface ConsultingRoomData {
     createdAt: string;
     updatedAt: string;
     publishedAt: string;
-    status: string;
+    status: ConsultingRoomStatusEnum;
   };
 }

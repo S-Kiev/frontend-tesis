@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import styles from './equipmentStatus.module.scss';
+import styles from './consultingRoomStatus.module.scss';
 import { ConsultingRoomStatusEnum } from 'models/ConsultingRoomStatus';
 import { ConsultingRoomStatusMapper } from 'util/consultingRoomStatusMapper';
 
@@ -8,14 +8,14 @@ interface ConsultingRoomStatusProps {
 }
 
 const ConsultingRoomStatus: FC<ConsultingRoomStatusProps> = ({ status }) => {
-  const index = Object.keys(ConsultingRoomStatus).indexOf(status);
+  const index = Object.keys(ConsultingRoomStatusEnum).indexOf(status);
   const blue = 'containerBlue';
   const red = 'containerRed';
   const green = 'containerGreen';
   const statusColorMapper = {
     0: green,
     1: red,
-    2: blue,
+    '-1': blue,
   };
 
   return (
