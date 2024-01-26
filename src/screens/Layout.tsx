@@ -19,6 +19,9 @@ import CustomerEdit from './CustomerEdit/CustomerEdit';
 import TrearmentCreate from './TrearmentCreate/TrearmentCreate';
 import TreatmentsEdit from './TreatmentsEdit/TreatmentsEdit';
 import Treatment from './Treatment/Treatment';
+import EquipmentCreate from './EquipmentCreate/EquipmentCreate';
+import Equipment from './Equipment/Equipment';
+import EquipmentEdit from './EquipmentEdit/EquipmentEdit';
 
 interface LayoutProps {}
 
@@ -56,6 +59,9 @@ const Layout: FC<LayoutProps> = () => {
           <Route path="home" element={<Home />} />
           <Route path="consultations" element={<Consultations />} />
           <Route path="equipments" element={<Equipments />} />
+          <Route path="equipments/create" element={<EquipmentCreate />} />
+          <Route path="equipments/:id" element={<Equipment />} />
+          <Route path="equipments/:id/edit" element={<EquipmentEdit />} />
           <Route path="treatments" element={<Treatments />} />
           <Route path="treatments/create" element={<TrearmentCreate />} />
           <Route path="treatments/:id" element={<Treatment />} />
