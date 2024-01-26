@@ -13,6 +13,7 @@ import { CloudLightningRain, DatabaseSlash, SendSlash } from 'react-bootstrap-ic
 import { DotLoader } from 'react-spinners';
 import PaginationComponent from 'components/pagination/pagination';
 import { defaultPageSize } from 'api/paginationConfig';
+import TreatmentsTable from 'components/treatmentsTable/treatmentsTable';
 
 interface TreatmentsProps {}
 
@@ -74,7 +75,7 @@ const Treatments: FC<TreatmentsProps> = () => {
       ) : null}
       {!isLoading && !error && data && data?.data?.data.length !== 0 ? (
         <>
-          {/*<CustomersTable customersData={data?.data?.data} search={search} />*/}
+          <TreatmentsTable treatmentsData={data?.data?.data} search={search} />
           {data?.data?.meta?.pagination?.total > defaultPageSize && (
             <div className="d-flex justify-content-center mt-4">
               <PaginationComponent
