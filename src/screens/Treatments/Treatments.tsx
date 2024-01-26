@@ -27,7 +27,6 @@ const Treatments: FC<TreatmentsProps> = () => {
     queryKey: [QueryKeys.Treatments, search, page],
     queryFn: () => getTreatments(page, search),
   });
-  console.log(data);
 
   return (
     <div className={styles.container}>
