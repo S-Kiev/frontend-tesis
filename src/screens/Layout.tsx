@@ -16,6 +16,7 @@ import MyUserConfig from './MyUserConfig/MyUserConfig';
 import CustomerCreate from './CustomerCreate/CustomerCreate';
 import Customer from './Customer/Customer';
 import CustomerEdit from './CustomerEdit/CustomerEdit';
+import TrearmentCreate from './TrearmentCreate/TrearmentCreate';
 
 interface LayoutProps {}
 
@@ -54,6 +55,7 @@ const Layout: FC<LayoutProps> = () => {
           <Route path="consultations" element={<Consultations />} />
           <Route path="equipments" element={<Equipments />} />
           <Route path="treatments" element={<Treatments />} />
+          <Route path="treatments/create" element={<TrearmentCreate />} />
           <Route path="consultingsRooms" element={<ConsultingsRooms />} />
           <Route path="customers" element={<Customers />} />
           <Route path="customers/create" element={<CustomerCreate />} />
