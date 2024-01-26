@@ -13,6 +13,7 @@ import Search from 'components/search/search';
 import { DotLoader } from 'react-spinners';
 import PaginationComponent from 'components/pagination/pagination';
 import { defaultPageSize } from 'api/paginationConfig';
+import EquipmentsTable from 'components/equipmentsTable/equipmentsTable';
 
 interface EquipmentsProps {}
 
@@ -74,7 +75,7 @@ const Equipments: FC<EquipmentsProps> = () => {
       ) : null}
       {!isLoading && !error && data && data?.data?.data.length !== 0 ? (
         <>
-          {/*<TreatmentsTable treatmentsData={data?.data?.data} search={search} />*/}
+          <EquipmentsTable equipmentData={data?.data?.data} search={search} />
           {data?.data?.meta?.pagination?.total > defaultPageSize && (
             <div className="d-flex justify-content-center mt-4">
               <PaginationComponent

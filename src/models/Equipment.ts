@@ -1,3 +1,5 @@
+import { EquipmentStatusEnum } from './EquipmentStatus';
+
 export interface EquipmentData {
   id: number;
   attributes: {
@@ -8,6 +10,6 @@ export interface EquipmentData {
     createdAt: string;
     updatedAt: string;
     publishedAt: string;
-    status: string;
+    status: EquipmentStatusEnum;
   };
 }
