@@ -5,20 +5,26 @@ import { selectUser } from 'redux/reducers/userSlice';
 import styles from './ConsultingsRooms.module.scss';
 import { Button } from 'react-bootstrap';
 import { Role } from 'models/Roles';
+import { useQuery } from '@tanstack/react-query';
+import { QueryKeys } from 'api/QueryKeys';
+import { getConsultingsRooms } from 'api/consultingRoom';
+import { BuildingFillSlash, CloudLightningRain } from 'react-bootstrap-icons';
+import { DotLoader } from 'react-spinners';
+import { defaultPageSize } from 'api/paginationConfig';
+import PaginationComponent from 'components/pagination/pagination';
 
 interface ConsultingsRoomsProps {}
 
 const ConsultingsRooms: FC<ConsultingsRoomsProps> = () => {
-  const [search, setSearch] = useState<string>('');
   const [page, setPage] = useState<number>(1);
   const navigate = useNavigate();
   const user = useSelector(selectUser);
 
-  /*const { data, error, isLoading } = useQuery({
-    queryKey: [QueryKeys.Treatments, search, page],
-    queryFn: () => getTreatments(page, search),
-  });*/
-
+  const { data, error, isLoading } = useQuery({
+    queryKey: [QueryKeys.ConsultingsRooms, page],
+    queryFn: () => getConsultingsRooms(page),
+  });
+  console.log(data);
   return (
     <div className={styles.container}>
       <div className={styles.header}>
@@ -41,19 +47,11 @@ const ConsultingsRooms: FC<ConsultingsRoomsProps> = () => {
           + Crear nuevo consultorio
         </Button>
       )}
-      {/*{data?.data?.data.length === 0 && !isLoading && search.length === 0 ? (
+      {data?.data?.data.length === 0 && !isLoading && (
         <div className={styles.errorFilters}>
-          <DatabaseSlash size={80} />
-          <h3 className="mt-3">Aún no existen tratamientos</h3>
+          <BuildingFillSlash size={80} />
+          <h3 className="mt-3">Aún no existen consultorios</h3>
         </div>
-      ) : (
-        <>
-          {!error ? (
-            <div className={styles.filters}>
-              <Search placeholder="Buscar por nombre o id tratamiento" onChange={e => setSearch(e)} width={300} />
-            </div>
-          ) : null}
-        </>
       )}
       {error ? (
         <div className={styles.errorFilters}>
@@ -67,9 +65,9 @@ const ConsultingsRooms: FC<ConsultingsRoomsProps> = () => {
           <DotLoader color="rgb(159,213,177)" />
         </div>
       ) : null}
-      {!isLoading && !error && data && data?.data?.data.length !== 0 ? (
+      {!isLoading && !error && data && data?.data?.data.length !== 0 && (
         <>
-          <TreatmentsTable treatmentsData={data?.data?.data} search={search} />
+          {/*<TreatmentsTable treatmentsData={data?.data?.data} search={search} />*/}
           {data?.data?.meta?.pagination?.total > defaultPageSize && (
             <div className="d-flex justify-content-center mt-4">
               <PaginationComponent
@@ -81,17 +79,7 @@ const ConsultingsRooms: FC<ConsultingsRoomsProps> = () => {
             </div>
           )}
         </>
-      ) : (
-        !error &&
-        !isLoading &&
-        search.length !== 0 && (
-          <div className={styles.errorFilters}>
-            <SendSlash size={80} />
-            <h3 className="mt-3">No encontramos resultados</h3>
-            <h5 className="mb-3 text-center">Puedes intentarlo nuevamente modificando la busqueda</h5>
-          </div>
-        )
-        )}*/}
+      )}
     </div>
   );
 };

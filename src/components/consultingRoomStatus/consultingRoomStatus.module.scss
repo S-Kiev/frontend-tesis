@@ -1,0 +1,38 @@
+@import 'colors.scss';
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
+
+  .text {
+    font-size: 12px;
+    margin: 0;
+    font-weight: 600;
+  }
+}
+
+.containerBlue {
+  @extend .container;
+  background-color: $primary_100;
+  .text {
+    color: $primary_900;
+  }
+}
+
+.containerGreen {
+  @extend .container;
+  background-color: $secondary_100;
+  .text {
+    color: $secondary_900;
+  }
+}
+
+.containerRed {
+  @extend .container;
+  background-color: $danger_100;
+  .text {
+    color: $danger;
+  }
+}
