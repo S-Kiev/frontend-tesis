@@ -6,4 +6,5 @@ export enum QueryKeys {
   PutUser = 'PutUser',
   Cities = 'Cities',
   Customers = 'Customers',
+  Treatments = 'Treatments',
 }
