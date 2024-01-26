@@ -23,7 +23,7 @@
 
 .containerYellow {
   @extend .container;
-  background: #e7ddca;
+  background: $warning_100;
   .text {
     color: $accent_2_dark;
   }

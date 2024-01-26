@@ -8,6 +8,7 @@ interface EquipmentStatusProps {
 }
 
 const EquipmentStatus: FC<EquipmentStatusProps> = ({ status }) => {
+  const index = Object.keys(EquipmentStatusEnum).indexOf(status);
   const blue = 'containerBlue';
   const red = 'containerRed';
   const green = 'containerGreen';
@@ -17,13 +18,13 @@ const EquipmentStatus: FC<EquipmentStatusProps> = ({ status }) => {
     1: red,
     2: yellow,
     3: red,
-    4: blue,
+    '-1': blue,
   };
 
   return (
     <div
       style={{ height: 46, paddingLeft: 26, paddingRight: 26, width: 172 }}
-      className={statusColorMapper[status] ? styles[statusColorMapper[status]] : styles.container}
+      className={statusColorMapper[index] ? styles[statusColorMapper[index]] : styles.container}
     >
       <p className={styles.text}>{equipmentStatusMapper(status)}</p>
     </div>
