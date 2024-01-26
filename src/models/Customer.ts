@@ -1,3 +1,5 @@
+import { AnyAsyncThunk } from '@reduxjs/toolkit/dist/matchers';
+
 export interface CustomerData {
   id: number;
   attributes: {
@@ -69,7 +71,7 @@ export interface CustomerPersonalInfo {
   name: string;
   lastname: string;
   document: string;
-  birthdate: string;
+  birthdate: string | Date;
   cellphone: string;
   email?: string;
   city: string | number;

@@ -42,8 +42,7 @@ const CustomerCreateForm: FC<CustomerCreateFormProps> = () => {
     coagulationProblems: false,
     comments: '',
   });
-  console.log(step);
-  console.log(customerData);
+
   switch (step) {
     case 1:
       return (

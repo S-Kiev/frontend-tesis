@@ -56,5 +56,5 @@ export const medicalInfoSchema = {
 };
 
 export const informedConsentSchema = {
-  informedConsent: yup.mixed(),
+  informedConsent: yup.mixed().nullable(),
 };

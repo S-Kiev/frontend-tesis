@@ -1,13 +1,20 @@
 import { CustomerCreateData } from 'models/Customer';
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import styles from '../customerCreateForm.module.scss';
 import * as yup from 'yup';
 import { informedConsentSchema } from 'util/validations/customerShema';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Alert, Button, Form } from 'react-bootstrap';
+import { Alert, Button, Form, Spinner } from 'react-bootstrap';
 import { ExclamationTriangleFill } from 'react-bootstrap-icons';
 import FileUploader from 'components/fileUploader/fileUploader';
+import { toast } from 'react-toastify';
+import ErrorToast from 'components/toast/errorToast';
+import SuccessToast from 'components/toast/successToast';
+import { useNavigate } from 'react-router-dom';
+import { useMutation } from '@tanstack/react-query';
+import { createCustomerMedicalInfo, createCustomerPersonalInfo } from 'api/customers';
+import { uploadAttachmentInformedConsent } from 'api/upload';
 
 interface InformedConsentProps {
   setStep: (state: number) => void;
@@ -26,6 +33,8 @@ const InformedConsent: FC<InformedConsentProps> = ({
   alertInformedConsent,
   setAlertInformedConsent,
 }) => {
+  const [isDisabled, setIsDisabled] = useState<boolean>(false);
+  const navigate = useNavigate();
   const {
     handleSubmit,
     formState: { errors },
@@ -40,12 +49,98 @@ const InformedConsent: FC<InformedConsentProps> = ({
     },
   });
 
+  const mutationCustomerPersonalInfo = useMutation({
+    mutationFn: createCustomerPersonalInfo,
+    onSuccess: (data: any) => {
+      const customerId: number = data?.data?.data?.id;
+      mutationCustomerMedicalInfo.mutate({
+        customer: customerId,
+        medication: customerData.medication,
+        doctor: customerData.doctor,
+        emergencyPhone: customerData.emergencyPhone,
+        suffersIllness: customerData.suffersIllness,
+        columnProblem: customerData.columnProblem,
+        operation: customerData.operation,
+        heartProblem: customerData.heartProblem,
+        cancer: customerData.cancer,
+        diu: customerData.diu,
+        metalImplants: customerData.metalImplants,
+        hypertensive: customerData.hypertensive,
+        varicoseVeins: customerData.varicoseVeins,
+        coagulationProblems: customerData.coagulationProblems,
+        comments: customerData.comments,
+      });
+    },
+    onError: () => {
+      toast(<ErrorToast message={`Ha ocurrido un error al registrar el cliente, intente nuevamente`} />, {
+        style: { borderRadius: '10px' },
+      });
+      setIsDisabled(false);
+    },
+  });
+
+  const mutationCustomerMedicalInfo = useMutation({
+    mutationFn: createCustomerMedicalInfo,
+    onSuccess: (data: any) => {
+      const customerMedicalInfoId: number = data?.data?.data?.id;
+      const informedConsentFile: any = getValues().informedConsent;
+      if (informedConsentFile) {
+        mutationUploadInformedConsent.mutate({
+          id: customerMedicalInfoId.toString(),
+          attachment: informedConsentFile,
+        });
+      } else {
+        toast(<SuccessToast message={`Cliente registrado con éxito`} hour />, {
+          style: { borderRadius: '10px' },
+        });
+        setIsDisabled(false);
+        navigate(`/app/customers`);
+      }
+    },
+    onError: () => {
+      toast(<ErrorToast message={`Ha ocurrido un error al registrar el cliente, intente nuevamente`} />, {
+        style: { borderRadius: '10px' },
+      });
+      setIsDisabled(false);
+    },
+  });
+
+  const mutationUploadInformedConsent = useMutation({
+    mutationFn: uploadAttachmentInformedConsent,
+    onSuccess: () => {
+      toast(<SuccessToast message={`Cliente registrado con éxito`} hour />, {
+        style: { borderRadius: '10px' },
+      });
+      setIsDisabled(false);
+      navigate(`/app/customers`);
+    },
+    onError: () => {
+      toast(<ErrorToast message={`Ha ocurrido un error al registrar el cliente, intente nuevamente`} />, {
+        style: { borderRadius: '10px' },
+      });
+      setIsDisabled(false);
+    },
+  });
+
   const onSubmit = async (dataForm: { informedConsent?: any }) => {
     setCustomerData({
       ...customerData,
       informedConsent: dataForm.informedConsent || null,
     });
-    //Subidas y guardados api
+    setIsDisabled(true);
+    mutationCustomerPersonalInfo.mutate({
+      name: customerData.name,
+      lastname: customerData.lastname,
+      document: customerData.document,
+      birthdate: customerData?.birthdate ? new Date(customerData.birthdate).toISOString() : '',
+      cellphone: customerData.cellphone,
+      email: customerData.email || '',
+      city: customerData.city || '',
+      address: customerData.address,
+      howDidYouKnow: customerData.howDidYouKnow,
+      profession: customerData.profession,
+      reasonFirstVisit: customerData.reasonFirstVisit || '',
+    });
   };
 
   return (
@@ -98,8 +193,9 @@ const InformedConsent: FC<InformedConsentProps> = ({
         >
           Atrás
         </Button>
-        <Button variant="success" type="submit">
-          Finalizar
+        <Button variant="success" type="submit" disabled={isDisabled}>
+          {isDisabled && <Spinner className="me-1" size="sm" />}
+          <span>Finalizar</span>
         </Button>
       </div>
     </Form>
