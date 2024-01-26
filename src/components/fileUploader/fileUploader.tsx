@@ -25,8 +25,6 @@ const admitFilesText = (acceptedTypes: string[]) =>
 const fileUploadedName = (fileUploaded: File | string | any) => {
   if (typeof fileUploaded === 'string') {
     return fileUploaded;
-  } else if (fileUploaded) {
-    return fileUploaded.displayName;
   } else {
     return fileUploaded.name;
   }
@@ -96,10 +94,10 @@ const FileUploader: FC<FileUploaderProps> = ({
         <>
           <div className={styles.uploadedFile}>
             <p>
-              <FileEarmark className={styles.fileIcon} />
+              <FileEarmark className={styles.fileIcon} size={18} />
               {fileUploadedName(fileUploaded)}
               {!showErrorIcon ? (
-                <Check2 className={styles.check} />
+                <Check2 className={styles.check} color="rgba(8, 135, 93, 1)" size={25} />
               ) : (
                 <ExclamationCircleFill className={styles.errorIcon} />
               )}

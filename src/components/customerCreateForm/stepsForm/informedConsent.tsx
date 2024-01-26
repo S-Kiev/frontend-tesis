@@ -75,7 +75,6 @@ const InformedConsent: FC<InformedConsentProps> = ({
                 'image/jpeg': ['.jpeg', '.jpg'],
                 'image/png': ['.png'],
               }}
-              label="Consentimiento informado"
               fileUploaded={field.value}
               onFileChange={field.onChange}
               error={errors.informedConsent ? errors.informedConsent?.message?.toString() : false}
