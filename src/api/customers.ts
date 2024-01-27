@@ -25,3 +25,7 @@ export const createCustomerMedicalInfo = async (medicalInfo: CustomerMedicalInfo
     data: medicalInfo,
   });
 };
+
+export const getCustomerInfo = async (id: string) => {
+  return await axiosDefaultConfig.get(routes.GET_CUSTOMER_INFO.replace('{id}', id));
+};

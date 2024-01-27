@@ -17,4 +17,5 @@ export const routes = {
   GET_TREATMENTS: 'treatments?sort=createdAt:desc',
   GET_EQUIPMENTS: 'equipments?sort=createdAt:desc',
   GET_CONSULTINGS_ROOMS: 'consulting-rooms?sort=createdAt:desc',
+  GET_CUSTOMER_INFO: 'customer-personal-informations/{id}?populate=medicalInformation',
 };
