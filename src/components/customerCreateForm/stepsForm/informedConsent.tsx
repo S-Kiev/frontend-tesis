@@ -19,7 +19,7 @@ import {
   editCustomerMedicalInfo,
   editCustomerPersonalInfo,
 } from 'api/customers';
-import { uploadAttachmentInformedConsent } from 'api/upload';
+import { uploadAttachmentInformedConsent, uploadUpdateFile } from 'api/upload';
 
 interface InformedConsentProps {
   setStep: (state: number) => void;
@@ -118,16 +118,21 @@ const InformedConsent: FC<InformedConsentProps> = ({
   const mutationUploadInformedConsent = useMutation({
     mutationFn: uploadAttachmentInformedConsent,
     onSuccess: () => {
-      toast(<SuccessToast message={`Cliente registrado con éxito`} hour />, {
+      toast(<SuccessToast message={`Cliente ${edit ? 'editado' : 'registrado'} con éxito`} hour />, {
         style: { borderRadius: '10px' },
       });
       setIsDisabled(false);
       navigate(`/app/customers`);
     },
     onError: () => {
-      toast(<ErrorToast message={`Ha ocurrido un error al registrar el cliente, intente nuevamente`} />, {
-        style: { borderRadius: '10px' },
-      });
+      toast(
+        <ErrorToast
+          message={`Ha ocurrido un error al ${edit ? 'editar' : 'registrar'} el cliente, intente nuevamente`}
+        />,
+        {
+          style: { borderRadius: '10px' },
+        },
+      );
       setIsDisabled(false);
     },
   });
@@ -164,7 +169,7 @@ const InformedConsent: FC<InformedConsentProps> = ({
 
   const mutationCustomerMedicalInfoEdit = useMutation({
     mutationFn: editCustomerMedicalInfo,
-    onSuccess: (data: any) => {
+    onSuccess: () => {
       const informedConsentFile: any = getValues().informedConsent;
       if (informedConsentFile) {
         if (customerEditData?.attributes?.medicalInformation?.data?.attributes?.informedConsent?.data === null) {
@@ -173,7 +178,12 @@ const InformedConsent: FC<InformedConsentProps> = ({
             attachment: informedConsentFile,
           });
         } else {
-          //caso update file
+          mutationUploadUpdate.mutate({
+            idFile:
+              customerEditData?.attributes?.medicalInformation?.data?.attributes?.informedConsent?.data?.id.toString() ||
+              '',
+            newAttachment: informedConsentFile,
+          });
         }
       } else {
         toast(<SuccessToast message={`Cliente editado con éxito`} hour />, {
@@ -182,6 +192,23 @@ const InformedConsent: FC<InformedConsentProps> = ({
         setIsDisabled(false);
         navigate(`/app/customers`);
       }
+    },
+    onError: () => {
+      toast(<ErrorToast message={`Ha ocurrido un error al editar el cliente, intente nuevamente`} />, {
+        style: { borderRadius: '10px' },
+      });
+      setIsDisabled(false);
+    },
+  });
+
+  const mutationUploadUpdate = useMutation({
+    mutationFn: uploadUpdateFile,
+    onSuccess: () => {
+      toast(<SuccessToast message={`Cliente editado con éxito`} hour />, {
+        style: { borderRadius: '10px' },
+      });
+      setIsDisabled(false);
+      navigate(`/app/customers`);
     },
     onError: () => {
       toast(<ErrorToast message={`Ha ocurrido un error al editar el cliente, intente nuevamente`} />, {
@@ -250,8 +277,8 @@ const InformedConsent: FC<InformedConsentProps> = ({
           </Alert.Heading>
           <p>
             Si sube un nuevo consentimiento informado se <strong>sustituira el anterior por el nuevo</strong>, en caso
-            de no haber subido ninguno hasta la fecha se guardara el que suba.{' '}
-            <strong>Si no realiza ninguna accion en el campo consentimiento informado se mantendra el actual</strong>.
+            de no haber subido ninguno hasta la fecha se guardara el que suba en caso de hacerlo.{' '}
+            <strong>Sino realiza ninguna accion en el campo consentimiento informado se mantendra el actual</strong>.
           </p>
         </Alert>
       )}
@@ -293,7 +320,7 @@ const InformedConsent: FC<InformedConsentProps> = ({
         </Button>
         <Button variant="success" type="submit" disabled={isDisabled}>
           {isDisabled && <Spinner className="me-1" size="sm" />}
-          <span>Finalizar</span>
+          <span>{edit ? 'Guardar cambios' : 'Finalizar'}</span>
         </Button>
       </div>
     </Form>

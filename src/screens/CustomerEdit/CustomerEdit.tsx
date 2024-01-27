@@ -19,8 +19,6 @@ const CustomerEdit: FC<CustomerEditProps> = () => {
     queryFn: () => getCustomerInfo(id || ''),
   });
 
-  console.log(data?.data?.data);
-
   return (
     <div className={styles.container}>
       {isLoading ? (

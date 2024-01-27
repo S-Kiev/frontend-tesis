@@ -9,3 +9,9 @@ export const uploadAttachmentInformedConsent = async (payload: { id: string; att
   formData.append('files', payload.attachment);
   return axiosDefaultConfig.post(routes.UPLOAD_FILE, formData);
 };
+
+export const uploadUpdateFile = async (payload: { idFile: string; newAttachment: any }) => {
+  const formData = new FormData();
+  formData.append('files', payload.newAttachment);
+  return axiosDefaultConfig.post(routes.UPLOAD_UPDATE_FILE.replace('{id}', payload.idFile.toString()), formData);
+};
