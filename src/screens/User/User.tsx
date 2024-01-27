@@ -142,7 +142,7 @@ const User: FC<UserProps> = () => {
                     <Button
                       variant="success"
                       onClick={() => navigate(`/app/user/${id}/config`)}
-                      className="d-none d-lg-block"
+                      className="d-none d-lg-block me-3"
                     >
                       <PencilSquare style={{ marginRight: '5px' }} />
                       Editar usuario

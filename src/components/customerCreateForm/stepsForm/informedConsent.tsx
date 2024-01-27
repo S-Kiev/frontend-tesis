@@ -1,4 +1,4 @@
-import { CustomerCreateData } from 'models/Customer';
+import { CustomerCreateData, CustomerGetData } from 'models/Customer';
 import { FC, useState } from 'react';
 import styles from '../customerCreateForm.module.scss';
 import * as yup from 'yup';
@@ -13,7 +13,12 @@ import ErrorToast from 'components/toast/errorToast';
 import SuccessToast from 'components/toast/successToast';
 import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
-import { createCustomerMedicalInfo, createCustomerPersonalInfo } from 'api/customers';
+import {
+  createCustomerMedicalInfo,
+  createCustomerPersonalInfo,
+  editCustomerMedicalInfo,
+  editCustomerPersonalInfo,
+} from 'api/customers';
 import { uploadAttachmentInformedConsent } from 'api/upload';
 
 interface InformedConsentProps {
@@ -22,6 +27,8 @@ interface InformedConsentProps {
   setCustomerData: (state: CustomerCreateData) => void;
   alertInformedConsent: boolean;
   setAlertInformedConsent: (state: boolean) => void;
+  edit: boolean;
+  customerEditData?: CustomerGetData;
 }
 
 const schema = yup.object().shape(informedConsentSchema);
@@ -32,6 +39,8 @@ const InformedConsent: FC<InformedConsentProps> = ({
   setCustomerData,
   alertInformedConsent,
   setAlertInformedConsent,
+  edit,
+  customerEditData,
 }) => {
   const [isDisabled, setIsDisabled] = useState<boolean>(false);
   const navigate = useNavigate();
@@ -49,6 +58,7 @@ const InformedConsent: FC<InformedConsentProps> = ({
     },
   });
 
+  // Create customer
   const mutationCustomerPersonalInfo = useMutation({
     mutationFn: createCustomerPersonalInfo,
     onSuccess: (data: any) => {
@@ -122,30 +132,106 @@ const InformedConsent: FC<InformedConsentProps> = ({
     },
   });
 
+  // Edit customer
+  const mutationCustomerPersonalInfoEdit = useMutation({
+    mutationFn: editCustomerPersonalInfo,
+    onSuccess: () => {
+      mutationCustomerMedicalInfoEdit.mutate({
+        customerMedicalInfoId: customerEditData?.attributes?.medicalInformation?.data?.id.toString() || '',
+        medication: customerData.medication,
+        doctor: customerData.doctor,
+        emergencyPhone: customerData.emergencyPhone,
+        suffersIllness: customerData.suffersIllness,
+        columnProblem: customerData.columnProblem,
+        operation: customerData.operation,
+        heartProblem: customerData.heartProblem,
+        cancer: customerData.cancer,
+        diu: customerData.diu,
+        metalImplants: customerData.metalImplants,
+        hypertensive: customerData.hypertensive,
+        varicoseVeins: customerData.varicoseVeins,
+        coagulationProblems: customerData.coagulationProblems,
+        comments: customerData.comments,
+      });
+    },
+    onError: () => {
+      toast(<ErrorToast message={`Ha ocurrido un error al editar el cliente, intente nuevamente`} />, {
+        style: { borderRadius: '10px' },
+      });
+      setIsDisabled(false);
+    },
+  });
+
+  const mutationCustomerMedicalInfoEdit = useMutation({
+    mutationFn: editCustomerMedicalInfo,
+    onSuccess: (data: any) => {
+      const informedConsentFile: any = getValues().informedConsent;
+      if (informedConsentFile) {
+        if (customerEditData?.attributes?.medicalInformation?.data?.attributes?.informedConsent?.data === null) {
+          mutationUploadInformedConsent.mutate({
+            id: customerEditData?.attributes?.medicalInformation?.data?.id.toString(),
+            attachment: informedConsentFile,
+          });
+        } else {
+          //caso update file
+        }
+      } else {
+        toast(<SuccessToast message={`Cliente editado con éxito`} hour />, {
+          style: { borderRadius: '10px' },
+        });
+        setIsDisabled(false);
+        navigate(`/app/customers`);
+      }
+    },
+    onError: () => {
+      toast(<ErrorToast message={`Ha ocurrido un error al editar el cliente, intente nuevamente`} />, {
+        style: { borderRadius: '10px' },
+      });
+      setIsDisabled(false);
+    },
+  });
+
   const onSubmit = async (dataForm: { informedConsent?: any }) => {
     setCustomerData({
       ...customerData,
       informedConsent: dataForm.informedConsent || null,
     });
     setIsDisabled(true);
-    mutationCustomerPersonalInfo.mutate({
-      name: customerData.name,
-      lastname: customerData.lastname,
-      document: customerData.document,
-      birthdate: customerData?.birthdate ? new Date(customerData.birthdate).toISOString() : '',
-      cellphone: customerData.cellphone,
-      email: customerData.email || '',
-      city: customerData.city || '',
-      address: customerData.address,
-      howDidYouKnow: customerData.howDidYouKnow,
-      profession: customerData.profession,
-      reasonFirstVisit: customerData.reasonFirstVisit || '',
-    });
+    if (edit) {
+      mutationCustomerPersonalInfoEdit.mutate({
+        customerId: customerEditData?.id.toString() || '',
+        name: customerData.name,
+        lastname: customerData.lastname,
+        document: customerData.document,
+        birthdate: customerData?.birthdate ? new Date(customerData.birthdate).toISOString() : '',
+        cellphone: customerData.cellphone,
+        email: customerData.email || '',
+        city: customerData.city || '',
+        address: customerData.address,
+        howDidYouKnow: customerData.howDidYouKnow,
+        profession: customerData.profession,
+        reasonFirstVisit: customerData.reasonFirstVisit || '',
+      });
+    } else {
+      mutationCustomerPersonalInfo.mutate({
+        name: customerData.name,
+        lastname: customerData.lastname,
+        document: customerData.document,
+        birthdate: customerData?.birthdate ? new Date(customerData.birthdate).toISOString() : '',
+        cellphone: customerData.cellphone,
+        email: customerData.email || '',
+        city: customerData.city || '',
+        address: customerData.address,
+        howDidYouKnow: customerData.howDidYouKnow,
+        profession: customerData.profession,
+        reasonFirstVisit: customerData.reasonFirstVisit || '',
+      });
+    }
   };
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)} className={styles.customerForm}>
-      {alertInformedConsent && (
+      {alertInformedConsent && !edit && (
         <Alert variant="warning" onClose={() => setAlertInformedConsent(false)} dismissible>
           <Alert.Heading className="d-flex align-items-center">
             <ExclamationTriangleFill className="me-2" /> Cuidado
@@ -154,6 +240,18 @@ const InformedConsent: FC<InformedConsentProps> = ({
             El consentimiento informado no es requerido para finalizar el alta del cliente. Pero
             <strong>a pesar de no ser obligatorio se recomienda su ingreso</strong> de ser posible ahora, sino recordar
             hacerlo luego ya que es <strong>importante</strong>.
+          </p>
+        </Alert>
+      )}
+      {edit && (
+        <Alert variant="warning">
+          <Alert.Heading className="d-flex align-items-center">
+            <ExclamationTriangleFill className="me-2" /> Cuidado
+          </Alert.Heading>
+          <p>
+            Si sube un nuevo consentimiento informado se <strong>sustituira el anterior por el nuevo</strong>, en caso
+            de no haber subido ninguno hasta la fecha se guardara el que suba.{' '}
+            <strong>Si no realiza ninguna accion en el campo consentimiento informado se mantendra el actual</strong>.
           </p>
         </Alert>
       )}

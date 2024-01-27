@@ -6,6 +6,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import styles from './CustomerEdit.module.scss';
 import { DotLoader } from 'react-spinners';
 import { ChevronLeft, CloudLightningRain } from 'react-bootstrap-icons';
+import CustomerCreateForm from 'components/customerCreateForm/customerCreateForm';
 
 interface CustomerEditProps {}
 
@@ -18,7 +19,7 @@ const CustomerEdit: FC<CustomerEditProps> = () => {
     queryFn: () => getCustomerInfo(id || ''),
   });
 
-  console.log(data);
+  console.log(data?.data?.data);
 
   return (
     <div className={styles.container}>
@@ -52,9 +53,7 @@ const CustomerEdit: FC<CustomerEditProps> = () => {
                 </div>
               </div>
               <div className={styles.form}>
-                {/* data?.data?.data[0]?.attributes && (
-                  <UserEditForm user={userData?.data} userData={data?.data?.data[0]?.attributes} userId={id || ''} />
-                )*/}
+                {data?.data?.data && <CustomerCreateForm edit customerEditData={data?.data?.data} />}
               </div>
             </>
           )}

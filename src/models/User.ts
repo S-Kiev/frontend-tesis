@@ -24,6 +24,7 @@ export interface UserDataEdit {
   city?: number;
   address?: string;
   userId: string;
+  userDataId: string;
 }
 
 export interface UserGet {
