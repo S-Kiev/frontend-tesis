@@ -22,11 +22,12 @@ interface UserEditFormProps {
   user: UserGet;
   userData: UserDataGet;
   userId: string;
+  userDataId: string;
 }
 
 const schema = yup.object().shape(userEditSchema);
 
-const UserEditForm: FC<UserEditFormProps> = ({ user, userData, userId }) => {
+const UserEditForm: FC<UserEditFormProps> = ({ user, userData, userId, userDataId }) => {
   const [isDisabled, setIsDisabled] = useState<boolean>(false);
   const { data: dataCities, isLoading: isLoadingCities } = useGetCities();
   const navigate = useNavigate();
@@ -51,7 +52,7 @@ const UserEditForm: FC<UserEditFormProps> = ({ user, userData, userId }) => {
       address: userData.address,
     },
   });
-
+  console.log();
   const mutationUser = useMutation({
     mutationFn: editUser,
     onSuccess: () => {
@@ -64,6 +65,7 @@ const UserEditForm: FC<UserEditFormProps> = ({ user, userData, userId }) => {
         city: userData.city,
         address: userData.address,
         userId: userId,
+        userDataId: userDataId,
       });
     },
     onError: () => {
@@ -117,6 +119,7 @@ const UserEditForm: FC<UserEditFormProps> = ({ user, userData, userId }) => {
         city: dataForm.city,
         address: dataForm.address,
         userId: userId,
+        userDataId: userDataId,
       });
     }
   };

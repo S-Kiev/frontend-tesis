@@ -15,6 +15,7 @@ interface MedicalInfoProps {
   setCustomerData: (state: CustomerCreateData) => void;
   alertMedicalInfo: boolean;
   setAlertMedicalInfo: (state: boolean) => void;
+  edit: boolean;
 }
 
 const schema = yup.object().shape(medicalInfoSchema);
@@ -25,6 +26,7 @@ const MedicalInfo: FC<MedicalInfoProps> = ({
   setCustomerData,
   alertMedicalInfo,
   setAlertMedicalInfo,
+  edit,
 }) => {
   const {
     register,
@@ -92,7 +94,7 @@ const MedicalInfo: FC<MedicalInfoProps> = ({
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)} className={styles.customerForm}>
-      {alertMedicalInfo && (
+      {alertMedicalInfo && !edit && (
         <Alert variant="warning" onClose={() => setAlertMedicalInfo(false)} dismissible>
           <Alert.Heading className="d-flex align-items-center">
             <ExclamationTriangleFill className="me-2" /> Cuidado

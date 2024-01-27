@@ -1,4 +1,4 @@
-import { CustomerCreateData } from 'models/Customer';
+import { CustomerCreateData, CustomerGetData } from 'models/Customer';
 import { FC, useState } from 'react';
 import PersonalInfo from './stepsForm/personalInfo';
 import ContactInfo from './stepsForm/contactInfo';
@@ -8,39 +8,75 @@ import { ProgressBar } from 'react-bootstrap';
 import styles from './customerCreateForm.module.scss';
 import { Icon1CircleFill, Icon2CircleFill, Icon3CircleFill, Icon4CircleFill } from 'react-bootstrap-icons';
 
-interface CustomerCreateFormProps {}
+interface CustomerCreateFormProps {
+  edit?: boolean;
+  customerEditData?: CustomerGetData;
+}
 
-const CustomerCreateForm: FC<CustomerCreateFormProps> = () => {
+const CustomerCreateForm: FC<CustomerCreateFormProps> = ({ edit = false, customerEditData }) => {
   const [step, setStep] = useState<number>(1);
   const [alertMedicalInfo, setAlertMedicalInfo] = useState<boolean>(true);
   const [alertInformedConsent, setAlertInformedConsent] = useState<boolean>(true);
   const [customerData, setCustomerData] = useState<CustomerCreateData>({
-    name: '',
-    lastname: '',
-    document: '',
-    birthdate: undefined,
-    cellphone: '',
-    email: '',
-    city: undefined,
-    address: '',
-    howDidYouKnow: '',
-    profession: '',
-    reasonFirstVisit: '',
+    name: edit && customerEditData ? customerEditData.attributes?.name : '',
+    lastname: edit && customerEditData ? customerEditData.attributes?.lastname : '',
+    document: edit && customerEditData ? customerEditData.attributes?.document : '',
+    birthdate: edit && customerEditData ? customerEditData.attributes?.birthdate : undefined,
+    cellphone: edit && customerEditData ? customerEditData.attributes?.cellphone : '',
+    email: edit && customerEditData ? customerEditData.attributes?.email || '' : '',
+    city: edit && customerEditData ? customerEditData.attributes?.city?.data?.id : undefined,
+    address: edit && customerEditData ? customerEditData.attributes?.address : '',
+    howDidYouKnow: edit && customerEditData ? customerEditData.attributes?.howDidYouKnow : '',
+    profession: edit && customerEditData ? customerEditData.attributes?.profession || '' : '',
+    reasonFirstVisit: edit && customerEditData ? customerEditData.attributes?.reasonFirstVisit || '' : '',
     informedConsent: null,
-    medication: '',
-    doctor: '',
-    emergencyPhone: '',
-    suffersIllness: '',
-    columnProblem: false,
-    operation: '',
-    heartProblem: false,
-    cancer: '',
-    diu: false,
-    metalImplants: false,
-    hypertensive: false,
-    varicoseVeins: false,
-    coagulationProblems: false,
-    comments: '',
+    medication:
+      edit && customerEditData
+        ? customerEditData.attributes?.medicalInformation?.data?.attributes?.medication || ''
+        : '',
+    doctor:
+      edit && customerEditData ? customerEditData.attributes?.medicalInformation?.data?.attributes?.doctor || '' : '',
+    emergencyPhone:
+      edit && customerEditData
+        ? customerEditData.attributes?.medicalInformation?.data?.attributes?.emergencyPhone || ''
+        : '',
+    suffersIllness:
+      edit && customerEditData
+        ? customerEditData.attributes?.medicalInformation?.data?.attributes?.suffersIllness || ''
+        : '',
+    columnProblem:
+      edit && customerEditData
+        ? customerEditData.attributes?.medicalInformation?.data?.attributes?.columnProblem
+        : false,
+    operation:
+      edit && customerEditData
+        ? customerEditData.attributes?.medicalInformation?.data?.attributes?.operation || ''
+        : '',
+    heartProblem:
+      edit && customerEditData
+        ? customerEditData.attributes?.medicalInformation?.data?.attributes?.heartProblem
+        : false,
+    cancer:
+      edit && customerEditData ? customerEditData.attributes?.medicalInformation?.data?.attributes?.cancer || '' : '',
+    diu: edit && customerEditData ? customerEditData.attributes?.medicalInformation?.data?.attributes?.diu : false,
+    metalImplants:
+      edit && customerEditData
+        ? customerEditData.attributes?.medicalInformation?.data?.attributes?.metalImplants
+        : false,
+    hypertensive:
+      edit && customerEditData
+        ? customerEditData.attributes?.medicalInformation?.data?.attributes?.hypertensive
+        : false,
+    varicoseVeins:
+      edit && customerEditData
+        ? customerEditData.attributes?.medicalInformation?.data?.attributes?.varicoseVeins
+        : false,
+    coagulationProblems:
+      edit && customerEditData
+        ? customerEditData.attributes?.medicalInformation?.data?.attributes?.coagulationProblems
+        : false,
+    comments:
+      edit && customerEditData ? customerEditData.attributes?.medicalInformation?.data?.attributes?.comments || '' : '',
   });
 
   switch (step) {
@@ -80,6 +116,7 @@ const CustomerCreateForm: FC<CustomerCreateFormProps> = () => {
             setCustomerData={setCustomerData}
             alertMedicalInfo={alertMedicalInfo}
             setAlertMedicalInfo={setAlertMedicalInfo}
+            edit={edit}
           />
         </>
       );
@@ -97,6 +134,8 @@ const CustomerCreateForm: FC<CustomerCreateFormProps> = () => {
             setCustomerData={setCustomerData}
             alertInformedConsent={alertInformedConsent}
             setAlertInformedConsent={setAlertInformedConsent}
+            customerEditData={customerEditData}
+            edit={edit}
           />
         </>
       );

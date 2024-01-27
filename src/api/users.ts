@@ -48,7 +48,7 @@ export const editUser = async (user: { username: string; email: string; userId: 
 };
 
 export const editUserData = async (userData: UserDataEdit) => {
-  return await axiosDefaultConfig.put(routes.PUT_USER_DATA.replace('{id}', userData.userId.toString()), {
+  return await axiosDefaultConfig.put(routes.PUT_USER_DATA.replace('{id}', userData.userDataId.toString()), {
     data: userData,
   });
 };
