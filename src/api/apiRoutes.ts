@@ -22,4 +22,5 @@ export const routes = {
     'customer-personal-informations/{id}?populate[city][populate][0]=id&populate[medicalInformation][populate][0]=informedConsent',
   PUT_CUSTOMER_PERSONAL_INFO: 'customer-personal-informations/{id}',
   PUT_CUSTOMER_MEDICAL_INFO: 'customer-medical-informations/{id}',
+  POST_EQUIPMENT: 'equipments',
 };

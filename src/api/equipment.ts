@@ -1,3 +1,4 @@
+import { Equipment } from 'models/Equipment';
 import { routes } from './apiRoutes';
 import { axiosDefaultConfig } from './axiosConfig';
 import { defaultPageSize } from './paginationConfig';
@@ -10,5 +11,11 @@ export const getEquipments = async (page: number, search: string) => {
       'pagination[page]': page,
       'pagination[pageSize]': defaultPageSize,
     },
+  });
+};
+
+export const createEquipment = async (equipment: Equipment) => {
+  return await axiosDefaultConfig.post(routes.POST_EQUIPMENT, {
+    data: equipment,
   });
 };

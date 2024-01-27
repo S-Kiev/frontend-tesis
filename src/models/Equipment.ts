@@ -13,3 +13,10 @@ export interface EquipmentData {
     status: EquipmentStatusEnum;
   };
 }
+
+export interface Equipment {
+  name: string;
+  brand: string;
+  description: string;
+  status: EquipmentStatusEnum;
+}
