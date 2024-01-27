@@ -39,8 +39,8 @@ const PersonalInfo: FC<PersonalInfoProps> = ({ setStep, customerData, setCustome
     },
   });
 
-  const dateParse = field => {
-    return field ? Date.parse(field) : null;
+  const dateParse = (field): Date | null => {
+    return field ? new Date(Date.parse(field)) : null;
   };
 
   const onSubmit = async (dataForm: {
@@ -123,7 +123,7 @@ const PersonalInfo: FC<PersonalInfoProps> = ({ setStep, customerData, setCustome
               placeholderText="Ingrese la fecha de nacimiento"
               dateFormat="dd-MM-yyyy"
               locale="es"
-              selected={dateParse(field.value)}
+              selected={dateParse(field?.value)}
               onChange={date => field.onChange(date)}
               maxDate={new Date()}
               wrapperClassName={errors.birthdate?.message ? styles.datepickerError : styles.datepicker}
