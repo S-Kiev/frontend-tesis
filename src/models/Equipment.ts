@@ -20,3 +20,10 @@ export interface Equipment {
   description: string;
   status: EquipmentStatusEnum;
 }
+
+export interface EquipmentEdit {
+  equipmentId: number | string;
+  name: string;
+  brand: string;
+  description: string;
+}
