@@ -81,3 +81,46 @@ export interface CustomerPersonalInfo {
   reasonFirstVisit?: string;
   medicalInformation?: string | number;
 }
+
+export interface CustomerGetData {
+  id: number;
+  attributes: {
+    name: string;
+    lastname: string;
+    document: string;
+    birthdate: string | Date;
+    cellphone: string;
+    email: string;
+    address: string;
+    howDidYouKnow: string;
+    profession: string;
+    reasonFirstVisit: string;
+    createdAt: string | Date;
+    updatedAt: string | Date;
+    publishedAt: string | Date;
+    medicalInformation: {
+      data: {
+        id: number;
+        attributes: {
+          medication: string | null;
+          doctor: string | null;
+          emergencyPhone: string | null;
+          suffersIllness: string | null;
+          columnProblem: boolean | null;
+          operation: string | null;
+          heartProblem: boolean;
+          cancer: string | null;
+          diu: boolean | null;
+          metalImplants: boolean | null;
+          hypertensive: boolean | null;
+          varicoseVeins: boolean | null;
+          coagulationProblems: boolean | null;
+          comments: string | null;
+          createdAt: string | Date;
+          updatedAt: string | Date;
+          publishedAt: string | Date;
+        };
+      };
+    };
+  };
+}

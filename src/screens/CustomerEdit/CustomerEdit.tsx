@@ -3,6 +3,9 @@ import { QueryKeys } from 'api/QueryKeys';
 import { getCustomerInfo } from 'api/customers';
 import { FC } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import styles from './CustomerEdit.module.scss';
+import { DotLoader } from 'react-spinners';
+import { ChevronLeft, CloudLightningRain } from 'react-bootstrap-icons';
 
 interface CustomerEditProps {}
 
@@ -17,17 +20,15 @@ const CustomerEdit: FC<CustomerEditProps> = () => {
 
   console.log(data);
 
-  return <></>;
-
-  {
-    /*<div className={styles.container}>
-      {isLoading && isLoadingUserData ? (
+  return (
+    <div className={styles.container}>
+      {isLoading ? (
         <div className="d-flex align-items-center justify-content-center" style={{ marginTop: '300px' }}>
           <DotLoader color="rgb(159,213,177)" />
         </div>
       ) : (
         <>
-          {error || errorUserData ? (
+          {error ? (
             <div className={styles.error}>
               <CloudLightningRain size={80} />
               <h3 className="mt-3">Ups, ha ocurrido un error</h3>
@@ -45,22 +46,22 @@ const CustomerEdit: FC<CustomerEditProps> = () => {
                     }}
                   />
                   <div className={styles.titleConteiner}>
-                    <h2 className={styles.headline}>Editar mi usuario</h2>
-                    <p>Modifica tu usuario de la aplicacion de Energía Natural</p>
+                    <h2 className={styles.headline}>Editar cliente</h2>
+                    <p>Modifica un cliente del sistema</p>
                   </div>
                 </div>
               </div>
               <div className={styles.form}>
-                {userData?.data && data?.data?.data[0]?.attributes && (
+                {/* data?.data?.data[0]?.attributes && (
                   <UserEditForm user={userData?.data} userData={data?.data?.data[0]?.attributes} userId={id || ''} />
-                )}
+                )*/}
               </div>
             </>
           )}
         </>
       )}
-                </div>*/
-  }
+    </div>
+  );
 };
 
 export default CustomerEdit;
