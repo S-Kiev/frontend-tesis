@@ -28,4 +28,6 @@ export const routes = {
   POST_CONSULTING_ROOM: 'consulting-rooms',
   PUT_CONSULTING_ROOM: 'consulting-rooms/{id}',
   GET_CONSULTING_ROOM: 'consulting-rooms/{id}',
+  GET_CONSULTATIONS:
+    'consultations?populate[customer][populate][0]=id&populate[responsibleUser][populate][0]=id&sort=since:desc',
 };
