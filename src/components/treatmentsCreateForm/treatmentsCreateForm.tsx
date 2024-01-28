@@ -4,18 +4,19 @@ import { Button, Form, Spinner } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import styles from './treatmentsCreateForm.module.scss';
 import * as yup from 'yup';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { toast } from 'react-toastify';
 import ErrorToast from 'components/toast/errorToast';
 import SuccessToast from 'components/toast/successToast';
-import { equipmentSchema } from 'util/validations/equipmentSchema';
 import { useGetConsultingRooms } from 'customHooks/useGetConsultingRooms';
 import { useGetEquipments } from 'customHooks/useGetEquipments';
+import { treatmentsSchema } from 'util/validations/treatmentsSchema';
+import Select from 'react-select';
 
 interface TreatmentsCreateFormProps {}
 
-const schema = yup.object().shape(equipmentSchema);
+const schema = yup.object().shape(treatmentsSchema);
 
 const TreatmentsCreateForm: FC<TreatmentsCreateFormProps> = () => {
   const [isDisabled, setIsDisabled] = useState<boolean>(false);
@@ -26,13 +27,15 @@ const TreatmentsCreateForm: FC<TreatmentsCreateFormProps> = () => {
     register,
     handleSubmit,
     formState: { errors },
+    control,
   } = useForm({
     criteriaMode: 'all',
     mode: 'onBlur',
     resolver: yupResolver(schema),
     defaultValues: {
       name: '',
-      brand: '',
+      equipments: [],
+      consultingRooms: [],
       description: '',
     },
   });
@@ -57,70 +60,142 @@ const TreatmentsCreateForm: FC<TreatmentsCreateFormProps> = () => {
     },
   });*/
 
-  /* const onSubmit = async (dataForm: { name: string; brand?: string; description?: string }) => {
+  const onSubmit = async (dataForm: {
+    name: string;
+    equipments: (number | undefined)[];
+    consultingRooms: (number | undefined)[];
+    description?: string;
+  }) => {
     setIsDisabled(true);
-    mutationEquipment.mutate({
+    /*mutationEquipment.mutate({
       name: dataForm.name,
       brand: dataForm.brand || '',
       description: dataForm.description || '',
       status: EquipmentStatusEnum.available,
-    });
-  };*/
+    });*/
+  };
 
   return (
     <>
-      {/*<Form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
-      <Form.Group className="form-outline mb-4">
-        <Form.Label>
-          Nombre <strong className="text-danger me-2">*</strong>
-        </Form.Label>
-        <Form.Control
-          {...register('name')}
-          type="text"
-          placeholder={'Ingrese el nombre' || ''}
-          isInvalid={!!errors.name}
-        />
-        <Form.Control.Feedback type="invalid">{errors.name?.message}</Form.Control.Feedback>
-      </Form.Group>
-      <Form.Group className="form-outline mb-4">
-        <Form.Label>
-          Marca <strong className="text-danger me-2">*</strong>
-        </Form.Label>
-        <Form.Control
-          {...register('brand')}
-          type="text"
-          placeholder={'Ingrese la marca' || ''}
-          isInvalid={!!errors.brand}
-        />
-        <Form.Control.Feedback type="invalid">{errors.brand?.message}</Form.Control.Feedback>
-      </Form.Group>
-      <Form.Group className="form-outline mb-4">
-        <Form.Label>Descripción</Form.Label>
-        <Form.Control
-          {...register('description')}
-          type="text"
-          placeholder={'Ingrese una descripción' || ''}
-          isInvalid={!!errors.description}
-        />
-        <Form.Control.Feedback type="invalid">{errors.description?.message}</Form.Control.Feedback>
-      </Form.Group>
-      <div className="d-flex align-items-center justify-content-end mb-2" style={{ marginTop: '40px' }}>
-        <Button
-          variant="secondary"
-          type="button"
-          className="me-3"
-          onClick={() => {
-            navigate(`/app/equipments`);
-          }}
-        >
-          Cancelar
-        </Button>
-        <Button variant="success" type="submit" disabled={isDisabled}>
-          {isDisabled && <Spinner className="me-1" size="sm" />}
-          <span>Guardar</span>
-        </Button>
-      </div>
-        </Form>*/}
+      <Form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
+        <Form.Group className="form-outline mb-4">
+          <Form.Label>
+            Nombre <strong className="text-danger me-2">*</strong>
+          </Form.Label>
+          <Form.Control
+            {...register('name')}
+            type="text"
+            placeholder={'Ingrese el nombre' || ''}
+            isInvalid={!!errors.name}
+          />
+          <Form.Control.Feedback type="invalid">{errors.name?.message}</Form.Control.Feedback>
+        </Form.Group>
+        <Form.Group className="form-outline mb-4">
+          <Form.Label>
+            Equipamiento <strong className="text-danger me-2">*</strong>
+          </Form.Label>
+          <Controller
+            name="equipments"
+            control={control}
+            render={({ field }) => (
+              <Select
+                options={dataEquipments}
+                isOptionDisabled={option => option.show === false}
+                isLoading={isLoadingEquipments}
+                value={dataEquipments.find(c => c.value === field.value)}
+                onChange={val => field.onChange(val)}
+                styles={{
+                  control: baseStyles => ({
+                    ...baseStyles,
+                    borderColor: !!errors.equipments ? '#dc3545' : '#dee2e6',
+                    borderRadius: '0.375rem',
+                    fontSize: '14px',
+                  }),
+                }}
+                menuPlacement="auto"
+                isSearchable
+                isMulti
+                noOptionsMessage={() => 'No hay opciones'}
+                name="equipments"
+                isDisabled={isLoadingEquipments}
+                placeholder={'Seleccione equipamiento'}
+              />
+            )}
+          />
+          {errors.equipments?.message && (
+            <div className="d-flex align-items-center">
+              <span className="text-danger mt-1 ms-2" style={{ fontSize: '0.875em' }}>
+                {errors.equipments?.message}
+              </span>
+            </div>
+          )}
+        </Form.Group>
+        <Form.Group className="form-outline mb-4">
+          <Form.Label>
+            Consultorios <strong className="text-danger me-2">*</strong>
+          </Form.Label>
+          <Controller
+            name="consultingRooms"
+            control={control}
+            render={({ field }) => (
+              <Select
+                options={dataConsultingRooms}
+                isLoading={isLoadingConsultingsRooms}
+                value={dataConsultingRooms.find(c => c.value === field.value)}
+                onChange={val => field.onChange(val)}
+                styles={{
+                  control: baseStyles => ({
+                    ...baseStyles,
+                    borderColor: !!errors.consultingRooms ? '#dc3545' : '#dee2e6',
+                    borderRadius: '0.375rem',
+                    fontSize: '14px',
+                  }),
+                }}
+                menuPlacement="auto"
+                isSearchable
+                isMulti
+                noOptionsMessage={() => 'No hay opciones'}
+                name="consultingRooms"
+                isDisabled={isLoadingConsultingsRooms}
+                placeholder={'Seleccione consultorios'}
+              />
+            )}
+          />
+          {errors.consultingRooms?.message && (
+            <div className="d-flex align-items-center">
+              <span className="text-danger mt-1 ms-2" style={{ fontSize: '0.875em' }}>
+                {errors.consultingRooms?.message}
+              </span>
+            </div>
+          )}
+        </Form.Group>
+        <Form.Group className="form-outline mb-4">
+          <Form.Label>Descripción</Form.Label>
+          <Form.Control
+            {...register('description')}
+            type="text"
+            placeholder={'Ingrese una descripción' || ''}
+            isInvalid={!!errors.description}
+          />
+          <Form.Control.Feedback type="invalid">{errors.description?.message}</Form.Control.Feedback>
+        </Form.Group>
+        <div className="d-flex align-items-center justify-content-end mb-2" style={{ marginTop: '40px' }}>
+          <Button
+            variant="secondary"
+            type="button"
+            className="me-3"
+            onClick={() => {
+              navigate(`/app/treatments`);
+            }}
+          >
+            Cancelar
+          </Button>
+          <Button variant="success" type="submit" disabled={isDisabled}>
+            {isDisabled && <Spinner className="me-1" size="sm" />}
+            <span>Guardar</span>
+          </Button>
+        </div>
+      </Form>
     </>
   );
 };
