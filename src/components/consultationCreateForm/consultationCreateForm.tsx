@@ -22,8 +22,14 @@ const schema = yup.object().shape(consultationSchema);
 
 const ConsultationsCreateForm: FC<ConsultationsCreateFormProps> = () => {
   const [isDisabled, setIsDisabled] = useState<boolean>(false);
+  const [treatments, setTreatments] = useState<any>();
   const { data: dataCustomers, isLoading: isLoadingCustomers } = useGetCustomers();
-  const { data: dataTreatments, isLoading: isLoadingTreatments } = useGetTreatments();
+  const {
+    data: dataTreatments,
+    isLoading: isLoadingTreatments,
+    equipments,
+    consultingRooms,
+  } = useGetTreatments(treatments);
   const navigate = useNavigate();
   const {
     register,
@@ -45,6 +51,9 @@ const ConsultationsCreateForm: FC<ConsultationsCreateFormProps> = () => {
       comments: '',
     },
   });
+
+  console.log(equipments);
+  console.log(consultingRooms);
 
   const dateParse = (field): Date | null => {
     return field ? new Date(Date.parse(field)) : null;
@@ -163,7 +172,10 @@ const ConsultationsCreateForm: FC<ConsultationsCreateFormProps> = () => {
               isOptionDisabled={option => option.show === false}
               isLoading={isLoadingTreatments}
               value={dataTreatments.find(c => c.value === field.value)}
-              onChange={val => field.onChange(val)}
+              onChange={val => {
+                setTreatments(val);
+                field.onChange(val);
+              }}
               styles={{
                 control: baseStyles => ({
                   ...baseStyles,
