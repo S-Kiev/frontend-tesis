@@ -28,7 +28,6 @@ const Consultations: FC<ConsultationsProps> = () => {
     queryFn: () => getConsultations(page, search),
   });
 
-  console.log(data);
   return (
     <div className={styles.container}>
       <div className={styles.header}>
@@ -56,7 +55,7 @@ const Consultations: FC<ConsultationsProps> = () => {
         <>
           {!error ? (
             <div className={styles.filters}>
-              <Search placeholder="Buscar por nombre cliente o id consulta" onChange={e => setSearch(e)} width={300} />
+              <Search placeholder="Buscar por nombre cliente o id consulta" onChange={e => setSearch(e)} width={320} />
             </div>
           ) : null}
         </>
