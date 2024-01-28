@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useMemo, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { Button, Form, Spinner } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
@@ -13,6 +13,8 @@ import SuccessToast from 'components/toast/successToast';
 import { consultationSchema } from 'util/validations/consultationSchema';
 import { useGetCustomers } from 'customHooks/useGetCustomers';
 import { useGetTreatments } from 'customHooks/useGetTreatments';
+import DatePicker from 'react-datepicker';
+import '../../util/styles/datepicker.scss';
 
 interface ConsultationsCreateFormProps {}
 
@@ -26,7 +28,7 @@ const ConsultationsCreateForm: FC<ConsultationsCreateFormProps> = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isValid },
     control,
     getValues,
   } = useForm({
@@ -44,8 +46,9 @@ const ConsultationsCreateForm: FC<ConsultationsCreateFormProps> = () => {
     },
   });
 
-  console.log(dataCustomers);
-  console.log(dataTreatments);
+  const dateParse = (field): Date | null => {
+    return field ? new Date(Date.parse(field)) : null;
+  };
 
   /*const mutationUser = useMutation({
     mutationFn: createUser,
@@ -90,11 +93,11 @@ const ConsultationsCreateForm: FC<ConsultationsCreateFormProps> = () => {
   const onSubmit = async (dataForm: {
     customer: number;
     treatments: ({ value: string; label: string } | undefined)[];
-    equipments: ({ value: string; label: string; show: boolean } | undefined)[];
+    equipments?: ({ value: string; label: string; show: boolean } | undefined)[] | null | undefined;
     consultingRooms: ({ value: string; label: string; show: boolean } | undefined)[];
     dateSinceConsultation: string;
     dateUntilConsultation: string;
-    comments: string;
+    comments?: string;
   }) => {
     setIsDisabled(true);
     /*mutationUser.mutate({
@@ -108,7 +111,162 @@ const ConsultationsCreateForm: FC<ConsultationsCreateFormProps> = () => {
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
-      //Contenido form
+      <Form.Group className="form-outline mb-4">
+        <Form.Label>
+          Cliente <strong className="text-danger me-2">*</strong>
+        </Form.Label>
+        <Controller
+          name="customer"
+          control={control}
+          render={({ field }) => (
+            <Select
+              options={dataCustomers}
+              isLoading={isLoadingCustomers}
+              value={dataCustomers.find(c => c.value === field.value)}
+              onChange={val => field.onChange(val.value)}
+              styles={{
+                control: baseStyles => ({
+                  ...baseStyles,
+                  borderColor: !!errors.customer ? '#dc3545' : '#dee2e6',
+                  borderRadius: '0.375rem',
+                  visibility: 'visible',
+                  height: '40px',
+                  fontSize: '14px',
+                  alignContent: 'center',
+                }),
+              }}
+              menuPlacement="auto"
+              isSearchable
+              noOptionsMessage={() => 'No hay opciones'}
+              name="customer"
+              isDisabled={isLoadingCustomers}
+              placeholder={'Seleccione un cliente'}
+            />
+          )}
+        />
+        {errors.customer?.message && (
+          <div className="d-flex align-items-center">
+            <span className="text-danger mt-1 ms-2" style={{ fontSize: '0.875em' }}>
+              {errors.customer?.message}
+            </span>
+          </div>
+        )}
+      </Form.Group>
+      <Form.Group className="form-outline mb-4">
+        <Form.Label>Tratamientos</Form.Label>
+        <Controller
+          name="treatments"
+          control={control}
+          render={({ field }) => (
+            <Select
+              options={dataTreatments}
+              isOptionDisabled={option => option.show === false}
+              isLoading={isLoadingTreatments}
+              value={dataTreatments.find(c => c.value === field.value)}
+              onChange={val => field.onChange(val)}
+              styles={{
+                control: baseStyles => ({
+                  ...baseStyles,
+                  borderColor: !!errors.treatments ? '#dc3545' : '#dee2e6',
+                  borderRadius: '0.375rem',
+                  fontSize: '14px',
+                }),
+              }}
+              menuPlacement="auto"
+              isSearchable
+              isMulti
+              noOptionsMessage={() => 'No hay opciones'}
+              name="treatments"
+              isDisabled={isLoadingTreatments}
+              placeholder={'Seleccione tratamientos'}
+            />
+          )}
+        />
+        {errors.treatments?.message && (
+          <div className="d-flex align-items-center">
+            <span className="text-danger mt-1 ms-2" style={{ fontSize: '0.875em' }}>
+              {errors.treatments?.message}
+            </span>
+          </div>
+        )}
+      </Form.Group>
+      <Form.Group className="form-outline mb-4">
+        <Form.Label>
+          Hora de inicio <strong className="text-danger me-2">*</strong>
+        </Form.Label>
+        <Controller
+          name="dateSinceConsultation"
+          control={control}
+          render={({ field }) => (
+            <DatePicker
+              showIcon
+              showMonthDropdown
+              showTimeSelect
+              placeholderText="Ingrese la fecha inicio"
+              dateFormat="MMMM d, yyyy h:mm aa"
+              locale="es"
+              selected={dateParse(field?.value)}
+              onChange={date => field.onChange(date)}
+              minDate={new Date()}
+              minTime={new Date()}
+              maxTime={new Date(0, 0, 0, 23, 30)}
+              wrapperClassName={errors.dateSinceConsultation?.message ? styles.datepickerError : styles.datepicker}
+            />
+          )}
+        />
+        {errors.dateSinceConsultation?.message && (
+          <div className="d-flex align-items-center">
+            <span className="text-danger mt-1 ms-2" style={{ fontSize: '0.875em' }}>
+              {errors.dateSinceConsultation?.message}
+            </span>
+          </div>
+        )}
+      </Form.Group>
+
+      <Form.Group className="form-outline mb-4">
+        <Form.Label>
+          Hora de fin <strong className="text-danger me-2">*</strong>
+        </Form.Label>
+        <Controller
+          name="dateUntilConsultation"
+          control={control}
+          render={({ field }) => (
+            <DatePicker
+              showIcon
+              showMonthDropdown
+              showTimeSelect
+              placeholderText="Ingrese la fecha de fin"
+              dateFormat="MMMM d, yyyy h:mm aa"
+              locale="es"
+              selected={dateParse(field?.value)}
+              onChange={date => field.onChange(date)}
+              minDate={new Date()}
+              minTime={new Date()}
+              maxTime={new Date(0, 0, 0, 23, 30)}
+              wrapperClassName={errors.dateUntilConsultation?.message ? styles.datepickerError : styles.datepicker}
+            />
+          )}
+        />
+        {errors.dateUntilConsultation?.message && (
+          <div className="d-flex align-items-center">
+            <span className="text-danger mt-1 ms-2" style={{ fontSize: '0.875em' }}>
+              {errors.dateUntilConsultation?.message}
+            </span>
+          </div>
+        )}
+      </Form.Group>
+
+      <Form.Group className="form-outline mb-4">
+        <Form.Label>Comentarios</Form.Label>
+        <Form.Control
+          {...register('comments')}
+          as="textarea"
+          rows={3}
+          placeholder="Ingrese comentarios"
+          isInvalid={!!errors.comments}
+        />
+        <Form.Control.Feedback type="invalid">{errors.comments?.message}</Form.Control.Feedback>
+      </Form.Group>
       <div className="d-flex align-items-center justify-content-end mb-2" style={{ marginTop: '40px' }}>
         <Button
           variant="secondary"
@@ -120,7 +278,7 @@ const ConsultationsCreateForm: FC<ConsultationsCreateFormProps> = () => {
         >
           Cancelar
         </Button>
-        <Button variant="success" type="submit" disabled={isDisabled}>
+        <Button variant="success" type="submit" disabled={isDisabled || !isValid}>
           {isDisabled && <Spinner className="me-1" size="sm" />}
           <span>Guardar</span>
         </Button>

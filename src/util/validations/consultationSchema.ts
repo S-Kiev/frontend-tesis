@@ -26,9 +26,7 @@ export const consultationSchema = {
         show: yup.boolean().required(),
       }),
     )
-    .min(1, REQUIREDMESSAGE)
-    .nullable()
-    .required(REQUIREDMESSAGE),
+    .nullable(),
   consultingRooms: yup
     .array()
     .of(
@@ -43,5 +41,5 @@ export const consultationSchema = {
     .required(REQUIREDMESSAGE),
   dateSinceConsultation: yup.string().required(REQUIREDMESSAGE),
   dateUntilConsultation: yup.string().required(REQUIREDMESSAGE),
-  comments: yup.string().trim().max(500, MAX500).required(REQUIREDMESSAGE),
+  comments: yup.string().trim().max(500, MAX500),
 };
