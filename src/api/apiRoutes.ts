@@ -17,7 +17,9 @@ export const routes = {
   POST_CUSTOMER_MEDICAL_INFO: 'customer-medical-informations',
   GET_TREATMENTS: 'treatments?sort=createdAt:desc',
   GET_EQUIPMENTS: 'equipments?sort=createdAt:desc',
+  GET_EQUIPMENTS_HOOK: 'equipments',
   GET_CONSULTINGS_ROOMS: 'consulting-rooms?sort=createdAt:desc',
+  GET_CONSULTINGS_ROOMS_HOOK: 'consulting-rooms',
   GET_CUSTOMER_INFO:
     'customer-personal-informations/{id}?populate[city][populate][0]=id&populate[medicalInformation][populate][0]=informedConsent',
   PUT_CUSTOMER_PERSONAL_INFO: 'customer-personal-informations/{id}',

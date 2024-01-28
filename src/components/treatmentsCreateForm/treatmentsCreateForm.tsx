@@ -11,6 +11,7 @@ import ErrorToast from 'components/toast/errorToast';
 import SuccessToast from 'components/toast/successToast';
 import { equipmentSchema } from 'util/validations/equipmentSchema';
 import { useGetConsultingRooms } from 'customHooks/useGetConsultingRooms';
+import { useGetEquipments } from 'customHooks/useGetEquipments';
 
 interface TreatmentsCreateFormProps {}
 
@@ -18,7 +19,8 @@ const schema = yup.object().shape(equipmentSchema);
 
 const TreatmentsCreateForm: FC<TreatmentsCreateFormProps> = () => {
   const [isDisabled, setIsDisabled] = useState<boolean>(false);
-  const { data: dataConsultingRooms, isLoading: isLoadingCities } = useGetConsultingRooms();
+  const { data: dataConsultingRooms, isLoading: isLoadingConsultingsRooms } = useGetConsultingRooms();
+  const { data: dataEquipments, isLoading: isLoadingEquipments } = useGetEquipments();
   const navigate = useNavigate();
   const {
     register,
@@ -36,6 +38,7 @@ const TreatmentsCreateForm: FC<TreatmentsCreateFormProps> = () => {
   });
 
   console.log(dataConsultingRooms);
+  console.log(dataEquipments);
 
   /* const mutationEquipment = useMutation({
     mutationFn: createEquipment,

@@ -14,6 +14,10 @@ export const getEquipments = async (page: number, search: string) => {
   });
 };
 
+export const getEquipmentsHook = async () => {
+  return await axiosDefaultConfig.get(routes.GET_EQUIPMENTS_HOOK);
+};
+
 export const createEquipment = async (equipment: Equipment) => {
   return await axiosDefaultConfig.post(routes.POST_EQUIPMENT, {
     data: equipment,
