@@ -13,16 +13,26 @@ import { useGetConsultingRooms } from 'customHooks/useGetConsultingRooms';
 import { useGetEquipments } from 'customHooks/useGetEquipments';
 import { treatmentsSchema } from 'util/validations/treatmentsSchema';
 import Select from 'react-select';
-import { createTreatment } from 'api/treatment';
+import { createTreatment, editTreatment } from 'api/treatment';
+import { TreatmentGetData } from 'models/Treatments';
+import { parseEquipments } from 'util/parseEquipments';
+import { parseConsultingsRooms } from 'util/parseConsultingRooms';
 
-interface TreatmentsCreateFormProps {}
+interface TreatmentsCreateFormProps {
+  edit?: boolean;
+  treatmentData?: TreatmentGetData;
+}
 
 const schema = yup.object().shape(treatmentsSchema);
 
-const TreatmentsCreateForm: FC<TreatmentsCreateFormProps> = () => {
+const TreatmentsCreateForm: FC<TreatmentsCreateFormProps> = ({ edit, treatmentData }) => {
   const [isDisabled, setIsDisabled] = useState<boolean>(false);
   const { data: dataConsultingRooms, isLoading: isLoadingConsultingsRooms } = useGetConsultingRooms();
   const { data: dataEquipments, isLoading: isLoadingEquipments } = useGetEquipments();
+  const equipmentsArray =
+    edit && treatmentData ? parseEquipments(treatmentData?.attributes?.equipments?.data || []) : [];
+  const consultingRoomsArray =
+    edit && treatmentData ? parseConsultingsRooms(treatmentData?.attributes?.consultingRooms?.data || []) : [];
   const navigate = useNavigate();
   const {
     register,
@@ -34,10 +44,10 @@ const TreatmentsCreateForm: FC<TreatmentsCreateFormProps> = () => {
     mode: 'onBlur',
     resolver: yupResolver(schema),
     defaultValues: {
-      name: '',
-      equipments: [],
-      consultingRooms: [],
-      description: '',
+      name: edit && treatmentData ? treatmentData?.attributes?.name || '' : '',
+      equipments: equipmentsArray,
+      consultingRooms: consultingRoomsArray,
+      description: edit && treatmentData ? treatmentData?.attributes?.description || '' : '',
     },
   });
 
@@ -58,6 +68,23 @@ const TreatmentsCreateForm: FC<TreatmentsCreateFormProps> = () => {
     },
   });
 
+  const mutationTreatmentsEdit = useMutation({
+    mutationFn: editTreatment,
+    onSuccess: () => {
+      toast(<SuccessToast message={`Tratamiento editado con éxito`} hour />, {
+        style: { borderRadius: '10px' },
+      });
+      setIsDisabled(false);
+      navigate(`/app/treatments`);
+    },
+    onError: () => {
+      toast(<ErrorToast message={`Ha ocurrido un error al editar el tratamiento, intente nuevamente`} />, {
+        style: { borderRadius: '10px' },
+      });
+      setIsDisabled(false);
+    },
+  });
+
   const onSubmit = async (dataForm: {
     name: string;
     equipments?: ({ value: string; label: string; show: boolean } | undefined)[] | null | undefined;
@@ -65,17 +92,32 @@ const TreatmentsCreateForm: FC<TreatmentsCreateFormProps> = () => {
     description?: string;
   }) => {
     setIsDisabled(true);
-    mutationTreatmentsCreate.mutate({
-      name: dataForm.name,
-      description: dataForm.description || '',
-      equipments:
-        dataForm?.equipments?.map(equipment => {
-          return Number(equipment?.value);
-        }) || [],
-      consultingRooms: dataForm.consultingRooms.map(consultingRoom => {
-        return Number(consultingRoom?.value);
-      }),
-    });
+    if (edit) {
+      mutationTreatmentsEdit.mutate({
+        treatmentId: treatmentData?.id || '',
+        name: dataForm.name,
+        description: dataForm.description || '',
+        equipments:
+          dataForm?.equipments?.map(equipment => {
+            return Number(equipment?.value);
+          }) || [],
+        consultingRooms: dataForm.consultingRooms.map(consultingRoom => {
+          return Number(consultingRoom?.value);
+        }),
+      });
+    } else {
+      mutationTreatmentsCreate.mutate({
+        name: dataForm.name,
+        description: dataForm.description || '',
+        equipments:
+          dataForm?.equipments?.map(equipment => {
+            return Number(equipment?.value);
+          }) || [],
+        consultingRooms: dataForm.consultingRooms.map(consultingRoom => {
+          return Number(consultingRoom?.value);
+        }),
+      });
+    }
   };
 
   return (
@@ -104,6 +146,7 @@ const TreatmentsCreateForm: FC<TreatmentsCreateFormProps> = () => {
                 isOptionDisabled={option => option.show === false}
                 isLoading={isLoadingEquipments}
                 value={dataEquipments.find(c => c.value === field.value)}
+                defaultValue={equipmentsArray}
                 onChange={val => field.onChange(val)}
                 styles={{
                   control: baseStyles => ({
@@ -143,6 +186,7 @@ const TreatmentsCreateForm: FC<TreatmentsCreateFormProps> = () => {
                 options={dataConsultingRooms}
                 isLoading={isLoadingConsultingsRooms}
                 value={dataConsultingRooms.find(c => c.value === field.value)}
+                defaultValue={consultingRoomsArray}
                 onChange={val => field.onChange(val)}
                 styles={{
                   control: baseStyles => ({
@@ -193,7 +237,7 @@ const TreatmentsCreateForm: FC<TreatmentsCreateFormProps> = () => {
           </Button>
           <Button variant="success" type="submit" disabled={isDisabled}>
             {isDisabled && <Spinner className="me-1" size="sm" />}
-            <span>Guardar</span>
+            <span>{edit ? 'Guardar cambios' : 'Guardar'}</span>
           </Button>
         </div>
       </Form>

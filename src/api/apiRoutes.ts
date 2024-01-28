@@ -33,4 +33,6 @@ export const routes = {
   GET_CONSULTATIONS:
     'consultations?populate[customer][populate][0]=id&populate[responsibleUser][populate][0]=id&sort=since:desc',
   POST_TREATMENT: 'treatments',
+  GET_TREATMENT: 'treatments/{id}?populate[equipments][populate][0]=id&populate[consultingRooms][populate][0]=id',
+  PUT_TREATMENT: 'treatments/{id}',
 };
