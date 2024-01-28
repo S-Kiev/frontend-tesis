@@ -12,6 +12,10 @@ export const getConsultingsRooms = async (page: number) => {
   });
 };
 
+export const getConsultingsRoomsHook = async () => {
+  return await axiosDefaultConfig.get(routes.GET_CONSULTINGS_ROOMS_HOOK);
+};
+
 export const createConsultingRoom = async (consultingRoom: ConsultingRoom) => {
   return await axiosDefaultConfig.post(routes.POST_CONSULTING_ROOM, {
     data: consultingRoom,
