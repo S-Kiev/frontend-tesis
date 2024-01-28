@@ -32,4 +32,5 @@ export const routes = {
   GET_CONSULTING_ROOM: 'consulting-rooms/{id}',
   GET_CONSULTATIONS:
     'consultations?populate[customer][populate][0]=id&populate[responsibleUser][populate][0]=id&sort=since:desc',
+  POST_TREATMENT: 'treatments',
 };

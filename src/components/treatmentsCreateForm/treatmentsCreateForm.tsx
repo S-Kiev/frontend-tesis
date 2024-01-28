@@ -13,6 +13,7 @@ import { useGetConsultingRooms } from 'customHooks/useGetConsultingRooms';
 import { useGetEquipments } from 'customHooks/useGetEquipments';
 import { treatmentsSchema } from 'util/validations/treatmentsSchema';
 import Select from 'react-select';
+import { createTreatment } from 'api/treatment';
 
 interface TreatmentsCreateFormProps {}
 
@@ -40,39 +41,41 @@ const TreatmentsCreateForm: FC<TreatmentsCreateFormProps> = () => {
     },
   });
 
-  console.log(dataConsultingRooms);
-  console.log(dataEquipments);
-
-  /* const mutationEquipment = useMutation({
-    mutationFn: createEquipment,
+  const mutationTreatmentsCreate = useMutation({
+    mutationFn: createTreatment,
     onSuccess: () => {
-      toast(<SuccessToast message={`Equipo registrado con éxito`} hour />, {
+      toast(<SuccessToast message={`Tratamiento registrado con éxito`} hour />, {
         style: { borderRadius: '10px' },
       });
       setIsDisabled(false);
-      navigate(`/app/equipments`);
+      navigate(`/app/treatments`);
     },
     onError: () => {
-      toast(<ErrorToast message={`Ha ocurrido un error al registrar el equipo, intente nuevamente`} />, {
+      toast(<ErrorToast message={`Ha ocurrido un error al registrar el tratamiento, intente nuevamente`} />, {
         style: { borderRadius: '10px' },
       });
       setIsDisabled(false);
     },
-  });*/
+  });
 
   const onSubmit = async (dataForm: {
     name: string;
-    equipments: (number | undefined)[];
-    consultingRooms: (number | undefined)[];
+    equipments?: ({ value: string; label: string; show: boolean } | undefined)[] | null | undefined;
+    consultingRooms: ({ value: string; label: string } | undefined)[];
     description?: string;
   }) => {
     setIsDisabled(true);
-    /*mutationEquipment.mutate({
+    mutationTreatmentsCreate.mutate({
       name: dataForm.name,
-      brand: dataForm.brand || '',
       description: dataForm.description || '',
-      status: EquipmentStatusEnum.available,
-    });*/
+      equipments:
+        dataForm?.equipments?.map(equipment => {
+          return Number(equipment?.value);
+        }) || [],
+      consultingRooms: dataForm.consultingRooms.map(consultingRoom => {
+        return Number(consultingRoom?.value);
+      }),
+    });
   };
 
   return (
@@ -91,9 +94,7 @@ const TreatmentsCreateForm: FC<TreatmentsCreateFormProps> = () => {
           <Form.Control.Feedback type="invalid">{errors.name?.message}</Form.Control.Feedback>
         </Form.Group>
         <Form.Group className="form-outline mb-4">
-          <Form.Label>
-            Equipamiento <strong className="text-danger me-2">*</strong>
-          </Form.Label>
+          <Form.Label>Equipamiento</Form.Label>
           <Controller
             name="equipments"
             control={control}

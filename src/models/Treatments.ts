@@ -9,3 +9,10 @@ export interface TreatmentsData {
     publishedAt: string;
   };
 }
+
+export interface Treatment {
+  name: string;
+  description: string;
+  equipments: (number | undefined)[];
+  consultingRooms: (number | undefined)[];
+}
