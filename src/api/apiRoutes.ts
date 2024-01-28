@@ -35,4 +35,5 @@ export const routes = {
   POST_TREATMENT: 'treatments',
   GET_TREATMENT: 'treatments/{id}?populate[equipments][populate][0]=id&populate[consultingRooms][populate][0]=id',
   PUT_TREATMENT: 'treatments/{id}',
+  GET_CUSTOMERS_HOOK: 'customer-personal-informations',
 };
