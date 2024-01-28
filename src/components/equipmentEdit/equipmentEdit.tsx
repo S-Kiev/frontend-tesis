@@ -95,7 +95,8 @@ const EquipmentEditForm: FC<EquipmentEditFormProps> = ({ equipmentData }) => {
         <Form.Label>Descripción</Form.Label>
         <Form.Control
           {...register('description')}
-          type="text"
+          as="textarea"
+          rows={3}
           placeholder={'Ingrese una descripción' || ''}
           isInvalid={!!errors.description}
         />
