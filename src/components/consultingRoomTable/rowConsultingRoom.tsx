@@ -26,9 +26,10 @@ const RowConsultingRoom: FC<RowConsultingRoomProps> = ({ consultingRoomData }) =
         <p className={`${styles.fw600} ${styles.textEllipsis}`}>{consultingRoomData?.attributes?.name}</p>
       </td>
       <td className={styles.titleTd}>
-        {consultingRoomData?.attributes?.necessaryAction !== null && (
-          <ExclamationDiamondFill size={25} color="#dc3545" />
-        )}
+        {consultingRoomData?.attributes?.necessaryAction !== null &&
+          consultingRoomData?.attributes?.necessaryAction !== '' && (
+            <ExclamationDiamondFill size={25} color="#dc3545" />
+          )}
       </td>
       <td className={styles.titleTd}>
         <ConsultingRoomStatus status={consultingRoomData?.attributes?.status} />
