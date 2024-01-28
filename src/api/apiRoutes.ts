@@ -25,4 +25,7 @@ export const routes = {
   POST_EQUIPMENT: 'equipments',
   GET_EQUIPMENT: 'equipments/{id}',
   PUT_EQUIPMENT: 'equipments/{id}',
+  POST_CONSULTING_ROOM: 'consulting-rooms',
+  PUT_CONSULTING_ROOM: 'consulting-rooms/{id}',
+  GET_CONSULTING_ROOM: 'consulting-rooms/{id}',
 };
