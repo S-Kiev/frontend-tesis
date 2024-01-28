@@ -12,6 +12,7 @@ import ErrorToast from 'components/toast/errorToast';
 import SuccessToast from 'components/toast/successToast';
 import { consultationSchema } from 'util/validations/consultationSchema';
 import { useGetCustomers } from 'customHooks/useGetCustomers';
+import { useGetTreatments } from 'customHooks/useGetTreatments';
 
 interface ConsultationsCreateFormProps {}
 
@@ -20,6 +21,7 @@ const schema = yup.object().shape(consultationSchema);
 const ConsultationsCreateForm: FC<ConsultationsCreateFormProps> = () => {
   const [isDisabled, setIsDisabled] = useState<boolean>(false);
   const { data: dataCustomers, isLoading: isLoadingCustomers } = useGetCustomers();
+  const { data: dataTreatments, isLoading: isLoadingTreatments } = useGetTreatments();
   const navigate = useNavigate();
   const {
     register,
@@ -43,6 +45,7 @@ const ConsultationsCreateForm: FC<ConsultationsCreateFormProps> = () => {
   });
 
   console.log(dataCustomers);
+  console.log(dataTreatments);
 
   /*const mutationUser = useMutation({
     mutationFn: createUser,

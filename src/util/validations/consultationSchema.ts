@@ -11,6 +11,7 @@ export const consultationSchema = {
       yup.object().shape({
         label: yup.string().required(),
         value: yup.string().required(),
+        show: yup.boolean().required(),
       }),
     )
     .min(1, REQUIREDMESSAGE)
