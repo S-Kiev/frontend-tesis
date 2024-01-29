@@ -25,6 +25,7 @@ export const routes = {
   PUT_CUSTOMER_PERSONAL_INFO: 'customer-personal-informations/{id}',
   PUT_CUSTOMER_MEDICAL_INFO: 'customer-medical-informations/{id}',
   POST_EQUIPMENT: 'equipments',
+  POST_EQUIPMENT_HISTORY: 'equipment-histories',
   GET_EQUIPMENT: 'equipments/{id}',
   PUT_EQUIPMENT: 'equipments/{id}',
   POST_CONSULTING_ROOM: 'consulting-rooms',
