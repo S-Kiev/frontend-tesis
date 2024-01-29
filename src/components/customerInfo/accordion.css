@@ -1,0 +1,7 @@
+.accordion {
+  --bs-accordion-btn-bg: #05845a;
+  --bs-accordion-btn-color: rgba(255, 255, 255, 1);
+  --bs-accordion-active-color: rgba(255, 255, 255, 1);
+  --bs-accordion-active-bg: #066042;
+  --bs-accordion-btn-focus-box-shadow: none;
+}
