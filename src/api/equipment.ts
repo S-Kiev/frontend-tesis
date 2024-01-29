@@ -55,3 +55,23 @@ export const getHistoryEquipment = async (page: number, id: string) => {
     },
   });
 };
+
+export const createEquipmentHistory = async (register: {
+  equipment: number | string;
+  status: EquipmentStatusEnum | string;
+  since: string;
+  until: string | null;
+}) => {
+  return await axiosDefaultConfig.post(routes.POST_EQUIPMENT_HISTORY, {
+    data: register,
+  });
+};
+
+export const editEquipmentStatus = async (equipment: {
+  equipmentId: number | string;
+  status: EquipmentStatusEnum | string;
+}) => {
+  return await axiosDefaultConfig.put(routes.PUT_EQUIPMENT.replace('{id}', equipment.equipmentId.toString()), {
+    data: equipment,
+  });
+};

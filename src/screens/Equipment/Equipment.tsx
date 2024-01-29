@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import styles from './Equipment.module.scss';
 import { useNavigate, useParams } from 'react-router-dom';
 import { selectUser } from 'redux/reducers/userSlice';
@@ -19,10 +19,12 @@ import { Button } from 'react-bootstrap';
 import { Role } from 'models/Roles';
 import EquipmentCard from 'components/EquipmentCrad/EquipmentCrad';
 import RentalEquipmentTable from 'components/rentalEquipmentTable/rentalEquipmentTable';
+import { ChangeStatusEquipmentModal } from 'components/modals/changeStatusEquipmentModal/changeStatusEquipmentModal';
 
 interface EquipmentProps {}
 
 const Equipment: FC<EquipmentProps> = () => {
+  const [showModal, setShowModal] = useState<boolean>(false);
   const navigate = useNavigate();
   const { id } = useParams();
   const user = useSelector(selectUser);
@@ -91,7 +93,13 @@ const Equipment: FC<EquipmentProps> = () => {
                     <ClockHistory style={{ marginRight: '5px' }} />
                     Ver Historial Equipo
                   </Button>
-                  <Button variant="success" onClick={() => {}} className="d-none d-lg-block">
+                  <Button
+                    variant="success"
+                    onClick={() => {
+                      setShowModal(true);
+                    }}
+                    className="d-none d-lg-block"
+                  >
                     <ClipboardCheck style={{ marginRight: '5px' }} />
                     Cambiar estado
                   </Button>
@@ -116,7 +124,13 @@ const Equipment: FC<EquipmentProps> = () => {
                   <ClockHistory style={{ marginRight: '5px' }} />
                   Ver Historial Equipo
                 </Button>
-                <Button variant="success" onClick={() => {}} className="d-lg-none mt-3">
+                <Button
+                  variant="success"
+                  onClick={() => {
+                    setShowModal(true);
+                  }}
+                  className="d-lg-none mt-3"
+                >
                   <ClipboardCheck style={{ marginRight: '5px' }} />
                   Cambiar estado
                 </Button>
@@ -139,6 +153,7 @@ const Equipment: FC<EquipmentProps> = () => {
                   </>
                 }
               </div>
+              <ChangeStatusEquipmentModal show={showModal} showModal={setShowModal} equipmentData={data?.data?.data} />
             </>
           )}
         </>
