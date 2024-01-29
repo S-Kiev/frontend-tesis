@@ -37,4 +37,5 @@ export const routes = {
   PUT_TREATMENT: 'treatments/{id}',
   GET_CUSTOMERS_HOOK: 'customer-personal-informations',
   GET_TREATMENTS_HOOK: 'treatments?populate[equipments][populate][0]=id&populate[consultingRooms][populate][0]=id',
+  GET_PENDING_RENT_EQUIPMENT: 'equipment-histories?populate[equipment][populate][0]=id&sort=since:desc',
 };

@@ -4,13 +4,14 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { selectUser } from 'redux/reducers/userSlice';
 import { useSelector } from 'react-redux';
 import { useQuery } from '@tanstack/react-query';
-import { getEquipment } from 'api/equipment';
+import { getEquipment, getPendingRentEquipments } from 'api/equipment';
 import { QueryKeys } from 'api/QueryKeys';
 import { DotLoader } from 'react-spinners';
 import { ChevronLeft, ClipboardCheck, ClockHistory, CloudLightningRain, PencilSquare } from 'react-bootstrap-icons';
 import { Button } from 'react-bootstrap';
 import { Role } from 'models/Roles';
 import EquipmentCard from 'components/EquipmentCrad/EquipmentCrad';
+import RentalEquipmentTable from 'components/rentalEquipmentTable/rentalEquipmentTable';
 
 interface EquipmentProps {}
 
@@ -24,15 +25,25 @@ const Equipment: FC<EquipmentProps> = () => {
     queryFn: () => getEquipment(id || ''),
   });
 
+  const {
+    data: dataRentedEquipment,
+    error: errorRentedEquipment,
+    isLoading: isLoadingRentedEquipment,
+  } = useQuery({
+    queryKey: [QueryKeys.PendingRentedEquipment],
+    queryFn: () => getPendingRentEquipments(id || ''),
+  });
+
+  console.log(dataRentedEquipment);
   return (
     <div className={styles.container}>
-      {isLoading ? (
+      {isLoading && isLoadingRentedEquipment ? (
         <div className="d-flex align-items-center justify-content-center" style={{ marginTop: '300px' }}>
           <DotLoader color="rgb(159,213,177)" />
         </div>
       ) : (
         <>
-          {error ? (
+          {error || errorRentedEquipment ? (
             <div className={styles.error}>
               <CloudLightningRain size={80} />
               <h3 className="mt-3">Ups, ha ocurrido un error</h3>
@@ -103,7 +114,17 @@ const Equipment: FC<EquipmentProps> = () => {
                   Cambiar estado
                 </Button>
               </div>
-              <div className={styles.form}>{<EquipmentCard equipmentData={data?.data?.data} />}</div>
+              <div className={styles.form}>
+                {
+                  <>
+                    <EquipmentCard equipmentData={data?.data?.data} />
+                    <div className="mt-5">
+                      <h4>Listado de alquileres pendientes</h4>
+                      <RentalEquipmentTable data={dataRentedEquipment?.data?.data} />
+                    </div>
+                  </>
+                }
+              </div>
             </>
           )}
         </>
