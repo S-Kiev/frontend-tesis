@@ -265,7 +265,7 @@ const InformedConsent: FC<InformedConsentProps> = ({
           </Alert.Heading>
           <p>
             El consentimiento informado no es requerido para finalizar el alta del cliente. Pero
-            <strong>a pesar de no ser obligatorio se recomienda su ingreso</strong> de ser posible ahora, sino recordar
+            <strong> a pesar de no ser obligatorio se recomienda su ingreso</strong> de ser posible ahora, sino recordar
             hacerlo luego ya que es <strong>importante</strong>.
           </p>
         </Alert>

@@ -14,6 +14,10 @@ export const getTreatments = async (page: number, search: string) => {
   });
 };
 
+export const getTreatmentsHook = async () => {
+  return await axiosDefaultConfig.get(routes.GET_TREATMENTS_HOOK);
+};
+
 export const createTreatment = async (treatment: Treatment) => {
   return await axiosDefaultConfig.post(routes.POST_TREATMENT, {
     data: treatment,

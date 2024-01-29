@@ -19,6 +19,10 @@ export const getCustomers = async (page: number, search: string) => {
   });
 };
 
+export const getCustomersHook = async () => {
+  return await axiosDefaultConfig.get(routes.GET_CUSTOMERS_HOOK);
+};
+
 export const createCustomerPersonalInfo = async (personalInfo: CustomerPersonalInfo) => {
   return await axiosDefaultConfig.post(routes.POST_CUSTOMER_PERSONAL_INFO, {
     data: personalInfo,

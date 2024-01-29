@@ -110,7 +110,8 @@ const ConsultingRoomForm: FC<ConsultingRoomFormProps> = ({ edit = false, consult
         <Form.Label>Descripción</Form.Label>
         <Form.Control
           {...register('description')}
-          type="text"
+          as="textarea"
+          rows={3}
           placeholder={'Ingrese una descripción' || ''}
           isInvalid={!!errors.description}
         />
@@ -120,7 +121,8 @@ const ConsultingRoomForm: FC<ConsultingRoomFormProps> = ({ edit = false, consult
         <Form.Label>Acción necesaria</Form.Label>
         <Form.Control
           {...register('necessaryAction')}
-          type="text"
+          as="textarea"
+          rows={3}
           placeholder={'Ingrese acción necesaria' || ''}
           isInvalid={!!errors.necessaryAction}
         />
