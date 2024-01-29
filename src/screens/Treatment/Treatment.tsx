@@ -1,7 +1,7 @@
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { QueryKeys } from 'api/QueryKeys';
-import { getTreatment } from 'api/treatment';
-import { FC } from 'react';
+import { desactivateTreatment, getTreatment } from 'api/treatment';
+import { FC, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { selectUser } from 'redux/reducers/userSlice';
@@ -11,17 +11,45 @@ import { ChevronLeft, CloudLightningRain, PencilSquare, SlashCircle } from 'reac
 import { Role } from 'models/Roles';
 import { Button } from 'react-bootstrap';
 import TreatmentCrad from 'components/treatmentCrad/treatmentCrad';
+import SuccessToast from 'components/toast/successToast';
+import { toast } from 'react-toastify';
+import ErrorToast from 'components/toast/errorToast';
+import { AlertModal } from 'components/modals/alertModal';
 
 interface TreatmentProps {}
 
 const Treatment: FC<TreatmentProps> = () => {
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [isDisabled, setIsDisabled] = useState<boolean>(false);
   const navigate = useNavigate();
   const { id } = useParams();
   const user = useSelector(selectUser);
+  const queryClient = useQueryClient();
 
   const { data, error, isLoading } = useQuery({
     queryKey: [QueryKeys.Treatment, id],
     queryFn: () => getTreatment(id || ''),
+  });
+
+  const desactivationTratementMutation = useMutation({
+    mutationFn: desactivateTreatment,
+    mutationKey: [QueryKeys.DesactivateTreatment, id],
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [QueryKeys.Treatment, id],
+      });
+      toast(<SuccessToast message={`Tratamiento desactivado con éxito`} hour />, {
+        style: { borderRadius: '10px' },
+      });
+      setIsDisabled(false);
+      setShowModal(false);
+    },
+    onError: () => {
+      toast(<ErrorToast message={`Ha ocurrido un error al desactivar el tratamiento, intente nuevamente`} />, {
+        style: { borderRadius: '10px' },
+      });
+      setIsDisabled(false);
+    },
   });
 
   return (
@@ -65,7 +93,13 @@ const Treatment: FC<TreatmentProps> = () => {
                         <PencilSquare style={{ marginRight: '5px' }} />
                         Editar
                       </Button>
-                      <Button variant="danger" onClick={() => {}} className="d-none d-lg-block">
+                      <Button
+                        variant="danger"
+                        onClick={() => {
+                          setShowModal(true);
+                        }}
+                        className="d-none d-lg-block"
+                      >
                         <SlashCircle style={{ marginRight: '5px' }} />
                         Descativar tratamiento
                       </Button>
@@ -84,7 +118,13 @@ const Treatment: FC<TreatmentProps> = () => {
                       <PencilSquare style={{ marginRight: '5px' }} />
                       Editar
                     </Button>
-                    <Button variant="danger" onClick={() => {}} className="d-lg-none mt-3">
+                    <Button
+                      variant="danger"
+                      onClick={() => {
+                        setShowModal(true);
+                      }}
+                      className="d-lg-none mt-3"
+                    >
                       <SlashCircle style={{ marginRight: '5px' }} />
                       Descativar tratamiento
                     </Button>
@@ -94,6 +134,21 @@ const Treatment: FC<TreatmentProps> = () => {
               <div className={styles.form}>{<TreatmentCrad treatmentData={data?.data?.data} />}</div>
             </>
           )}
+          <AlertModal
+            show={showModal}
+            showModal={setShowModal}
+            title={'Desactivar tratamiento'}
+            body={
+              <>
+                ¿Está seguro que quiere <strong>desactivar</strong> este tratamiento?
+              </>
+            }
+            confirmBtn="Desactivar"
+            cancelBtn="Cancelar"
+            onAction={() => desactivationTratementMutation.mutate(id || '')}
+            isDisabled={isDisabled}
+            setIsDisabled={setIsDisabled}
+          />
         </>
       )}
     </div>

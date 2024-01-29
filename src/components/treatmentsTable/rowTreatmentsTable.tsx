@@ -23,8 +23,8 @@ interface RowTreatmentsTableProps {
 }
 
 const RowTreatmentsTable: FC<RowTreatmentsTableProps> = ({ treatmentData, search, page }) => {
-  const [showModal, setShowModal] = useState(false);
-  const [isDisabled, setIsDisabled] = useState(false);
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [isDisabled, setIsDisabled] = useState<boolean>(false);
   const navigate = useNavigate();
   const user = useSelector(selectUser);
   const queryClient = useQueryClient();
