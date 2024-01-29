@@ -450,7 +450,7 @@ const ConsultationsCreateForm: FC<ConsultationsCreateFormProps> = () => {
             <Card.Body>
               <Form.Group className="form-outline mb-4">
                 <Form.Label>
-                  Hora de inicioconsultorio <strong className="text-danger me-2">*</strong>
+                  Hora de inicio consultorio <strong className="text-danger me-2">*</strong>
                 </Form.Label>
                 <Controller
                   name="dateSinceConsultingRoomTwo"
