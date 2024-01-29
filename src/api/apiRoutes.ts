@@ -38,4 +38,6 @@ export const routes = {
   GET_CUSTOMERS_HOOK: 'customer-personal-informations',
   GET_TREATMENTS_HOOK: 'treatments?populate[equipments][populate][0]=id&populate[consultingRooms][populate][0]=id',
   GET_PENDING_RENT_EQUIPMENT: 'equipment-histories?populate[equipment][populate][0]=id&sort=since:desc',
+  GET_HISTORY_EQUIPMENTS:
+    'equipment-histories?populate[equipment][populate][0]=id&populate[consultation][populate][0]=responsibleUser&$sort=since:desc',
 };

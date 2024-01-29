@@ -23,7 +23,7 @@ const Treatment: FC<TreatmentProps> = () => {
     queryKey: [QueryKeys.Treatment, id],
     queryFn: () => getTreatment(id || ''),
   });
-  console.log(data);
+
   return (
     <div className={styles.container}>
       {isLoading ? (
