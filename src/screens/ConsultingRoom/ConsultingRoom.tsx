@@ -1,6 +1,6 @@
 import { QueryKeys } from 'api/QueryKeys';
 import { getConsultingRoom } from 'api/consultingRoom';
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { selectUser } from 'redux/reducers/userSlice';
@@ -11,10 +11,12 @@ import { Role } from 'models/Roles';
 import { Button } from 'react-bootstrap';
 import { useQuery } from '@tanstack/react-query';
 import ConsultingRoomCard from 'components/consultingRoomCard/consultingRoomCard';
+import { ChangeStatusConsultingRoomModal } from 'components/modals/changeStatusCosnultingRoomModal';
 
 interface ConsultingRoomProps {}
 
 const ConsultingRoom: FC<ConsultingRoomProps> = () => {
+  const [showModal, setShowModal] = useState<boolean>(false);
   const navigate = useNavigate();
   const { id } = useParams();
   const user = useSelector(selectUser);
@@ -65,7 +67,13 @@ const ConsultingRoom: FC<ConsultingRoomProps> = () => {
                         <PencilSquare style={{ marginRight: '5px' }} />
                         Editar
                       </Button>
-                      <Button variant="success" onClick={() => {}} className="d-none d-lg-block">
+                      <Button
+                        variant="success"
+                        onClick={() => {
+                          setShowModal(true);
+                        }}
+                        className="d-none d-lg-block"
+                      >
                         <ClipboardCheck style={{ marginRight: '5px' }} />
                         Cambiar estado
                       </Button>
@@ -92,7 +100,13 @@ const ConsultingRoom: FC<ConsultingRoomProps> = () => {
                       <PencilSquare style={{ marginRight: '5px' }} />
                       Editar
                     </Button>
-                    <Button variant="success" onClick={() => {}} className="d-lg-none mt-3">
+                    <Button
+                      variant="success"
+                      onClick={() => {
+                        setShowModal(true);
+                      }}
+                      className="d-lg-none mt-3"
+                    >
                       <ClipboardCheck style={{ marginRight: '5px' }} />
                       Cambiar estado
                     </Button>
@@ -108,6 +122,11 @@ const ConsultingRoom: FC<ConsultingRoomProps> = () => {
                 </Button>
               </div>
               <div className={styles.form}>{<ConsultingRoomCard consultingRoomData={data?.data?.data} />}</div>
+              <ChangeStatusConsultingRoomModal
+                show={showModal}
+                showModal={setShowModal}
+                consultingRoomData={data?.data?.data}
+              />
             </>
           )}
         </>

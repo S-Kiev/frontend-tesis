@@ -12,11 +12,12 @@ import { EquipmentStatusEnum } from 'models/EquipmentStatus';
 import DatePicker from 'react-datepicker';
 import '../../../util/styles/datepicker.scss';
 import styles from './changeStatusEquipmentModal.module.scss';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createEquipmentHistory, editEquipmentStatus } from 'api/equipment';
 import SuccessToast from 'components/toast/successToast';
 import { toast } from 'react-toastify';
 import ErrorToast from 'components/toast/errorToast';
+import { QueryKeys } from 'api/QueryKeys';
 
 interface ChangeStatusEquipmentModalProps {
   show: boolean;
@@ -29,12 +30,14 @@ const schema = yup.object().shape(changeStatusEquipmentSchema);
 export const ChangeStatusEquipmentModal: FC<ChangeStatusEquipmentModalProps> = ({ show, showModal, equipmentData }) => {
   const [isDisabled, setIsDisabled] = useState<boolean>(false);
   const occupiedStatus: boolean = equipmentData?.attributes?.status === EquipmentStatusEnum.occupied;
+  const queryClient = useQueryClient();
   const {
     handleSubmit,
-    formState: { errors },
+    formState: { errors, defaultValues },
     control,
     watch,
     getValues,
+    reset,
   } = useForm({
     criteriaMode: 'all',
     mode: 'onBlur',
@@ -109,7 +112,11 @@ export const ChangeStatusEquipmentModal: FC<ChangeStatusEquipmentModalProps> = (
       if (values.newStatus === EquipmentStatusEnum.broken) {
         toast.warn('Se aconseje revisar consultas y alquileres que puedan verse afectados por la ruptura del equipo');
       }
+      queryClient.invalidateQueries({
+        queryKey: [QueryKeys.Equipment, equipmentData.id],
+      });
       setIsDisabled(false);
+      reset(defaultValues);
       showModal(false);
     },
     onError: () => {
@@ -139,7 +146,14 @@ export const ChangeStatusEquipmentModal: FC<ChangeStatusEquipmentModalProps> = (
 
   return (
     <>
-      <Modal onHide={() => showModal(false)} show={show} centered>
+      <Modal
+        onHide={() => {
+          showModal(false);
+          reset(defaultValues);
+        }}
+        show={show}
+        centered
+      >
         <Modal.Header closeButton>
           <Modal.Title>
             <ClipboardCheck /> Cambio estado de disponibilidad
