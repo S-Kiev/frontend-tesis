@@ -23,8 +23,9 @@ export const getPendingRentEquipments = async (id: string) => {
   return await axiosDefaultConfig.get(routes.GET_PENDING_RENT_EQUIPMENT, {
     params: {
       'filters[$and][0][status][$containsi]': EquipmentStatusEnum.rented,
-      'filters[$and][1][equipment][id][$containsi]': id,
+      'filters[$and][1][equipment][id][$eq]': id,
       'filters[$and][2][since][$gt]': new Date(),
+      'filters[$and][3][canceledRental][$eq]': false,
     },
   });
 };
