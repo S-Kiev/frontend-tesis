@@ -10,6 +10,7 @@ import { DotLoader } from 'react-spinners';
 import { ChevronLeft, ClipboardCheck, ClockHistory, CloudLightningRain, PencilSquare } from 'react-bootstrap-icons';
 import { Button } from 'react-bootstrap';
 import { Role } from 'models/Roles';
+import EquipmentCard from 'components/EquipmentCrad/EquipmentCrad';
 
 interface EquipmentProps {}
 
@@ -102,7 +103,7 @@ const Equipment: FC<EquipmentProps> = () => {
                   Cambiar estado
                 </Button>
               </div>
-              <div className={styles.form}>{/*<CustomerInfo customerData={data?.data?.data} />*/}</div>
+              <div className={styles.form}>{<EquipmentCard equipmentData={data?.data?.data} />}</div>
             </>
           )}
         </>
