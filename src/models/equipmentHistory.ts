@@ -106,8 +106,6 @@ interface EquipmentHistoryItemAttributes {
 }
 
 export interface EquipmentHistoryItem {
-  data: {
-    id: number;
-    attributes: EquipmentHistoryItemAttributes;
-  };
+  id: number;
+  attributes: EquipmentHistoryItemAttributes;
 }

@@ -10,6 +10,7 @@ import { ChevronLeft, CloudLightningRain, DatabaseSlash } from 'react-bootstrap-
 import { DotLoader } from 'react-spinners';
 import PaginationComponent from 'components/pagination/pagination';
 import { defaultPageSize } from 'api/paginationConfig';
+import EquipmentHistoryTable from 'components/equipmentHistory/equipmentHistory';
 
 interface EquipmentHistoryProps {}
 
@@ -23,7 +24,6 @@ const EquipmentHistory: FC<EquipmentHistoryProps> = () => {
     queryKey: [QueryKeys.HistoryEquipment, id, page],
     queryFn: () => getHistoryEquipment(page, id || ''),
   });
-  console.log(data);
 
   return (
     <div className={styles.container}>
@@ -62,7 +62,7 @@ const EquipmentHistory: FC<EquipmentHistoryProps> = () => {
       ) : null}
       {!isLoading && !error && data && data?.data?.data.length !== 0 ? (
         <>
-          {/*<EquipmentsTable equipmentData={data?.data?.data} search={search} />*/}
+          {<EquipmentHistoryTable equipmentData={data?.data?.data} />}
           {data?.data?.meta?.pagination?.total > defaultPageSize && (
             <div className="d-flex justify-content-center mt-4">
               <PaginationComponent
