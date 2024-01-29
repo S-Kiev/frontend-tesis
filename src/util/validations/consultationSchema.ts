@@ -42,4 +42,10 @@ export const consultationSchema = {
   dateSinceConsultation: yup.string().required(REQUIREDMESSAGE),
   dateUntilConsultation: yup.string().required(REQUIREDMESSAGE),
   comments: yup.string().trim().max(500, MAX500),
+  dateSinceConsultingRoomOne: yup.string(),
+  dateUntilConsultingRoomOne: yup.string(),
+  dateSinceConsultingRoomTwo: yup.string(),
+  dateUntilConsultingRoomTwo: yup.string(),
+  dateSinceConsultingRoomThree: yup.string(),
+  dateUntilConsultingRoomThree: yup.string(),
 };

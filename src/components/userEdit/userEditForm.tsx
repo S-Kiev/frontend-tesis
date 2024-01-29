@@ -52,7 +52,7 @@ const UserEditForm: FC<UserEditFormProps> = ({ user, userData, userId, userDataI
       address: userData.address,
     },
   });
-  console.log();
+
   const mutationUser = useMutation({
     mutationFn: editUser,
     onSuccess: () => {

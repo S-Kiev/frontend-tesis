@@ -1,6 +1,6 @@
 import { FC, useMemo, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
-import { Button, Form, OverlayTrigger, Spinner, Tooltip } from 'react-bootstrap';
+import { Button, Card, Form, OverlayTrigger, Spinner, Tooltip } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import styles from './consultationCreateForm.module.scss';
 import * as yup from 'yup';
@@ -15,7 +15,7 @@ import { useGetCustomers } from 'customHooks/useGetCustomers';
 import { useGetTreatments } from 'customHooks/useGetTreatments';
 import DatePicker from 'react-datepicker';
 import '../../util/styles/datepicker.scss';
-import { QuestionCircleFill } from 'react-bootstrap-icons';
+import { BuildingAdd, QuestionCircleFill } from 'react-bootstrap-icons';
 
 interface ConsultationsCreateFormProps {}
 
@@ -38,6 +38,7 @@ const ConsultationsCreateForm: FC<ConsultationsCreateFormProps> = () => {
     formState: { errors, isValid },
     control,
     getValues,
+    watch,
   } = useForm({
     criteriaMode: 'all',
     mode: 'onBlur',
@@ -50,6 +51,12 @@ const ConsultationsCreateForm: FC<ConsultationsCreateFormProps> = () => {
       dateSinceConsultation: '',
       dateUntilConsultation: '',
       comments: '',
+      dateSinceConsultingRoomOne: '',
+      dateUntilConsultingRoomOne: '',
+      dateSinceConsultingRoomTwo: '',
+      dateUntilConsultingRoomTwo: '',
+      dateSinceConsultingRoomThree: '',
+      dateUntilConsultingRoomThree: '',
     },
   });
 
@@ -105,8 +112,15 @@ const ConsultationsCreateForm: FC<ConsultationsCreateFormProps> = () => {
     dateSinceConsultation: string;
     dateUntilConsultation: string;
     comments?: string;
+    dateSinceConsultingRoomOne?: string;
+    dateUntilConsultingRoomOne?: string;
+    dateSinceConsultingRoomTwo?: string;
+    dateUntilConsultingRoomTwo?: string;
+    dateSinceConsultingRoomThree?: string;
+    dateUntilConsultingRoomThree?: string;
   }) => {
     setIsDisabled(true);
+    //Falta mutacion para crear y errores post envio
     /*mutationUser.mutate({
       username: dataForm.username,
       email: dataForm.email,
@@ -347,7 +361,245 @@ const ConsultationsCreateForm: FC<ConsultationsCreateFormProps> = () => {
           </div>
         )}
       </Form.Group>
+      {watch('consultingRooms').length === 2 || watch('consultingRooms').length === 3 ? (
+        <>
+          <Card className="mb-4">
+            <Card.Header className="d-flex align-items-center">
+              <BuildingAdd size={20} className="me-2" />
+              <h4>{`Consultorio: ${watch('consultingRooms')[0].label}`}</h4>
+            </Card.Header>
+            <Card.Body>
+              <>
+                <Form.Group className="form-outline mb-4">
+                  <Form.Label>
+                    Hora de inicio consultorio <strong className="text-danger me-2">*</strong>
+                  </Form.Label>
+                  <Controller
+                    name="dateSinceConsultingRoomOne"
+                    control={control}
+                    render={({ field }) => (
+                      <DatePicker
+                        showIcon
+                        showMonthDropdown
+                        showTimeSelect
+                        placeholderText="Ingrese la fecha inicio"
+                        dateFormat="MMMM d, yyyy h:mm aa"
+                        locale="es"
+                        selected={dateParse(field?.value)}
+                        onChange={date => field.onChange(date)}
+                        minDate={new Date()}
+                        minTime={new Date()}
+                        maxTime={new Date(0, 0, 0, 23, 30)}
+                        wrapperClassName={
+                          errors.dateSinceConsultingRoomOne?.message ? styles.datepickerError : styles.datepicker
+                        }
+                      />
+                    )}
+                  />
+                  {errors.dateSinceConsultingRoomOne?.message && (
+                    <div className="d-flex align-items-center">
+                      <span className="text-danger mt-1 ms-2" style={{ fontSize: '0.875em' }}>
+                        {errors.dateSinceConsultingRoomOne?.message}
+                      </span>
+                    </div>
+                  )}
+                </Form.Group>
+                <Form.Group className="form-outline mb-4">
+                  <Form.Label>
+                    Hora de fin consultorio <strong className="text-danger me-2">*</strong>
+                  </Form.Label>
+                  <Controller
+                    name="dateUntilConsultingRoomOne"
+                    control={control}
+                    render={({ field }) => (
+                      <DatePicker
+                        showIcon
+                        showMonthDropdown
+                        showTimeSelect
+                        placeholderText="Ingrese la fecha de fin"
+                        dateFormat="MMMM d, yyyy h:mm aa"
+                        locale="es"
+                        selected={dateParse(field?.value)}
+                        onChange={date => field.onChange(date)}
+                        minDate={new Date()}
+                        minTime={new Date()}
+                        maxTime={new Date(0, 0, 0, 23, 30)}
+                        wrapperClassName={
+                          errors.dateUntilConsultingRoomOne?.message ? styles.datepickerError : styles.datepicker
+                        }
+                      />
+                    )}
+                  />
+                  {errors.dateUntilConsultingRoomOne?.message && (
+                    <div className="d-flex align-items-center">
+                      <span className="text-danger mt-1 ms-2" style={{ fontSize: '0.875em' }}>
+                        {errors.dateUntilConsultingRoomOne?.message}
+                      </span>
+                    </div>
+                  )}
+                </Form.Group>
+              </>
+            </Card.Body>
+          </Card>
 
+          <Card className="mb-4">
+            <Card.Header className="d-flex align-items-center">
+              <BuildingAdd size={20} className="me-2" />
+              <h4>{`Consultorio: ${watch('consultingRooms')[1].label}`}</h4>
+            </Card.Header>
+            <Card.Body>
+              <Form.Group className="form-outline mb-4">
+                <Form.Label>
+                  Hora de inicioconsultorio <strong className="text-danger me-2">*</strong>
+                </Form.Label>
+                <Controller
+                  name="dateSinceConsultingRoomTwo"
+                  control={control}
+                  render={({ field }) => (
+                    <DatePicker
+                      showIcon
+                      showMonthDropdown
+                      showTimeSelect
+                      placeholderText="Ingrese la fecha inicio"
+                      dateFormat="MMMM d, yyyy h:mm aa"
+                      locale="es"
+                      selected={dateParse(field?.value)}
+                      onChange={date => field.onChange(date)}
+                      minDate={new Date()}
+                      minTime={new Date()}
+                      maxTime={new Date(0, 0, 0, 23, 30)}
+                      wrapperClassName={
+                        errors.dateSinceConsultingRoomTwo?.message ? styles.datepickerError : styles.datepicker
+                      }
+                    />
+                  )}
+                />
+                {errors.dateSinceConsultingRoomTwo?.message && (
+                  <div className="d-flex align-items-center">
+                    <span className="text-danger mt-1 ms-2" style={{ fontSize: '0.875em' }}>
+                      {errors.dateSinceConsultingRoomTwo?.message}
+                    </span>
+                  </div>
+                )}
+              </Form.Group>
+              <Form.Group className="form-outline mb-4">
+                <Form.Label>
+                  Hora de fin consultorio <strong className="text-danger me-2">*</strong>
+                </Form.Label>
+                <Controller
+                  name="dateUntilConsultingRoomTwo"
+                  control={control}
+                  render={({ field }) => (
+                    <DatePicker
+                      showIcon
+                      showMonthDropdown
+                      showTimeSelect
+                      placeholderText="Ingrese la fecha de fin"
+                      dateFormat="MMMM d, yyyy h:mm aa"
+                      locale="es"
+                      selected={dateParse(field?.value)}
+                      onChange={date => field.onChange(date)}
+                      minDate={new Date()}
+                      minTime={new Date()}
+                      maxTime={new Date(0, 0, 0, 23, 30)}
+                      wrapperClassName={
+                        errors.dateUntilConsultingRoomTwo?.message ? styles.datepickerError : styles.datepicker
+                      }
+                    />
+                  )}
+                />
+                {errors.dateUntilConsultingRoomTwo?.message && (
+                  <div className="d-flex align-items-center">
+                    <span className="text-danger mt-1 ms-2" style={{ fontSize: '0.875em' }}>
+                      {errors.dateUntilConsultingRoomTwo?.message}
+                    </span>
+                  </div>
+                )}
+              </Form.Group>
+            </Card.Body>
+          </Card>
+        </>
+      ) : null}
+      {watch('consultingRooms').length == 3 && (
+        <>
+          <Card className="mb-4">
+            <Card.Header className="d-flex align-items-center">
+              <BuildingAdd size={20} className="me-2" />
+              <h4>{`Consultorio: ${watch('consultingRooms')[2].label}`}</h4>
+            </Card.Header>
+            <Card.Body>
+              <Form.Group className="form-outline mb-4">
+                <Form.Label>
+                  Hora de inicio consultorio <strong className="text-danger me-2">*</strong>
+                </Form.Label>
+                <Controller
+                  name="dateSinceConsultingRoomThree"
+                  control={control}
+                  render={({ field }) => (
+                    <DatePicker
+                      showIcon
+                      showMonthDropdown
+                      showTimeSelect
+                      placeholderText="Ingrese la fecha inicio"
+                      dateFormat="MMMM d, yyyy h:mm aa"
+                      locale="es"
+                      selected={dateParse(field?.value)}
+                      onChange={date => field.onChange(date)}
+                      minDate={new Date()}
+                      minTime={new Date()}
+                      maxTime={new Date(0, 0, 0, 23, 30)}
+                      wrapperClassName={
+                        errors.dateSinceConsultingRoomThree?.message ? styles.datepickerError : styles.datepicker
+                      }
+                    />
+                  )}
+                />
+                {errors.dateSinceConsultingRoomThree?.message && (
+                  <div className="d-flex align-items-center">
+                    <span className="text-danger mt-1 ms-2" style={{ fontSize: '0.875em' }}>
+                      {errors.dateSinceConsultingRoomThree?.message}
+                    </span>
+                  </div>
+                )}
+              </Form.Group>
+              <Form.Group className="form-outline mb-2">
+                <Form.Label>
+                  Hora de fin consultorio <strong className="text-danger me-2">*</strong>
+                </Form.Label>
+                <Controller
+                  name="dateUntilConsultingRoomThree"
+                  control={control}
+                  render={({ field }) => (
+                    <DatePicker
+                      showIcon
+                      showMonthDropdown
+                      showTimeSelect
+                      placeholderText="Ingrese la fecha de fin"
+                      dateFormat="MMMM d, yyyy h:mm aa"
+                      locale="es"
+                      selected={dateParse(field?.value)}
+                      onChange={date => field.onChange(date)}
+                      minDate={new Date()}
+                      minTime={new Date()}
+                      maxTime={new Date(0, 0, 0, 23, 30)}
+                      wrapperClassName={
+                        errors.dateUntilConsultingRoomThree?.message ? styles.datepickerError : styles.datepicker
+                      }
+                    />
+                  )}
+                />
+                {errors.dateUntilConsultingRoomThree?.message && (
+                  <div className="d-flex align-items-center">
+                    <span className="text-danger mt-1 ms-2" style={{ fontSize: '0.875em' }}>
+                      {errors.dateUntilConsultingRoomThree?.message}
+                    </span>
+                  </div>
+                )}
+              </Form.Group>
+            </Card.Body>
+          </Card>
+        </>
+      )}
       <Form.Group className="form-outline mb-4">
         <Form.Label>Comentarios</Form.Label>
         <Form.Control

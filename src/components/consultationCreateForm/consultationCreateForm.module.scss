@@ -3,6 +3,12 @@
 .form {
   max-width: 450px;
   padding-bottom: 30px;
+
+  h4 {
+    color: $success;
+    font-size: 18px;
+    margin-bottom: 0px;
+  }
 }
 
 .pointer {
@@ -11,7 +17,7 @@
 
 .datepicker {
   input {
-    width: 450px;
+    width: 350px;
     border-radius: 0.375rem;
     visibility: visible;
     font-size: 14px;
