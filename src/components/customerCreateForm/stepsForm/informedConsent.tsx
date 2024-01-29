@@ -290,7 +290,6 @@ const InformedConsent: FC<InformedConsentProps> = ({
           render={({ field }) => (
             <FileUploader
               acceptTypes={{
-                'application/pdf': ['.pdf'],
                 'image/jpeg': ['.jpeg', '.jpg'],
                 'image/png': ['.png'],
               }}
