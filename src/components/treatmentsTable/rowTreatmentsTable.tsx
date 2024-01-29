@@ -14,42 +14,41 @@ import { CustomerData } from 'models/Customer';
 import { useSelector } from 'react-redux';
 import { selectUser } from 'redux/reducers/userSlice';
 import { TreatmentsData } from 'models/Treatments';
+import { desactivateTreatment } from 'api/treatment';
 
 interface RowTreatmentsTableProps {
   treatmentData: TreatmentsData;
   search: string;
+  page: number;
 }
 
-const RowTreatmentsTable: FC<RowTreatmentsTableProps> = ({ treatmentData, search }) => {
-  //const [showBlockedModal, setShowBlockedModal] = useState(false);
-  //const [isDisabled, setIsDisabled] = useState(false);
+const RowTreatmentsTable: FC<RowTreatmentsTableProps> = ({ treatmentData, search, page }) => {
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [isDisabled, setIsDisabled] = useState<boolean>(false);
   const navigate = useNavigate();
   const user = useSelector(selectUser);
-  //const queryClient = useQueryClient();
+  const queryClient = useQueryClient();
 
-  /*const blockedUserMutation = useMutation({
-    mutationFn: changeStateUser,
-    mutationKey: [QueryKeys.PutUser, userData?.id],
+  const desactivationTratementMutation = useMutation({
+    mutationFn: desactivateTreatment,
+    mutationKey: [QueryKeys.DesactivateTreatment, treatmentData?.id],
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [QueryKeys.Users, search],
+        queryKey: [QueryKeys.Treatments, search, page],
       });
-      toast(<SuccessToast message={`Usuario ${userData?.blocked ? 'habilitado' : 'bloqueado'} con éxito`} hour />, {
+      toast(<SuccessToast message={`Tratamiento desactivado con éxito`} hour />, {
         style: { borderRadius: '10px' },
       });
       setIsDisabled(false);
-      setShowBlockedModal(false);
+      setShowModal(false);
     },
     onError: () => {
-      toast(
-        <ErrorToast message={`Ha ocurrido un error al ${userData?.blocked ? 'habilitar' : 'bloquear'} el usuario`} />,
-        {
-          style: { borderRadius: '10px' },
-        },
-      );
+      toast(<ErrorToast message={`Ha ocurrido un error al desactivar el tratamiento, intente nuevamente`} />, {
+        style: { borderRadius: '10px' },
+      });
       setIsDisabled(false);
     },
-  });*/
+  });
 
   return (
     <tr key={treatmentData?.id}>
@@ -81,7 +80,12 @@ const RowTreatmentsTable: FC<RowTreatmentsTableProps> = ({ treatmentData, search
                   <PencilSquare />
                   <p>Editar tratamiento</p>
                 </div>
-                <div className={`${styles.optionDelete} mt-3`} onClick={() => {}}>
+                <div
+                  className={`${styles.optionDelete} mt-3`}
+                  onClick={() => {
+                    setShowModal(true);
+                  }}
+                >
                   <SlashCircle color="#dc3545" />
                   <p>Desactivar tratamiento</p>
                 </div>
@@ -90,21 +94,21 @@ const RowTreatmentsTable: FC<RowTreatmentsTableProps> = ({ treatmentData, search
           </Tooltip>
         </div>
       </td>
-      {/*<AlertModal
-        show={showBlockedModal}
-        showModal={setShowBlockedModal}
-        title={userData?.blocked ? 'Habilitar usuario' : 'Bloquear usuario'}
+      <AlertModal
+        show={showModal}
+        showModal={setShowModal}
+        title={'Desactivar tratamiento'}
         body={
           <>
-            ¿Está seguro que quiere <strong>{`${userData?.blocked ? 'habilitar' : 'bloquear'}`}</strong> este usuario?
+            ¿Está seguro que quiere <strong>desactivar</strong> este tratamiento?
           </>
         }
-        confirmBtn="Aceptar"
+        confirmBtn="Desactivar"
         cancelBtn="Cancelar"
-        onAction={() => blockedUserMutation.mutate({ userId: userData?.id || '', blocked: !userData?.blocked })}
+        onAction={() => desactivationTratementMutation.mutate(treatmentData?.id)}
         isDisabled={isDisabled}
         setIsDisabled={setIsDisabled}
-    />*/}
+      />
     </tr>
   );
 };
