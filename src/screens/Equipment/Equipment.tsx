@@ -7,7 +7,14 @@ import { useQuery } from '@tanstack/react-query';
 import { getEquipment, getPendingRentEquipments } from 'api/equipment';
 import { QueryKeys } from 'api/QueryKeys';
 import { DotLoader } from 'react-spinners';
-import { ChevronLeft, ClipboardCheck, ClockHistory, CloudLightningRain, PencilSquare } from 'react-bootstrap-icons';
+import {
+  CartCheck,
+  ChevronLeft,
+  ClipboardCheck,
+  ClockHistory,
+  CloudLightningRain,
+  PencilSquare,
+} from 'react-bootstrap-icons';
 import { Button } from 'react-bootstrap';
 import { Role } from 'models/Roles';
 import EquipmentCard from 'components/EquipmentCrad/EquipmentCrad';
@@ -120,7 +127,14 @@ const Equipment: FC<EquipmentProps> = () => {
                     <EquipmentCard equipmentData={data?.data?.data} />
                     <div className="mt-5">
                       <h4>Listado de alquileres pendientes</h4>
-                      <RentalEquipmentTable data={dataRentedEquipment?.data?.data} />
+                      {dataRentedEquipment?.data?.data.length > 0 ? (
+                        <RentalEquipmentTable data={dataRentedEquipment?.data?.data} />
+                      ) : (
+                        <div className={styles.error}>
+                          <CartCheck size={40} />
+                          <h3 className="mt-3">No hay alquileres pendientes</h3>
+                        </div>
+                      )}
                     </div>
                   </>
                 }
