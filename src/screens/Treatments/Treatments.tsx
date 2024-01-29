@@ -74,7 +74,7 @@ const Treatments: FC<TreatmentsProps> = () => {
       ) : null}
       {!isLoading && !error && data && data?.data?.data.length !== 0 ? (
         <>
-          <TreatmentsTable treatmentsData={data?.data?.data} search={search} />
+          <TreatmentsTable treatmentsData={data?.data?.data} search={search} page={page} />
           {data?.data?.meta?.pagination?.total > defaultPageSize && (
             <div className="d-flex justify-content-center mt-4">
               <PaginationComponent

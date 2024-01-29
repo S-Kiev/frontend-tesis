@@ -33,3 +33,11 @@ export const editTreatment = async (treatment: TreatmentEdit) => {
     data: treatment,
   });
 };
+
+export const desactivateTreatment = async (treatmentId: string | number) => {
+  return await axiosDefaultConfig.put(routes.PUT_TREATMENT.replace('{id}', treatmentId.toString()), {
+    data: {
+      deactivationDate: new Date().toISOString(),
+    },
+  });
+};

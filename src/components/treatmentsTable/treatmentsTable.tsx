@@ -7,9 +7,10 @@ import RowTreatmentsTable from './rowTreatmentsTable';
 interface TreatmentsTableProps {
   treatmentsData: TreatmentsData[];
   search: string;
+  page: number;
 }
 
-const TreatmentsTable: FC<TreatmentsTableProps> = ({ treatmentsData, search }) => {
+const TreatmentsTable: FC<TreatmentsTableProps> = ({ treatmentsData, search, page }) => {
   const headersList: { title: string; col: number }[] = [
     { title: 'ID', col: 0 },
     { title: 'Nombre', col: 1 },
@@ -21,7 +22,7 @@ const TreatmentsTable: FC<TreatmentsTableProps> = ({ treatmentsData, search }) =
       <TableHeader headersList={headersList} />
       <tbody>
         {treatmentsData.map(element => (
-          <RowTreatmentsTable treatmentData={element} search={search} />
+          <RowTreatmentsTable treatmentData={element} search={search} page={page} />
         ))}
       </tbody>
     </Table>
