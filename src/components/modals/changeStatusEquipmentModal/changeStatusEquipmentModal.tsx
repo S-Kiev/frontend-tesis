@@ -77,6 +77,7 @@ export const ChangeStatusEquipmentModal: FC<ChangeStatusEquipmentModalProps> = (
     mutationFn: editEquipmentStatus,
     onSuccess: () => {
       const values = getValues();
+
       if (values.newStatus !== EquipmentStatusEnum.rented) {
         mutationCreateEquipmentHistory.mutate({
           equipment: equipmentData?.id || '',
@@ -97,9 +98,17 @@ export const ChangeStatusEquipmentModal: FC<ChangeStatusEquipmentModalProps> = (
   const mutationCreateEquipmentHistory = useMutation({
     mutationFn: createEquipmentHistory,
     onSuccess: () => {
+      const values = getValues();
+
       toast(<SuccessToast message={`Estado registrado con éxito`} hour />, {
         style: { borderRadius: '10px' },
       });
+      if (values.newStatus === EquipmentStatusEnum.outOfUse) {
+        toast.warn('Se aconseje revisar tratamientos que puedan verse afectados por sacar de circulación el equipo');
+      }
+      if (values.newStatus === EquipmentStatusEnum.broken) {
+        toast.warn('Se aconseje revisar consultas y alquileres que puedan verse afectados por la ruptura del equipo');
+      }
       setIsDisabled(false);
       showModal(false);
     },

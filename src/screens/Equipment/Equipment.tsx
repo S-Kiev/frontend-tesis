@@ -43,7 +43,6 @@ const Equipment: FC<EquipmentProps> = () => {
     queryFn: () => getPendingRentEquipments(id || ''),
   });
 
-  console.log(dataRentedEquipment);
   return (
     <div className={styles.container}>
       {isLoading && isLoadingRentedEquipment ? (
