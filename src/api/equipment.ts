@@ -75,3 +75,11 @@ export const editEquipmentStatus = async (equipment: {
     data: equipment,
   });
 };
+
+export const cancelRentalEquipmentHistory = async (idRegister: number | string) => {
+  return await axiosDefaultConfig.put(routes.PUT_EQUIPMENT_HISTORY.replace('{id}', idRegister.toString()), {
+    data: {
+      canceledRental: true,
+    },
+  });
+};
