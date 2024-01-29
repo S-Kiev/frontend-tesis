@@ -19,4 +19,5 @@ export enum QueryKeys {
   CustomersHook = 'CustomersHook',
   TreatmentsHook = 'TreatmentsHook',
   Customer = 'Customer',
+  PendingRentedEquipment = 'PendingRentedEquipment',
 }
