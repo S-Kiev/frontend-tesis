@@ -2,9 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { QueryKeys } from 'api/QueryKeys';
 import { getHistoryEquipment } from 'api/equipment';
 import { FC, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
-import { selectUser } from 'redux/reducers/userSlice';
 import styles from './EquipmentHistory.module.scss';
 import { ChevronLeft, CloudLightningRain, DatabaseSlash } from 'react-bootstrap-icons';
 import { DotLoader } from 'react-spinners';
@@ -17,7 +15,6 @@ interface EquipmentHistoryProps {}
 const EquipmentHistory: FC<EquipmentHistoryProps> = () => {
   const [page, setPage] = useState<number>(1);
   const navigate = useNavigate();
-  const user = useSelector(selectUser);
   const { id } = useParams();
 
   const { data, error, isLoading } = useQuery({
