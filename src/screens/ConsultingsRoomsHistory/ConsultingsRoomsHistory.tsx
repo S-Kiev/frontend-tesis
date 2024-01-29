@@ -8,6 +8,7 @@ import { ChevronLeft, CloudLightningRain, DatabaseSlash } from 'react-bootstrap-
 import { DotLoader } from 'react-spinners';
 import PaginationComponent from 'components/pagination/pagination';
 import { defaultPageSize } from 'api/paginationConfig';
+import ConsultingRoomtHistoryTable from 'components/consultingRoomHistory/consultingRoomHistory';
 
 interface ConsultingsRoomsHistoryProps {}
 
@@ -20,8 +21,6 @@ const ConsultingsRoomsHistory: FC<ConsultingsRoomsHistoryProps> = () => {
     queryKey: [QueryKeys.HistoryConsultingRoom, id, page],
     queryFn: () => getHistoryConsultingRoom(page, id || ''),
   });
-
-  console.log(data);
 
   return (
     <div className={styles.container}>
@@ -60,7 +59,7 @@ const ConsultingsRoomsHistory: FC<ConsultingsRoomsHistoryProps> = () => {
       ) : null}
       {!isLoading && !error && data && data?.data?.data.length !== 0 ? (
         <>
-          {/*<EquipmentHistoryTable equipmentData={data?.data?.data} />*/}
+          {<ConsultingRoomtHistoryTable data={data?.data?.data} />}
           {data?.data?.meta?.pagination?.total > defaultPageSize && (
             <div className="d-flex justify-content-center mt-4">
               <PaginationComponent
