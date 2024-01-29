@@ -10,6 +10,7 @@ import { Button } from 'react-bootstrap';
 import { selectUser } from 'redux/reducers/userSlice';
 import { useSelector } from 'react-redux';
 import { Role } from 'models/Roles';
+import CustomerInfo from 'components/customerInfo/customerInfo';
 
 interface CustomerProps {}
 
@@ -57,12 +58,20 @@ const Customer: FC<CustomerProps> = () => {
                 </div>
                 <div className="d-flex gap-3">
                   {user?.role === Role.collaborator ? (
-                    <Button variant="success" onClick={() => {}} className="d-none d-lg-block">
+                    <Button
+                      variant="success"
+                      onClick={() => navigate(`/app/customers/${id}/edit`)}
+                      className="d-none d-lg-block"
+                    >
                       <PencilSquare style={{ marginRight: '5px' }} />
                       Editar
                     </Button>
                   ) : null}
-                  <Button variant="success" onClick={() => {}} className="d-none d-lg-block">
+                  <Button
+                    variant="success"
+                    onClick={() => navigate(`/app/customers/${id}/history`)}
+                    className="d-none d-lg-block"
+                  >
                     <ClockHistory style={{ marginRight: '5px' }} />
                     Ver Historial Consultas
                   </Button>
@@ -74,12 +83,20 @@ const Customer: FC<CustomerProps> = () => {
               </div>
               <div className="d-grid gap-2">
                 {user?.role === Role.collaborator ? (
-                  <Button variant="success" onClick={() => {}} className="d-lg-none mt-3">
+                  <Button
+                    variant="success"
+                    onClick={() => navigate(`/app/customers/${id}/edit`)}
+                    className="d-lg-none mt-3"
+                  >
                     <PencilSquare style={{ marginRight: '5px' }} />
                     Editar
                   </Button>
                 ) : null}
-                <Button variant="success" onClick={() => {}} className="d-lg-none mt-3">
+                <Button
+                  variant="success"
+                  onClick={() => navigate(`/app/customers/${id}/history`)}
+                  className="d-lg-none mt-3"
+                >
                   <ClockHistory style={{ marginRight: '5px' }} />
                   Ver Historial Consultas
                 </Button>
@@ -88,9 +105,7 @@ const Customer: FC<CustomerProps> = () => {
                   Descargar Ficha
                 </Button>
               </div>
-              <div className={styles.form}>
-                {/*data?.data?.data && <CustomerCreateForm edit customerEditData={data?.data?.data} />*/}
-              </div>
+              <div className={styles.form}>{<CustomerInfo customerData={data?.data?.data} />}</div>
             </>
           )}
         </>
