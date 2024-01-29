@@ -1,7 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { QueryKeys } from 'api/QueryKeys';
 import { getTreatmentsHook } from 'api/treatment';
-import { useState } from 'react';
 import { deleteDuplicate } from 'util/deleteDuplicate';
 import { parseEquipments } from 'util/parseEquipments';
 import { parseTreatments } from 'util/parseTreatments';
@@ -15,8 +14,6 @@ export const useGetTreatments = (
   equipments: any;
   consultingRooms: any;
 } => {
-  const [equipments, setEquipments] = useState<{ value: string; label: string; show: boolean }[]>([]);
-  const [consultingRooms, setConsultingRooms] = useState<{ value: string; label: string; show: boolean }[]>([]);
   const { data, error, isLoading } = useQuery({
     queryKey: [QueryKeys.TreatmentsHook],
     queryFn: () => getTreatmentsHook(),

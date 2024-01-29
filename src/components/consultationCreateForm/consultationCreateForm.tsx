@@ -1,6 +1,6 @@
 import { FC, useMemo, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
-import { Button, Form, Spinner } from 'react-bootstrap';
+import { Button, Form, OverlayTrigger, Spinner, Tooltip } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import styles from './consultationCreateForm.module.scss';
 import * as yup from 'yup';
@@ -15,6 +15,7 @@ import { useGetCustomers } from 'customHooks/useGetCustomers';
 import { useGetTreatments } from 'customHooks/useGetTreatments';
 import DatePicker from 'react-datepicker';
 import '../../util/styles/datepicker.scss';
+import { QuestionCircleFill } from 'react-bootstrap-icons';
 
 interface ConsultationsCreateFormProps {}
 
@@ -27,8 +28,8 @@ const ConsultationsCreateForm: FC<ConsultationsCreateFormProps> = () => {
   const {
     data: dataTreatments,
     isLoading: isLoadingTreatments,
-    equipments,
-    consultingRooms,
+    equipments: dataEquipments,
+    consultingRooms: dataConsultingRooms,
   } = useGetTreatments(treatments);
   const navigate = useNavigate();
   const {
@@ -51,9 +52,6 @@ const ConsultationsCreateForm: FC<ConsultationsCreateFormProps> = () => {
       comments: '',
     },
   });
-
-  console.log(equipments);
-  console.log(consultingRooms);
 
   const dateParse = (field): Date | null => {
     return field ? new Date(Date.parse(field)) : null;
@@ -162,7 +160,9 @@ const ConsultationsCreateForm: FC<ConsultationsCreateFormProps> = () => {
         )}
       </Form.Group>
       <Form.Group className="form-outline mb-4">
-        <Form.Label>Tratamientos</Form.Label>
+        <Form.Label>
+          Tratamientos <strong className="text-danger me-2">*</strong>
+        </Form.Label>
         <Controller
           name="treatments"
           control={control}
@@ -234,7 +234,6 @@ const ConsultationsCreateForm: FC<ConsultationsCreateFormProps> = () => {
           </div>
         )}
       </Form.Group>
-
       <Form.Group className="form-outline mb-4">
         <Form.Label>
           Hora de fin <strong className="text-danger me-2">*</strong>
@@ -263,6 +262,87 @@ const ConsultationsCreateForm: FC<ConsultationsCreateFormProps> = () => {
           <div className="d-flex align-items-center">
             <span className="text-danger mt-1 ms-2" style={{ fontSize: '0.875em' }}>
               {errors.dateUntilConsultation?.message}
+            </span>
+          </div>
+        )}
+      </Form.Group>
+      <Form.Group className="form-outline mb-4">
+        <Form.Label>Equipamiento</Form.Label>
+        <Controller
+          name="equipments"
+          control={control}
+          render={({ field }) => (
+            <Select
+              options={dataEquipments}
+              isOptionDisabled={option => option.show === false}
+              value={dataEquipments.find(c => c.value === field.value)}
+              onChange={val => field.onChange(val)}
+              styles={{
+                control: baseStyles => ({
+                  ...baseStyles,
+                  borderColor: !!errors.equipments ? '#dc3545' : '#dee2e6',
+                  borderRadius: '0.375rem',
+                  fontSize: '14px',
+                }),
+              }}
+              menuPlacement="auto"
+              isSearchable
+              isMulti
+              noOptionsMessage={() => 'No hay opciones'}
+              name="equipments"
+              placeholder={'Seleccione equipamiento'}
+            />
+          )}
+        />
+        {errors.equipments?.message && (
+          <div className="d-flex align-items-center">
+            <span className="text-danger mt-1 ms-2" style={{ fontSize: '0.875em' }}>
+              {errors.equipments?.message}
+            </span>
+          </div>
+        )}
+      </Form.Group>
+      <Form.Group className="form-outline mb-4">
+        <Form.Label>
+          Consultorios <strong className="text-danger me-2">*</strong>
+          <OverlayTrigger
+            placement="right"
+            delay={{ show: 250, hide: 400 }}
+            overlay={<Tooltip>Se puede seleccionar un maximo de 3 consultorios por consulta</Tooltip>}
+          >
+            <QuestionCircleFill className={styles.pointer} />
+          </OverlayTrigger>
+        </Form.Label>
+        <Controller
+          name="consultingRooms"
+          control={control}
+          render={({ field }) => (
+            <Select
+              options={dataConsultingRooms}
+              value={dataConsultingRooms.find(c => c.value === field.value)}
+              onChange={val => field.onChange(val)}
+              styles={{
+                control: baseStyles => ({
+                  ...baseStyles,
+                  borderColor: !!errors.consultingRooms ? '#dc3545' : '#dee2e6',
+                  borderRadius: '0.375rem',
+                  fontSize: '14px',
+                }),
+              }}
+              isOptionDisabled={() => field.value.length >= 3}
+              menuPlacement="auto"
+              isSearchable
+              isMulti
+              noOptionsMessage={() => 'No hay opciones'}
+              name="consultingRooms"
+              placeholder={'Seleccione consultorios'}
+            />
+          )}
+        />
+        {errors.consultingRooms?.message && (
+          <div className="d-flex align-items-center">
+            <span className="text-danger mt-1 ms-2" style={{ fontSize: '0.875em' }}>
+              {errors.consultingRooms?.message}
             </span>
           </div>
         )}
