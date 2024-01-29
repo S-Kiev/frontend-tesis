@@ -34,3 +34,13 @@ export const editConsultingRoom = async (consultingRoom: ConsultingRoomEdit) => 
     },
   );
 };
+
+export const getHistoryConsultingRoom = async (page: number, id: string) => {
+  return await axiosDefaultConfig.get(routes.GET_HISTORY_CONSULTING_ROOM, {
+    params: {
+      'filters[$and][0][consulting_room][id][$eq]': id,
+      'pagination[page]': page,
+      'pagination[pageSize]': defaultPageSize,
+    },
+  });
+};

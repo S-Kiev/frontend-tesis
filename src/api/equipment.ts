@@ -45,3 +45,13 @@ export const editEquipment = async (equipment: EquipmentEdit) => {
     data: equipment,
   });
 };
+
+export const getHistoryEquipment = async (page: number, id: string) => {
+  return await axiosDefaultConfig.get(routes.GET_HISTORY_EQUIPMENTS, {
+    params: {
+      'filters[$and][1][equipment][id][$eq]': id,
+      'pagination[page]': page,
+      'pagination[pageSize]': defaultPageSize,
+    },
+  });
+};
