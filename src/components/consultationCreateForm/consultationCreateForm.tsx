@@ -20,11 +20,13 @@ import { createConsultation } from 'api/consultation';
 import { useSelector } from 'react-redux';
 import { selectUser } from 'redux/reducers/userSlice';
 
-interface ConsultationsCreateFormProps {}
+interface ConsultationsCreateFormProps {
+  userDataId: number;
+}
 
 const schema = yup.object().shape(consultationSchema);
 
-const ConsultationsCreateForm: FC<ConsultationsCreateFormProps> = () => {
+const ConsultationsCreateForm: FC<ConsultationsCreateFormProps> = ({ userDataId }) => {
   const [isDisabled, setIsDisabled] = useState<boolean>(false);
   const [alert, setAlert] = useState<{ alert: boolean; message: string }>({ alert: false, message: '' });
   const [treatments, setTreatments] = useState<any>();
@@ -187,7 +189,7 @@ const ConsultationsCreateForm: FC<ConsultationsCreateFormProps> = () => {
     }
     if (user) {
       mutationCreateConsultation.mutate({
-        responsibleUserId: 7,
+        responsibleUserId: userDataId,
         customerId: dataForm.customer,
         dateSince: new Date(dataForm?.dateSinceConsultation || '').toISOString(),
         dateUntil: new Date(dataForm?.dateUntilConsultation || '').toISOString(),
