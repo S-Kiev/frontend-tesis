@@ -1,5 +1,8 @@
 import { number } from 'yup';
 import { ConsultationStatusEnum } from './ConsultationStatus';
+import { TreatmentGetData } from './Treatments';
+import { EquipmentData } from './Equipment';
+import { ConsultingRoomData } from './ConsultingRoom';
 
 export interface ConsultationData {
   id: number;
@@ -62,4 +65,52 @@ export interface consultationCreate {
   equitments: number[];
   consultingsRooms: { id: number; dateSince: string; dateUntil: string }[];
   comments: string;
+}
+
+export interface consultationGetData {
+  customer: {
+    data: {
+      id: number;
+      attributes: {
+        name: string;
+        lastname: string;
+        document: string;
+        birthdate: string;
+        cellphone: string;
+        email: string;
+        address: string;
+        howDidYouKnow: string;
+        profession: string;
+        reasonFirstVisit: string;
+        createdAt: string;
+        updatedAt: string;
+        publishedAt: string;
+      };
+    };
+  };
+  treatments: TreatmentGetData[];
+  equipments: EquipmentData[];
+  consultingRooms: ConsultingRoomData[];
+  responsibleUser: {
+    data: {
+      id: number;
+      attributes: {
+        name: string;
+        lastname: string;
+        document: string;
+        cellphone: string;
+        address: string;
+        deactivationDate: string | null;
+        createdAt: string;
+        updatedAt: string;
+        publishedAt: string;
+        userId: number;
+      };
+    };
+  };
+  comments: string;
+  status: ConsultationStatusEnum;
+  since: string;
+  until: string;
+  createdAt: string;
 }

@@ -27,3 +27,23 @@ export const createConsultation = async (consultation: consultationCreate) => {
     comments: consultation.comments,
   });
 };
+
+export const getConsultation = async (id: string) => {
+  return await axiosDefaultConfig.get(routes.GET_CONSULTATION.replace('{id}', id));
+};
+
+export const getHistoryEquipmentConsultation = async (consultationId: string) => {
+  return await axiosDefaultConfig.get(routes.GET_HISTORY_EQUIPMENTS, {
+    params: {
+      'filters[$and][0][consultation][id][$eq]': consultationId,
+    },
+  });
+};
+
+export const getHistoryConsultingRoomConsultation = async (consultationId: string) => {
+  return await axiosDefaultConfig.get(routes.GET_HISTORY_CONSULTING_ROOM, {
+    params: {
+      'filters[$and][0][consultation][id][$eq]': consultationId,
+    },
+  });
+};
