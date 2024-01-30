@@ -31,6 +31,8 @@ import ConsultationEdit from './ConsultationEdit/ConsultationEdit';
 import CustomerHistory from './CustomerHistory/CustomerHistory';
 import EquipmentHistory from './EquipmentHistory/EquipmentHistory';
 import ConsultingsRoomsHistory from './ConsultingsRoomsHistory/ConsultingsRoomsHistory';
+import ObservationEdit from './ObservationEdit/ObservationEdit';
+import ObservationCreate from './ObservationCreate/ObservationCreate';
 
 interface LayoutProps {}
 
@@ -70,6 +72,8 @@ const Layout: FC<LayoutProps> = () => {
           <Route path="consultations/create" element={<ConsultationCreate />} />
           <Route path="consultations/:id" element={<Consultation />} />
           <Route path="consultations/:id/edit" element={<ConsultationEdit />} />
+          <Route path="consultations/:id/observation/create" element={<ObservationCreate />} />
+          <Route path="consultations/:id/observation/:observationId/edit" element={<ObservationEdit />} />
           <Route path="equipments" element={<Equipments />} />
           <Route path="equipments/:id/history" element={<EquipmentHistory />} />
           <Route path="equipments/create" element={<EquipmentCreate />} />

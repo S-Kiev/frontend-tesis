@@ -5,7 +5,14 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { selectUser } from 'redux/reducers/userSlice';
 import styles from './Consultation.module.scss';
 import { DotLoader } from 'react-spinners';
-import { ChevronLeft, CloudLightningRain, PencilSquare, SlashCircle } from 'react-bootstrap-icons';
+import {
+  ChevronLeft,
+  CloudLightningRain,
+  JournalCheck,
+  Journals,
+  PencilSquare,
+  SlashCircle,
+} from 'react-bootstrap-icons';
 import { Button } from 'react-bootstrap';
 import { Role } from 'models/Roles';
 import ConsultationCard from 'components/consultationCard/consultationCard';
@@ -132,6 +139,35 @@ const Consultation: FC<ConsultationProps> = () => {
                       </Button>
                     </>
                   ) : null}
+                  {user?.role === Role.collaborator &&
+                  (data?.status === ConsultationStatusEnum.inProgress ||
+                    data?.status === ConsultationStatusEnum.finish) ? (
+                    <>
+                      {consultationInfoData?.data?.data?.length >= 1 ? (
+                        <Button
+                          variant="success"
+                          onClick={() =>
+                            navigate(
+                              `/app/consultations/${id}/observation/${consultationInfoData?.data?.data[0]?.id}/edit`,
+                            )
+                          }
+                          className="d-none d-lg-block"
+                        >
+                          <JournalCheck style={{ marginRight: '5px' }} />
+                          Editar Observaciones
+                        </Button>
+                      ) : (
+                        <Button
+                          variant="success"
+                          onClick={() => navigate(`/app/consultations/${id}/observation/create`)}
+                          className="d-none d-lg-block"
+                        >
+                          <Journals style={{ marginRight: '5px' }} />
+                          Agregar Observaciones
+                        </Button>
+                      )}
+                    </>
+                  ) : null}
                 </div>
               </div>
               <div className="d-grid gap-2">
@@ -155,6 +191,35 @@ const Consultation: FC<ConsultationProps> = () => {
                       <SlashCircle style={{ marginRight: '5px' }} />
                       Cancelar consulta
                     </Button>
+                  </>
+                ) : null}
+                {user?.role === Role.collaborator &&
+                (data?.status === ConsultationStatusEnum.inProgress ||
+                  data?.status === ConsultationStatusEnum.finish) ? (
+                  <>
+                    {consultationInfoData?.data?.data?.length >= 1 ? (
+                      <Button
+                        variant="success"
+                        onClick={() =>
+                          navigate(
+                            `/app/consultations/${id}/observation/${consultationInfoData?.data?.data[0]?.id}/edit`,
+                          )
+                        }
+                        className="d-lg-none mt-3"
+                      >
+                        <JournalCheck style={{ marginRight: '5px' }} />
+                        Editar Observaciones
+                      </Button>
+                    ) : (
+                      <Button
+                        variant="success"
+                        onClick={() => navigate(`/app/consultations/${id}/observation/create`)}
+                        className="d-lg-none mt-3"
+                      >
+                        <Journals style={{ marginRight: '5px' }} />
+                        Agregar Observaciones
+                      </Button>
+                    )}
                   </>
                 ) : null}
               </div>

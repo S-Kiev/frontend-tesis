@@ -15,3 +15,12 @@ export const uploadUpdateFile = async (payload: { idFile: string; newAttachment:
   formData.append('files', payload.newAttachment);
   return axiosDefaultConfig.post(routes.UPLOAD_UPDATE_FILE.replace('{id}', payload.idFile.toString()), formData);
 };
+
+export const uploadAttachmentObservations = async (payload: { id: string; attachments: any }) => {
+  const formData = new FormData();
+  formData.append('ref', 'api::consultation-information.consultation-information');
+  formData.append('refId', payload.id);
+  formData.append('field', 'images');
+  formData.append('files', payload.attachments);
+  return axiosDefaultConfig.post(routes.UPLOAD_FILE, formData);
+};

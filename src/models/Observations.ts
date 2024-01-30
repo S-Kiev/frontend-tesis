@@ -96,3 +96,32 @@ export interface ConsultationObservation {
   id: number;
   attributes: Attributes;
 }
+
+export interface ObservationCreate {
+  consultation: string | number;
+  observationsConsultation: string;
+  measurements: string | null | number;
+}
+
+export interface MeasurementsCreate {
+  consultation: string | number;
+  customer: string | number;
+  highWaist: number | null | undefined;
+  mean: number | null | undefined;
+  navelLine: number | null | undefined;
+  lowerBelly: number | null | undefined;
+}
+
+export interface ObservationEdit {
+  observationId: string | number;
+  observationsConsultation: string;
+  measurements?: null | number;
+}
+
+export interface MeasurementsEdit {
+  measurementsId: string | number;
+  highWaist: number | null | undefined;
+  mean: number | null | undefined;
+  navelLine: number | null | undefined;
+  lowerBelly: number | null | undefined;
+}

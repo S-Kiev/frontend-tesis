@@ -57,4 +57,8 @@ export const routes = {
   GET_CONSULTATION_INFO:
     'consultation-informations?populate[consultation][populate][0]=id&populate[images][populate][0]=id&populate[measurements][populate][0]=id',
   PUT_CANCEL_CONSULTATION: 'consultation/simlpleCancelConsultation',
+  POST_OBSERVATION: 'consultation-informations',
+  POST_MEASUREMENTS: 'measurements-customers',
+  PUT_OBSERVATION: 'consultation-informations/{id}',
+  PUT_MEASUREMENTS: 'measurements-customers/{id}',
 };
