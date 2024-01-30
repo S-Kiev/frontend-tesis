@@ -11,6 +11,7 @@ export interface ConsultationData {
     createdAt: string;
     updatedAt: string;
     publishedAt: string;
+    customerPayment?: any;
     status: ConsultationStatusEnum;
     since: string;
     until: string;

@@ -9,6 +9,7 @@ import { useQuery } from '@tanstack/react-query';
 import { QueryKeys } from 'api/QueryKeys';
 import { getConsultationsByCustomer } from 'api/consultation';
 import { getCustomersPayments } from 'api/customers';
+import { parseCustumerHistoryData } from 'util/parseCustumerHistoryData';
 
 interface CustomerHistoryProps {}
 
@@ -22,8 +23,6 @@ const CustomerHistory: FC<CustomerHistoryProps> = () => {
     queryFn: () => getConsultationsByCustomer(page, id || ''),
   });
 
-  console.log(data);
-
   const {
     data: dataPayments,
     error: errorPayments,
@@ -33,7 +32,7 @@ const CustomerHistory: FC<CustomerHistoryProps> = () => {
     queryFn: () => getCustomersPayments(id || ''),
   });
 
-  console.log(dataPayments);
+  console.log(parseCustumerHistoryData(data?.data?.data, dataPayments?.data?.data));
   return (
     <div className={styles.container}>
       <div className={styles.header}>
