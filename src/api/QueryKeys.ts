@@ -31,4 +31,6 @@ export enum QueryKeys {
   CustomersPayments = 'CustomersPayments',
   Measurements = 'Measurements',
   ConsultingRoomsHistoryByConsultation = 'ConsultingRoomsHistoryByConsultation',
+  ConsultationsInfoByConsultation = 'ConsultationsInfoByConsultation',
+  CustomersPaymentsByConsultation = 'CustomersPaymentsByConsultation',
 }

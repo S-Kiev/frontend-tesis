@@ -73,3 +73,11 @@ export const editConsultation = async (consultation: consultationEdit) => {
     notifyUser: true,
   });
 };
+
+export const getConsultationsInfoByConsultation = async (consultationId: string) => {
+  return await axiosDefaultConfig.get(routes.GET_CONSULTATION_INFO, {
+    params: {
+      'filters[$and][0][consultation][id][$eq]': consultationId,
+    },
+  });
+};

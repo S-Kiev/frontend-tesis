@@ -13,6 +13,8 @@ import { useQuery } from '@tanstack/react-query';
 import { QueryKeys } from 'api/QueryKeys';
 import { getConsultingRoomsHistoryByConsultation } from 'api/consultingRoom';
 import { ConsultationStatusEnum } from 'models/ConsultationStatus';
+import { getConsultationsInfoByConsultation } from 'api/consultation';
+import { getCustomersPayments, getCustomersPaymentsByConsultation } from 'api/customers';
 
 interface ConsultationProps {}
 
@@ -32,15 +34,33 @@ const Consultation: FC<ConsultationProps> = () => {
     queryFn: () => getConsultingRoomsHistoryByConsultation(id || ''),
   });
 
+  const {
+    data: consultationInfoData,
+    error: consultationInfoError,
+    isLoading: consultationInfoIsLoading,
+  } = useQuery({
+    queryKey: [QueryKeys.ConsultationsInfoByConsultation, id],
+    queryFn: () => getConsultationsInfoByConsultation(id || ''),
+  });
+
+  const {
+    data: dataPayments,
+    error: errorPayments,
+    isLoading: isLoadingPayments,
+  } = useQuery({
+    queryKey: [QueryKeys.CustomersPaymentsByConsultation, id],
+    queryFn: () => getCustomersPaymentsByConsultation(id || ''),
+  });
+
   return (
     <div className={styles.container}>
-      {isLoading && historyConsultingRoomIsLoading ? (
+      {isLoading && historyConsultingRoomIsLoading && isLoadingPayments && consultationInfoIsLoading ? (
         <div className="d-flex align-items-center justify-content-center" style={{ marginTop: '300px' }}>
           <DotLoader color="rgb(159,213,177)" />
         </div>
       ) : (
         <>
-          {error || historyConsultingRoomError ? (
+          {error || historyConsultingRoomError || consultationInfoError || errorPayments ? (
             <div className={styles.error}>
               <CloudLightningRain size={80} />
               <h3 className="mt-3">Ups, ha ocurrido un error</h3>
@@ -114,7 +134,12 @@ const Consultation: FC<ConsultationProps> = () => {
               <div className={styles.form}>
                 {
                   <>
-                    <ConsultationCard data={data} dataConsultingRooms={historyConsultingRoomData?.data?.data} />
+                    <ConsultationCard
+                      data={data}
+                      dataConsultingRooms={historyConsultingRoomData?.data?.data}
+                      observations={consultationInfoData?.data?.data[0] || []}
+                      paymentData={dataPayments?.data?.data[0] || []}
+                    />
                   </>
                 }
               </div>
