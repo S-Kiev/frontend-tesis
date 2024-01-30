@@ -8,10 +8,11 @@ import { defaultPageSize } from 'api/paginationConfig';
 import { useQuery } from '@tanstack/react-query';
 import { QueryKeys } from 'api/QueryKeys';
 import { getConsultationsByCustomer } from 'api/consultation';
-import { getCustomersPayments } from 'api/customers';
+import { getCustomersMesurments, getCustomersPayments } from 'api/customers';
 import { parseCustumerHistoryData } from 'util/parseCustumerHistoryData';
 import CustomerHistoryTable from 'components/customerHistoryTable/customerHistoryTable';
 import { Button } from 'react-bootstrap';
+import { MeasurementsModal } from 'components/modals/measurementsModal';
 
 interface CustomerHistoryProps {}
 
@@ -35,7 +36,15 @@ const CustomerHistory: FC<CustomerHistoryProps> = () => {
     queryFn: () => getCustomersPayments(id || ''),
   });
 
-  console.log(parseCustumerHistoryData(data?.data?.data, dataPayments?.data?.data));
+  const {
+    data: dataMeasurements,
+    error: errorMeasurements,
+    isLoading: isLoadingMeasurements,
+  } = useQuery({
+    queryKey: [QueryKeys.Measurements, id],
+    queryFn: () => getCustomersMesurments(id || ''),
+  });
+
   return (
     <div className={styles.container}>
       <div className={styles.header}>
@@ -52,13 +61,8 @@ const CustomerHistory: FC<CustomerHistoryProps> = () => {
             <p>Listado de todas las consultas registradas del cliente en el sistema</p>
           </div>
         </div>
-
         <div className="d-flex gap-3">
-          <Button
-            variant="success"
-            onClick={() => navigate(`/app/equipments/${id}/edit`)}
-            className="d-none d-lg-block"
-          >
+          <Button variant="success" onClick={() => {}} className="d-none d-lg-block">
             <BoxArrowInDown style={{ marginRight: '5px' }} />
             Descargar
           </Button>
@@ -96,14 +100,14 @@ const CustomerHistory: FC<CustomerHistoryProps> = () => {
           <h3 className="mt-3">Aún no existen consultas registradas para este cliente</h3>
         </div>
       ) : null}
-      {error || errorPayments ? (
+      {error || errorPayments || errorMeasurements ? (
         <div className={styles.errorFilters}>
           <CloudLightningRain size={80} />
           <h3 className="mt-3">Ups, ha ocurrido un error</h3>
           <h5 className="mb-3 text-center">Vuelve a cargar la pagina por favor</h5>
         </div>
       ) : null}
-      {isLoading && isLoadingPayments ? (
+      {isLoading && isLoadingPayments && isLoadingMeasurements ? (
         <div className="d-flex align-items-center justify-content-center" style={{ marginTop: '200px' }}>
           <DotLoader color="rgb(159,213,177)" />
         </div>
@@ -123,6 +127,7 @@ const CustomerHistory: FC<CustomerHistoryProps> = () => {
           )}
         </>
       ) : null}
+      <MeasurementsModal show={showModal} showModal={setShowModal} customerMesurements={dataMeasurements?.data?.data} />
     </div>
   );
 };
