@@ -3,11 +3,22 @@ import { useNavigate } from 'react-router-dom';
 import styles from './ConsultationCreate.module.scss';
 import { ChevronLeft } from 'react-bootstrap-icons';
 import ConsultationsCreateForm from 'components/consultationCreateForm/consultationCreateForm';
+import { useQuery } from '@tanstack/react-query';
+import { QueryKeys } from 'api/QueryKeys';
+import { getUserData } from 'api/users';
+import { selectUser } from 'redux/reducers/userSlice';
+import { useSelector } from 'react-redux';
 
 interface ConsultationProps {}
 
 const Consultation: FC<ConsultationProps> = () => {
   const navigate = useNavigate();
+  const user = useSelector(selectUser);
+
+  const { data } = useQuery({
+    queryKey: [QueryKeys.UserDataPorfile, user?.id],
+    queryFn: () => getUserData(user?.id.toString() || ''),
+  });
 
   return (
     <div className={styles.container}>
@@ -26,7 +37,7 @@ const Consultation: FC<ConsultationProps> = () => {
           </div>
         </div>
       </div>
-      <div className={styles.form}>{<ConsultationsCreateForm />}</div>
+      <div className={styles.form}>{<ConsultationsCreateForm userDataId={data?.data?.data[0]?.id} />}</div>
     </div>
   );
 };

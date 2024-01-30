@@ -45,4 +45,8 @@ export const routes = {
   GET_HISTORY_EQUIPMENTS:
     'equipment-histories?populate[equipment][populate][0]=id&populate[consultation][populate][0]=responsibleUser&$sort=since:desc',
   POST_HISTORY_CONSULTING_ROOM: 'consulting-room-histories',
+  POST_CONSULTATION: 'consultation/simlpleCreateConsultation',
+  PUT_CONSULTATION: 'consultation/simlpleUpdateConsultation',
+  GET_CONSULTATION:
+    'consultations/{id}?populate[customer][populate][0]=id&populate[treatments][populate][0]=id&populate[responsibleUser][populate][0]=id',
 };

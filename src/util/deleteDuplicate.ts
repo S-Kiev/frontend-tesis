@@ -4,5 +4,5 @@ export const deleteDuplicate = (arr: any[], clave: string): any[] => {
     const value = obj[clave];
     uniqueMap.set(value, obj);
   }
-  return Array.from(uniqueMap.values());
+  return Array.from(uniqueMap?.values());
 };

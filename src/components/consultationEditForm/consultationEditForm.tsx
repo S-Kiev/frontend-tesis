@@ -2,7 +2,7 @@ import { FC, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { Alert, Button, Card, Form, OverlayTrigger, Spinner, Tooltip } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import styles from './consultationCreateForm.module.scss';
+import styles from './consultationEditForm.module.scss';
 import * as yup from 'yup';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -16,20 +16,29 @@ import { useGetTreatments } from 'customHooks/useGetTreatments';
 import DatePicker from 'react-datepicker';
 import '../../util/styles/datepicker.scss';
 import { BuildingAdd, ExclamationTriangleFill, QuestionCircleFill } from 'react-bootstrap-icons';
-import { createConsultation } from 'api/consultation';
+import { editConsultation } from 'api/consultation';
 import { useSelector } from 'react-redux';
 import { selectUser } from 'redux/reducers/userSlice';
+import { consultationGetData } from 'models/Consultation';
+import { parseEquipments } from 'util/parseEquipments';
+import { parseConsultingsRooms } from 'util/parseConsultingRooms';
 
-interface ConsultationsCreateFormProps {
+interface ConsultationEditFormProps {
   userDataId: number;
+  consultationData: consultationGetData;
+  traetmentsArray: any;
 }
 
 const schema = yup.object().shape(consultationSchema);
 
-const ConsultationsCreateForm: FC<ConsultationsCreateFormProps> = ({ userDataId }) => {
+const ConsultationEditForm: FC<ConsultationEditFormProps> = ({ userDataId, consultationData, traetmentsArray }) => {
   const [isDisabled, setIsDisabled] = useState<boolean>(false);
   const [alert, setAlert] = useState<{ alert: boolean; message: string }>({ alert: false, message: '' });
   const [treatments, setTreatments] = useState<any>();
+  const equipmentsArray = consultationData ? parseEquipments(consultationData?.equipments?.data || []) : [];
+  const consultingRoomsArray = consultationData
+    ? parseConsultingsRooms(consultationData?.consultingRooms?.data || [])
+    : [];
   const user = useSelector(selectUser);
   const { data: dataCustomers, isLoading: isLoadingCustomers } = useGetCustomers();
   const {
@@ -50,13 +59,13 @@ const ConsultationsCreateForm: FC<ConsultationsCreateFormProps> = ({ userDataId 
     mode: 'onBlur',
     resolver: yupResolver(schema),
     defaultValues: {
-      customer: undefined,
-      treatments: [],
-      equipments: [],
-      consultingRooms: [],
-      dateSinceConsultation: '',
-      dateUntilConsultation: '',
-      comments: '',
+      customer: consultationData?.customer?.data?.id,
+      treatments: traetmentsArray,
+      equipments: equipmentsArray,
+      consultingRooms: consultingRoomsArray,
+      dateSinceConsultation: consultationData?.since,
+      dateUntilConsultation: consultationData?.until,
+      comments: consultationData?.comments,
       dateSinceConsultingRoomOne: '',
       dateUntilConsultingRoomOne: '',
       dateSinceConsultingRoomTwo: '',
@@ -70,10 +79,10 @@ const ConsultationsCreateForm: FC<ConsultationsCreateFormProps> = ({ userDataId 
     return field ? new Date(Date.parse(field)) : null;
   };
 
-  const mutationCreateConsultation = useMutation({
-    mutationFn: createConsultation,
+  const mutationEditeConsultation = useMutation({
+    mutationFn: editConsultation,
     onSuccess: () => {
-      toast(<SuccessToast message={`Consulta registrada con éxito`} hour />, {
+      toast(<SuccessToast message={`Consulta editada con éxito`} hour />, {
         style: { borderRadius: '10px' },
       });
       setIsDisabled(false);
@@ -99,9 +108,9 @@ const ConsultationsCreateForm: FC<ConsultationsCreateFormProps> = ({ userDataId 
         setAlert({
           alert: true,
           message: `Los equipos ${equipments?.map(equipment => {
-            return `${equipment.name} con id ${equipment.id},`;
+            return `${equipment?.name} con id ${equipment?.id},`;
           })} y los consultorios ${consultigsRooms?.map(cr => {
-            return `${cr.name} con id ${cr.id},`;
+            return `${cr?.name} con id ${cr?.id},`;
           })} estan ocupados, por favor reserve otros o pruebe a diferente hora`,
         });
       }
@@ -109,7 +118,7 @@ const ConsultationsCreateForm: FC<ConsultationsCreateFormProps> = ({ userDataId 
         setAlert({
           alert: true,
           message: `Los equipos ${equipments?.map(equipment => {
-            return `${equipment.name} con id ${equipment.id},`;
+            return `${equipment?.name} con id ${equipment?.id},`;
           })} estan ocupados, por favor reserve otros o pruebe a diferente hora`,
         });
       }
@@ -117,11 +126,11 @@ const ConsultationsCreateForm: FC<ConsultationsCreateFormProps> = ({ userDataId 
         setAlert({
           alert: true,
           message: `Los consultorios ${consultigsRooms?.map(cr => {
-            return `${cr.name} con id ${cr.id},`;
+            return `${cr?.name} con id ${cr?.id},`;
           })} estan ocupados, por favor reserve otros o pruebe a diferente hora`,
         });
       }
-      toast(<ErrorToast message={`Ha ocurrido un error al registrar la consulta, intente nuevamente`} />, {
+      toast(<ErrorToast message={`Ha ocurrido un error al edita la consulta, intente nuevamente`} />, {
         style: { borderRadius: '10px' },
       });
       setIsDisabled(false);
@@ -188,7 +197,8 @@ const ConsultationsCreateForm: FC<ConsultationsCreateFormProps> = ({ userDataId 
       ];
     }
     if (user) {
-      mutationCreateConsultation.mutate({
+      mutationEditeConsultation.mutate({
+        consultationId: Number(consultationData?.id.toString()),
         responsibleUserId: userDataId,
         customerId: dataForm.customer,
         dateSince: new Date(dataForm?.dateSinceConsultation || '').toISOString(),
@@ -244,7 +254,7 @@ const ConsultationsCreateForm: FC<ConsultationsCreateFormProps> = ({ userDataId 
               isSearchable
               noOptionsMessage={() => 'No hay opciones'}
               name="customer"
-              isDisabled={isLoadingCustomers}
+              isDisabled={true}
               placeholder={'Seleccione un cliente'}
             />
           )}
@@ -269,6 +279,7 @@ const ConsultationsCreateForm: FC<ConsultationsCreateFormProps> = ({ userDataId 
               options={dataTreatments}
               isOptionDisabled={option => option.show === false}
               isLoading={isLoadingTreatments}
+              defaultValue={traetmentsArray}
               value={dataTreatments.find(c => c.value === field.value)}
               onChange={val => {
                 setTreatments(val);
@@ -384,6 +395,7 @@ const ConsultationsCreateForm: FC<ConsultationsCreateFormProps> = ({ userDataId 
               options={dataEquipments}
               isOptionDisabled={option => option.show === false}
               value={dataEquipments.find(c => c.value === field.value)}
+              defaultValue={equipmentsArray}
               onChange={val => field.onChange(val)}
               styles={{
                 control: baseStyles => ({
@@ -429,6 +441,7 @@ const ConsultationsCreateForm: FC<ConsultationsCreateFormProps> = ({ userDataId 
               options={dataConsultingRooms}
               value={dataConsultingRooms.find(c => c.value === field.value)}
               onChange={val => field.onChange(val)}
+              defaultValue={consultingRoomsArray}
               styles={{
                 control: baseStyles => ({
                   ...baseStyles,
@@ -724,11 +737,11 @@ const ConsultationsCreateForm: FC<ConsultationsCreateFormProps> = ({ userDataId 
         </Button>
         <Button variant="success" type="submit" disabled={isDisabled || !isValid}>
           {isDisabled && <Spinner className="me-1" size="sm" />}
-          <span>Guardar</span>
+          <span>Guardar cambios</span>
         </Button>
       </div>
     </Form>
   );
 };
 
-export default ConsultationsCreateForm;
+export default ConsultationEditForm;

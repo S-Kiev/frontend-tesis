@@ -3,7 +3,7 @@ import styles from './consultingRoomHistory.module.scss';
 import { useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
 import { Button } from 'react-bootstrap';
-import { Eye, SlashCircle } from 'react-bootstrap-icons';
+import { Eye } from 'react-bootstrap-icons';
 import { ConsultingRoomHistoryItem } from 'models/ConsultingRoomHistory';
 import ConsultingRoomStatus from 'components/consultingRoomStatus/consultingRoomStatus';
 import { ConsultingRoomStatusEnum } from 'models/ConsultingRoomStatus';
