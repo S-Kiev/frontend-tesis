@@ -81,3 +81,9 @@ export const getConsultationsInfoByConsultation = async (consultationId: string)
     },
   });
 };
+
+export const cancelConsultation = async (consultationId: number | string) => {
+  return await axiosDefaultConfig.put(routes.PUT_CANCEL_CONSULTATION, {
+    consultationId: consultationId,
+  });
+};
