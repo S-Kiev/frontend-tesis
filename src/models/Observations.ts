@@ -111,3 +111,17 @@ export interface MeasurementsCreate {
   navelLine: number | null | undefined;
   lowerBelly: number | null | undefined;
 }
+
+export interface ObservationEdit {
+  observationId: string | number;
+  observationsConsultation: string;
+  measurements?: null | number;
+}
+
+export interface MeasurementsEdit {
+  measurementsId: string | number;
+  highWaist: number | null | undefined;
+  mean: number | null | undefined;
+  navelLine: number | null | undefined;
+  lowerBelly: number | null | undefined;
+}

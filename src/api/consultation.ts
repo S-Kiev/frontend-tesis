@@ -2,7 +2,7 @@ import { consultationCreate, consultationEdit } from 'models/Consultation';
 import { routes } from './apiRoutes';
 import { axiosDefaultConfig } from './axiosConfig';
 import { defaultPageSize } from './paginationConfig';
-import { MeasurementsCreate, ObservationCreate } from 'models/Observations';
+import { MeasurementsCreate, MeasurementsEdit, ObservationCreate, ObservationEdit } from 'models/Observations';
 
 export const getConsultations = async (page: number, search: string) => {
   return await axiosDefaultConfig.get(routes.GET_CONSULTATIONS, {
@@ -97,6 +97,18 @@ export const createObservation = async (observation: ObservationCreate) => {
 
 export const createMeasurements = async (measurements: MeasurementsCreate) => {
   return await axiosDefaultConfig.post(routes.POST_MEASUREMENTS, {
+    data: measurements,
+  });
+};
+
+export const editObservation = async (observation: ObservationEdit) => {
+  return await axiosDefaultConfig.put(routes.PUT_OBSERVATION.replace('{id}', observation.observationId.toString()), {
+    data: observation,
+  });
+};
+
+export const editMeasurements = async (measurements: MeasurementsEdit) => {
+  return await axiosDefaultConfig.put(routes.PUT_MEASUREMENTS.replace('{id}', measurements.measurementsId.toString()), {
     data: measurements,
   });
 };

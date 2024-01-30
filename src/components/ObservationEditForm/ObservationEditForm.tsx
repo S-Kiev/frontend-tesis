@@ -2,26 +2,28 @@ import { FC, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { Button, Form, Spinner } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import styles from './ObservationCreateForm.module.scss';
+import styles from './ObservationEditForm.module.scss';
 import * as yup from 'yup';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { observationSchema } from 'util/validations/observationSchema';
 import Switch from 'react-switch';
-import { createMeasurements, createObservation } from 'api/consultation';
+import { createMeasurements, editMeasurements, editObservation } from 'api/consultation';
 import { toast } from 'react-toastify';
 import SuccessToast from 'components/toast/successToast';
 import ErrorToast from 'components/toast/errorToast';
 import { uploadAttachmentObservations } from 'api/upload';
+import { ConsultationObservation } from 'models/Observations';
 
-interface ObservationCreateFormProps {
+interface ObservationEditFormProps {
   consultationId: number | string;
+  observationData: ConsultationObservation;
   customerId: number | string;
 }
 
 const schema = yup.object().shape(observationSchema);
 
-const ObservationCreateForm: FC<ObservationCreateFormProps> = ({ consultationId, customerId }) => {
+const ObservationEditForm: FC<ObservationEditFormProps> = ({ consultationId, observationData, customerId }) => {
   const [isDisabled, setIsDisabled] = useState<boolean>(false);
   const navigate = useNavigate();
   const {
@@ -36,13 +38,29 @@ const ObservationCreateForm: FC<ObservationCreateFormProps> = ({ consultationId,
     mode: 'onBlur',
     resolver: yupResolver(schema),
     defaultValues: {
-      observations: '',
+      observations: observationData ? observationData?.attributes?.observationsConsultation : '',
       images: null,
-      measurements: false,
-      highWaist: undefined,
-      mean: undefined,
-      navelLine: undefined,
-      lowerBelly: undefined,
+      measurements: observationData?.attributes?.measurements?.data?.id ? true : false,
+      highWaist: observationData ? observationData?.attributes?.measurements?.data?.attributes?.highWaist : undefined,
+      mean: observationData ? observationData?.attributes?.measurements?.data?.attributes?.mean : undefined,
+      navelLine: observationData ? observationData?.attributes?.measurements?.data?.attributes?.navelLine : undefined,
+      lowerBelly: observationData ? observationData?.attributes?.measurements?.data?.attributes?.lowerBelly : undefined,
+    },
+  });
+
+  const mutationEditMesurmenets = useMutation({
+    mutationFn: editMeasurements,
+    onSuccess: (data: any) => {
+      mutationEditObservations.mutate({
+        observationId: Number(observationData?.id),
+        observationsConsultation: getValues().observations || '',
+      });
+    },
+    onError: () => {
+      toast(<ErrorToast message={`Ha ocurrido un error al editar las observaciones, intente nuevamente`} />, {
+        style: { borderRadius: '10px' },
+      });
+      setIsDisabled(false);
     },
   });
 
@@ -50,10 +68,10 @@ const ObservationCreateForm: FC<ObservationCreateFormProps> = ({ consultationId,
     mutationFn: createMeasurements,
     onSuccess: (data: any) => {
       const measurementsId: number = data?.data?.data?.id;
-      mutationCreateObservations.mutate({
-        consultation: Number(consultationId),
+      mutationEditObservations.mutate({
+        observationId: Number(observationData?.id),
         observationsConsultation: getValues().observations || '',
-        measurements: Number(measurementsId),
+        measurements: measurementsId,
       });
     },
     onError: () => {
@@ -64,8 +82,8 @@ const ObservationCreateForm: FC<ObservationCreateFormProps> = ({ consultationId,
     },
   });
 
-  const mutationCreateObservations = useMutation({
-    mutationFn: createObservation,
+  const mutationEditObservations = useMutation({
+    mutationFn: editObservation,
     onSuccess: (data: any) => {
       const observationId: number = data?.data?.data?.id;
       const files: any = getValues().images;
@@ -79,7 +97,7 @@ const ObservationCreateForm: FC<ObservationCreateFormProps> = ({ consultationId,
           });
         }
       } else {
-        toast(<SuccessToast message={`Observaciones registradas con éxito`} hour />, {
+        toast(<SuccessToast message={`Observaciones editadas con éxito`} hour />, {
           style: { borderRadius: '10px' },
         });
         setIsDisabled(false);
@@ -87,7 +105,7 @@ const ObservationCreateForm: FC<ObservationCreateFormProps> = ({ consultationId,
       }
     },
     onError: () => {
-      toast(<ErrorToast message={`Ha ocurrido un error al registrar las observaciones, intente nuevamente`} />, {
+      toast(<ErrorToast message={`Ha ocurrido un error al editar las observaciones, intente nuevamente`} />, {
         style: { borderRadius: '10px' },
       });
       setIsDisabled(false);
@@ -121,7 +139,16 @@ const ObservationCreateForm: FC<ObservationCreateFormProps> = ({ consultationId,
     lowerBelly?: number | null | undefined;
   }) => {
     setIsDisabled(true);
-    if (dataForm.measurements) {
+    if (dataForm.measurements && observationData?.attributes?.measurements?.data?.id) {
+      mutationEditMesurmenets.mutate({
+        measurementsId: Number(observationData?.attributes?.measurements?.data?.id),
+        highWaist: dataForm?.highWaist,
+        mean: dataForm?.mean,
+        navelLine: dataForm?.navelLine,
+        lowerBelly: dataForm?.lowerBelly,
+      });
+    }
+    if (dataForm.measurements && !observationData?.attributes?.measurements?.data?.id) {
       mutationCreateMesurmenets.mutate({
         consultation: Number(consultationId),
         customer: Number(customerId),
@@ -130,11 +157,11 @@ const ObservationCreateForm: FC<ObservationCreateFormProps> = ({ consultationId,
         navelLine: dataForm?.navelLine,
         lowerBelly: dataForm?.lowerBelly,
       });
-    } else {
-      mutationCreateObservations.mutate({
-        consultation: Number(consultationId),
+    }
+    if (dataForm.measurements === false) {
+      mutationEditObservations.mutate({
+        observationId: Number(observationData?.id),
         observationsConsultation: dataForm?.observations || '',
-        measurements: null,
       });
     }
   };
@@ -222,11 +249,11 @@ const ObservationCreateForm: FC<ObservationCreateFormProps> = ({ consultationId,
         </Button>
         <Button variant="success" type="submit" disabled={isDisabled}>
           {isDisabled && <Spinner className="me-1" size="sm" />}
-          <span>Guardar</span>
+          <span>Guardar cambios</span>
         </Button>
       </div>
     </Form>
   );
 };
 
-export default ObservationCreateForm;
+export default ObservationEditForm;
