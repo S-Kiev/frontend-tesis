@@ -1,0 +1,41 @@
+@import 'colors.scss';
+
+.conteiner {
+  margin-bottom: 20px;
+
+  .text {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid $neutral;
+    margin-bottom: 15px;
+  }
+
+  .textFinal {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid $neutral;
+  }
+
+  p {
+    font-size: 18px;
+    height: 20px;
+    color: $text_secondary;
+    margin-left: 10px;
+  }
+
+  strong {
+    font-size: 18px;
+    color: $text_primary;
+  }
+
+  .images {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    flex-wrap: wrap;
+
+    @media (min-width: 768px) {
+      flex-direction: row;
+    }
+  }
+}

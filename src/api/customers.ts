@@ -66,6 +66,15 @@ export const getCustomersPayments = async (customerId: string) => {
   });
 };
 
+export const getCustomersPaymentsByConsultation = async (consultationId: string) => {
+  return await axiosDefaultConfig.get(routes.GET_CUSTOMER_PAYMENT, {
+    params: {
+      'filters[$and][0][consultation][id][$eq]': consultationId,
+      'pagination[pageSize]': 100,
+    },
+  });
+};
+
 export const getCustomersMesurments = async (customerId: string) => {
   return await axiosDefaultConfig.get(routes.GET_MEASUREMENTS_CUSTOMER, {
     params: {

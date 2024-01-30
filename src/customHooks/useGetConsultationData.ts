@@ -5,11 +5,9 @@ import {
   getHistoryConsultingRoomConsultation,
   getHistoryEquipmentConsultation,
 } from 'api/consultation';
-import { consultationGetData } from 'models/Consultation';
+import { ConsultationGetDataView, consultationGetData } from 'models/Consultation';
 
-export const useGetConsultationData = (
-  consultationId: string,
-): { data: consultationGetData; error: any; isLoading: boolean } => {
+export const useGetConsultationData = (consultationId: string): { data: any; error: any; isLoading: boolean } => {
   const { data, error, isLoading } = useQuery({
     queryKey: [QueryKeys.Cosnultation],
     queryFn: () => getConsultation(consultationId),

@@ -129,3 +129,52 @@ export interface consultationGetData {
   until: string;
   createdAt: string;
 }
+
+export interface ConsultationGetDataView {
+  id: number | string;
+  customer: {
+    data: {
+      id: number;
+      attributes: {
+        name: string;
+        lastname: string;
+        document: string;
+        birthdate: string;
+        cellphone: string;
+        email: string;
+        address: string;
+        howDidYouKnow: string;
+        profession: string;
+        reasonFirstVisit: string;
+        createdAt: string;
+        updatedAt: string;
+        publishedAt: string;
+      };
+    };
+  };
+  treatments: { data: TreatmentGetData[] };
+  equipments: EquipmentData[];
+  consultingRooms: any;
+  responsibleUser: {
+    data: {
+      id: number;
+      attributes: {
+        name: string;
+        lastname: string;
+        document: string;
+        cellphone: string;
+        address: string;
+        deactivationDate: string | null;
+        createdAt: string;
+        updatedAt: string;
+        publishedAt: string;
+        userId: number;
+      };
+    };
+  };
+  comments: string;
+  status: ConsultationStatusEnum;
+  since: string;
+  until: string;
+  createdAt: string;
+}

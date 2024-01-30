@@ -1,3 +1,5 @@
+import { PaymentStatusEnum } from './paymentStatus';
+
 interface ConsultationAttributes {
   comments: string;
   createdAt: string;
@@ -43,7 +45,7 @@ interface CustomerData {
 interface RentalAttributes {
   totalCost: number;
   paid: number;
-  paymentStatus: string;
+  paymentStatus: PaymentStatusEnum;
   createdAt: string;
   updatedAt: string;
   publishedAt: string;
