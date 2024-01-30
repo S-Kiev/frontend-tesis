@@ -1,6 +1,6 @@
-import { FC, useMemo, useState } from 'react';
+import { FC, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
-import { Button, Card, Form, OverlayTrigger, Spinner, Tooltip } from 'react-bootstrap';
+import { Alert, Button, Card, Form, OverlayTrigger, Spinner, Tooltip } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import styles from './consultationCreateForm.module.scss';
 import * as yup from 'yup';
@@ -15,7 +15,10 @@ import { useGetCustomers } from 'customHooks/useGetCustomers';
 import { useGetTreatments } from 'customHooks/useGetTreatments';
 import DatePicker from 'react-datepicker';
 import '../../util/styles/datepicker.scss';
-import { BuildingAdd, QuestionCircleFill } from 'react-bootstrap-icons';
+import { BuildingAdd, ExclamationTriangleFill, QuestionCircleFill } from 'react-bootstrap-icons';
+import { createConsultation } from 'api/consultation';
+import { useSelector } from 'react-redux';
+import { selectUser } from 'redux/reducers/userSlice';
 
 interface ConsultationsCreateFormProps {}
 
@@ -23,7 +26,9 @@ const schema = yup.object().shape(consultationSchema);
 
 const ConsultationsCreateForm: FC<ConsultationsCreateFormProps> = () => {
   const [isDisabled, setIsDisabled] = useState<boolean>(false);
+  const [alert, setAlert] = useState<{ alert: boolean; message: string }>({ alert: false, message: '' });
   const [treatments, setTreatments] = useState<any>();
+  const user = useSelector(selectUser);
   const { data: dataCustomers, isLoading: isLoadingCustomers } = useGetCustomers();
   const {
     data: dataTreatments,
@@ -37,7 +42,6 @@ const ConsultationsCreateForm: FC<ConsultationsCreateFormProps> = () => {
     handleSubmit,
     formState: { errors, isValid },
     control,
-    getValues,
     watch,
   } = useForm({
     criteriaMode: 'all',
@@ -64,45 +68,63 @@ const ConsultationsCreateForm: FC<ConsultationsCreateFormProps> = () => {
     return field ? new Date(Date.parse(field)) : null;
   };
 
-  /*const mutationUser = useMutation({
-    mutationFn: createUser,
-    onSuccess: (data: any) => {
-      const userId: number = data.data.id;
-      const userData: any = getValues();
-      mutationUserData.mutate({
-        name: userData.name,
-        lastname: userData.lastname,
-        document: userData.document,
-        cellphone: userData.cellphone.slice(1, -1),
-        city: userData.city,
-        address: userData.address,
-        userId: userId,
+  const mutationCreateConsultation = useMutation({
+    mutationFn: createConsultation,
+    onSuccess: () => {
+      toast(<SuccessToast message={`Consulta registrada con éxito`} hour />, {
+        style: { borderRadius: '10px' },
       });
+      setIsDisabled(false);
+      navigate(`/app/consultations`);
     },
-    onError: () => {
-      toast(<ErrorToast message={`Ha ocurrido un error al registrar el usuario, intente nuevamente`} />, {
+    onError: (data: any) => {
+      let equipments = data?.response?.data?.equipments;
+      let consultigsRooms = data?.response?.data?.consultingRooms;
+      if (data?.response?.data?.message === 'La fechas no estan en el formato correcto') {
+        setAlert({
+          alert: true,
+          message:
+            'Revise las fechas. La fecha y hora de comienzo no puede ser mayor a la fecha y hora de finalización',
+        });
+      }
+      if (data?.response?.data?.message === 'Ya hay una consulta agendada en ese rango horario') {
+        setAlert({
+          alert: true,
+          message: 'Ya tiene una consulta agendada en ese rango horario, por favor pruebe con otra hora o día',
+        });
+      }
+      if (data?.response?.data?.message === 'Algunos equipos y salas de consulta están ocupados') {
+        setAlert({
+          alert: true,
+          message: `Los equipos ${equipments?.map(equipment => {
+            return `${equipment.name} con id ${equipment.id},`;
+          })} y los consultorios ${consultigsRooms?.map(cr => {
+            return `${cr.name} con id ${cr.id},`;
+          })} estan ocupados, por favor reserve otros o pruebe a diferente hora`,
+        });
+      }
+      if (data?.response?.data?.message === 'Algunos equipos están ocupados') {
+        setAlert({
+          alert: true,
+          message: `Los equipos ${equipments?.map(equipment => {
+            return `${equipment.name} con id ${equipment.id},`;
+          })} estan ocupados, por favor reserve otros o pruebe a diferente hora`,
+        });
+      }
+      if (data?.response?.data?.message === 'Algunas salas de consulta están ocupadas') {
+        setAlert({
+          alert: true,
+          message: `Los consultorios ${consultigsRooms?.map(cr => {
+            return `${cr.name} con id ${cr.id},`;
+          })} estan ocupados, por favor reserve otros o pruebe a diferente hora`,
+        });
+      }
+      toast(<ErrorToast message={`Ha ocurrido un error al registrar la consulta, intente nuevamente`} />, {
         style: { borderRadius: '10px' },
       });
       setIsDisabled(false);
     },
   });
-
-  const mutationUserData = useMutation({
-    mutationFn: createUserData,
-    onSuccess: () => {
-      toast(<SuccessToast message={`Usuario registrado con éxito`} hour />, {
-        style: { borderRadius: '10px' },
-      });
-      setIsDisabled(false);
-      navigate(`/app/users`);
-    },
-    onError: () => {
-      toast(<ErrorToast message={`Ha ocurrido un error al registrar el usuario, intente nuevamente`} />, {
-        style: { borderRadius: '10px' },
-      });
-      setIsDisabled(false);
-    },
-  });*/
 
   const onSubmit = async (dataForm: {
     customer: number;
@@ -120,18 +142,78 @@ const ConsultationsCreateForm: FC<ConsultationsCreateFormProps> = () => {
     dateUntilConsultingRoomThree?: string;
   }) => {
     setIsDisabled(true);
-    //Falta mutacion para crear y errores post envio
-    /*mutationUser.mutate({
-      username: dataForm.username,
-      email: dataForm.email,
-      password: dataForm.password,
-      role: 4,
-      confirmed: true,
-    });*/
+    let consultingsRooms;
+    if (dataForm.consultingRooms.length === 1) {
+      consultingsRooms = [
+        {
+          id: Number(dataForm.consultingRooms[0]?.value),
+          dateSince: new Date(dataForm.dateSinceConsultation).toISOString(),
+          dateUntil: new Date(dataForm.dateUntilConsultation).toISOString(),
+        },
+      ];
+    }
+    if (dataForm.consultingRooms.length === 2) {
+      consultingsRooms = [
+        {
+          id: Number(dataForm.consultingRooms[0]?.value),
+          dateSince: new Date(dataForm?.dateSinceConsultingRoomOne || '').toISOString(),
+          dateUntil: new Date(dataForm?.dateUntilConsultingRoomOne || '').toISOString(),
+        },
+        {
+          id: Number(dataForm.consultingRooms[1]?.value),
+          dateSince: new Date(dataForm?.dateSinceConsultingRoomTwo || '').toISOString(),
+          dateUntil: new Date(dataForm?.dateUntilConsultingRoomTwo || '').toISOString(),
+        },
+      ];
+    }
+    if (dataForm.consultingRooms.length === 3) {
+      consultingsRooms = [
+        {
+          id: Number(dataForm.consultingRooms[0]?.value),
+          dateSince: new Date(dataForm?.dateSinceConsultingRoomOne || '').toISOString(),
+          dateUntil: new Date(dataForm?.dateUntilConsultingRoomOne || '').toISOString(),
+        },
+        {
+          id: Number(dataForm.consultingRooms[1]?.value),
+          dateSince: new Date(dataForm?.dateSinceConsultingRoomTwo || '').toISOString(),
+          dateUntil: new Date(dataForm?.dateUntilConsultingRoomTwo || '').toISOString(),
+        },
+        {
+          id: Number(dataForm.consultingRooms[2]?.value),
+          dateSince: new Date(dataForm?.dateSinceConsultingRoomThree || '').toISOString(),
+          dateUntil: new Date(dataForm?.dateUntilConsultingRoomThree || '').toISOString(),
+        },
+      ];
+    }
+    if (user) {
+      mutationCreateConsultation.mutate({
+        responsibleUserId: 7,
+        customerId: dataForm.customer,
+        dateSince: new Date(dataForm?.dateSinceConsultation || '').toISOString(),
+        dateUntil: new Date(dataForm?.dateUntilConsultation || '').toISOString(),
+        treatments:
+          dataForm?.treatments?.map(traetment => {
+            return Number(traetment?.value);
+          }) || [],
+        equitments:
+          dataForm?.equipments?.map(equipment => {
+            return Number(equipment?.value);
+          }) || [],
+        consultingsRooms: consultingsRooms,
+        comments: dataForm.comments || '',
+      });
+    }
   };
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
+      {alert.alert && (
+        <Alert variant="danger" className="mt-2">
+          <div className="d-flex align-items-center">
+            <ExclamationTriangleFill className="me-3" size={70} /> {alert.message}
+          </div>
+        </Alert>
+      )}
       <Form.Group className="form-outline mb-4">
         <Form.Label>
           Cliente <strong className="text-danger me-2">*</strong>
@@ -376,7 +458,7 @@ const ConsultationsCreateForm: FC<ConsultationsCreateFormProps> = () => {
           <Card className="mb-4">
             <Card.Header className="d-flex align-items-center">
               <BuildingAdd size={20} className="me-2" />
-              <h4>{`Consultorio: ${watch('consultingRooms')[0].label}`}</h4>
+              <h4>{`Consultorio: ${watch('consultingRooms')[0]?.label || '---'}`}</h4>
             </Card.Header>
             <Card.Body>
               <>
@@ -398,6 +480,7 @@ const ConsultationsCreateForm: FC<ConsultationsCreateFormProps> = () => {
                         selected={dateParse(field?.value)}
                         onChange={date => field.onChange(date)}
                         minDate={new Date(watch('dateSinceConsultation'))}
+                        maxDate={new Date(watch('dateUntilConsultation'))}
                         minTime={new Date(watch('dateSinceConsultation'))}
                         maxTime={new Date(watch('dateUntilConsultation'))}
                         wrapperClassName={
@@ -432,6 +515,7 @@ const ConsultationsCreateForm: FC<ConsultationsCreateFormProps> = () => {
                         selected={dateParse(field?.value)}
                         onChange={date => field.onChange(date)}
                         minDate={new Date(watch('dateSinceConsultation'))}
+                        maxDate={new Date(watch('dateUntilConsultation'))}
                         minTime={new Date(watch('dateSinceConsultation'))}
                         maxTime={new Date(watch('dateUntilConsultation'))}
                         wrapperClassName={
@@ -455,7 +539,7 @@ const ConsultationsCreateForm: FC<ConsultationsCreateFormProps> = () => {
           <Card className="mb-4">
             <Card.Header className="d-flex align-items-center">
               <BuildingAdd size={20} className="me-2" />
-              <h4>{`Consultorio: ${watch('consultingRooms')[1].label}`}</h4>
+              <h4>{`Consultorio: ${watch('consultingRooms')[1]?.label || '---'}`}</h4>
             </Card.Header>
             <Card.Body>
               <Form.Group className="form-outline mb-4">
@@ -476,6 +560,7 @@ const ConsultationsCreateForm: FC<ConsultationsCreateFormProps> = () => {
                       selected={dateParse(field?.value)}
                       onChange={date => field.onChange(date)}
                       minDate={new Date(watch('dateSinceConsultation'))}
+                      maxDate={new Date(watch('dateUntilConsultation'))}
                       minTime={new Date(watch('dateSinceConsultation'))}
                       maxTime={new Date(watch('dateUntilConsultation'))}
                       wrapperClassName={
@@ -510,6 +595,7 @@ const ConsultationsCreateForm: FC<ConsultationsCreateFormProps> = () => {
                       selected={dateParse(field?.value)}
                       onChange={date => field.onChange(date)}
                       minDate={new Date(watch('dateSinceConsultation'))}
+                      maxDate={new Date(watch('dateUntilConsultation'))}
                       minTime={new Date(watch('dateSinceConsultation'))}
                       maxTime={new Date(watch('dateUntilConsultation'))}
                       wrapperClassName={
@@ -535,7 +621,7 @@ const ConsultationsCreateForm: FC<ConsultationsCreateFormProps> = () => {
           <Card className="mb-4">
             <Card.Header className="d-flex align-items-center">
               <BuildingAdd size={20} className="me-2" />
-              <h4>{`Consultorio: ${watch('consultingRooms')[2].label}`}</h4>
+              <h4>{`Consultorio: ${watch('consultingRooms')[2]?.label || '---'}`}</h4>
             </Card.Header>
             <Card.Body>
               <Form.Group className="form-outline mb-4">
@@ -556,6 +642,7 @@ const ConsultationsCreateForm: FC<ConsultationsCreateFormProps> = () => {
                       selected={dateParse(field?.value)}
                       onChange={date => field.onChange(date)}
                       minDate={new Date(watch('dateSinceConsultation'))}
+                      maxDate={new Date(watch('dateUntilConsultation'))}
                       minTime={new Date(watch('dateSinceConsultation'))}
                       maxTime={new Date(watch('dateUntilConsultation'))}
                       wrapperClassName={
@@ -590,6 +677,7 @@ const ConsultationsCreateForm: FC<ConsultationsCreateFormProps> = () => {
                       selected={dateParse(field?.value)}
                       onChange={date => field.onChange(date)}
                       minDate={new Date(watch('dateSinceConsultation'))}
+                      maxDate={new Date(watch('dateUntilConsultation'))}
                       minTime={new Date(watch('dateSinceConsultation'))}
                       maxTime={new Date(watch('dateUntilConsultation'))}
                       wrapperClassName={

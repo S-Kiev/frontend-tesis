@@ -1,3 +1,4 @@
+import { number } from 'yup';
 import { ConsultationStatusEnum } from './ConsultationStatus';
 
 export interface ConsultationData {
@@ -50,4 +51,15 @@ export interface ConsultationData {
       };
     };
   };
+}
+
+export interface consultationCreate {
+  responsibleUserId: number;
+  customerId: number;
+  dateSince: string;
+  dateUntil: string;
+  treatments: number[];
+  equitments: number[];
+  consultingsRooms: { id: number; dateSince: string; dateUntil: string }[];
+  comments: string;
 }
