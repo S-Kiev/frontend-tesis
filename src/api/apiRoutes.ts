@@ -52,4 +52,6 @@ export const routes = {
   GET_CUSTOMER_PAYMENT: 'customer-payments?populate[consultation][populate][0]=id&populate[customer][populate][0]=id',
   GET_MEASUREMENTS_CUSTOMER:
     'measurements-customers?populate[consultation][populate][0]=id&populate[customer][populate][0]=id',
+  GET_HISTORY_CONSULTINGROOM_BY_CONSULTATION:
+    'consulting-room-histories?populate[consultation][populate][0]=id&populate[consulting_room][populate][0]=id&$sort=since:desc',
 };

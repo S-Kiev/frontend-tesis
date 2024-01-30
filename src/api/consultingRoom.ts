@@ -73,3 +73,12 @@ export const createConsultingRoomHistory = async (register: {
     },
   });
 };
+
+export const getConsultingRoomsHistoryByConsultation = async (consultationId: string) => {
+  return await axiosDefaultConfig.get(routes.GET_HISTORY_CONSULTINGROOM_BY_CONSULTATION, {
+    params: {
+      'filters[$and][0][consultation][id][$eq]': consultationId,
+      'pagination[pageSize]': 100,
+    },
+  });
+};
