@@ -1,13 +1,16 @@
 import { FC } from 'react';
 import { ChevronLeft } from 'react-bootstrap-icons';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import styles from './ObservationCreate.module.scss';
+import ObservationCreateForm from 'components/ObservationCreateForm/ObservationCreateForm';
+import { useGetConsultationData } from 'customHooks/useGetConsultationData';
 
 interface ObservationCreateProps {}
 
 const ObservationCreate: FC<ObservationCreateProps> = () => {
   const navigate = useNavigate();
-
+  const { id } = useParams();
+  const { data } = useGetConsultationData(id || '');
   return (
     <div className={styles.container}>
       <div className={styles.header}>
@@ -25,7 +28,9 @@ const ObservationCreate: FC<ObservationCreateProps> = () => {
           </div>
         </div>
       </div>
-      <div className={styles.form}>{/*<TreatmentsCreateForm />*/}</div>
+      <div className={styles.form}>
+        {<ObservationCreateForm consultationId={id || ''} customerId={data?.customer?.data?.id || ''} />}
+      </div>
     </div>
   );
 };

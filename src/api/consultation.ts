@@ -2,6 +2,7 @@ import { consultationCreate, consultationEdit } from 'models/Consultation';
 import { routes } from './apiRoutes';
 import { axiosDefaultConfig } from './axiosConfig';
 import { defaultPageSize } from './paginationConfig';
+import { MeasurementsCreate, ObservationCreate } from 'models/Observations';
 
 export const getConsultations = async (page: number, search: string) => {
   return await axiosDefaultConfig.get(routes.GET_CONSULTATIONS, {
@@ -85,5 +86,17 @@ export const getConsultationsInfoByConsultation = async (consultationId: string)
 export const cancelConsultation = async (consultationId: number | string) => {
   return await axiosDefaultConfig.put(routes.PUT_CANCEL_CONSULTATION, {
     consultationId: consultationId,
+  });
+};
+
+export const createObservation = async (observation: ObservationCreate) => {
+  return await axiosDefaultConfig.post(routes.POST_OBSERVATION, {
+    data: observation,
+  });
+};
+
+export const createMeasurements = async (measurements: MeasurementsCreate) => {
+  return await axiosDefaultConfig.post(routes.POST_MEASUREMENTS, {
+    data: measurements,
   });
 };
