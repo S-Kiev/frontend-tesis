@@ -67,7 +67,20 @@ export interface consultationCreate {
   comments: string;
 }
 
+export interface consultationEdit {
+  consultationId: number;
+  responsibleUserId: number;
+  customerId: number;
+  dateSince: string;
+  dateUntil: string;
+  treatments: number[];
+  equitments: number[];
+  consultingsRooms: { id: number; dateSince: string; dateUntil: string }[];
+  comments: string;
+}
+
 export interface consultationGetData {
+  id: number | string;
   customer: {
     data: {
       id: number;
@@ -88,9 +101,9 @@ export interface consultationGetData {
       };
     };
   };
-  treatments: TreatmentGetData[];
-  equipments: EquipmentData[];
-  consultingRooms: ConsultingRoomData[];
+  treatments: { data: TreatmentGetData[] };
+  equipments: { data: EquipmentData[] };
+  consultingRooms: { data: ConsultingRoomData[] };
   responsibleUser: {
     data: {
       id: number;

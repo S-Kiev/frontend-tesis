@@ -23,7 +23,7 @@ export const useGetTreatments = (
     let filterTreatments: any[] = [];
     if (treatments) {
       treatments.map(item => {
-        const filterTreatmentAdd = data?.data?.data?.filter(treatment => treatment?.id === Number(item.value));
+        const filterTreatmentAdd = data?.data?.data?.filter(treatment => treatment?.id === Number(item?.value));
         filterTreatments = filterTreatments.concat(filterTreatmentAdd);
       });
     }
@@ -34,24 +34,24 @@ export const useGetTreatments = (
     let arrayEquipments: any[] = [];
     let filterTreatments: any[] = getFilterTreatments();
     if (filterTreatments) {
-      filterTreatments.map(equipment => {
+      filterTreatments?.map(equipment => {
         arrayEquipments = arrayEquipments.concat(parseEquipments(equipment?.attributes?.equipments?.data));
       });
     }
-    return deleteDuplicate(arrayEquipments, 'value');
+    return arrayEquipments ? deleteDuplicate(arrayEquipments, 'value') : [];
   };
 
   const getConsultingsRooms = () => {
     let arrayConsultingsRooms: any[] = [];
     let filterTreatments: any[] = getFilterTreatments();
     if (filterTreatments) {
-      filterTreatments.map(consultingRoom => {
+      filterTreatments?.map(consultingRoom => {
         arrayConsultingsRooms = arrayConsultingsRooms.concat(
           parseEquipments(consultingRoom?.attributes?.consultingRooms?.data),
         );
       });
     }
-    return deleteDuplicate(arrayConsultingsRooms, 'value');
+    return arrayConsultingsRooms ? deleteDuplicate(arrayConsultingsRooms, 'value') : [];
   };
 
   return {

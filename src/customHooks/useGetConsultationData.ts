@@ -41,6 +41,7 @@ export const useGetConsultationData = (
       return item?.attributes?.consulting_room?.data;
     });
     return {
+      id: data?.data?.data?.id,
       customer: data?.data?.data?.attributes?.customer,
       treatments: data?.data?.data?.attributes?.treatments,
       equipments: equipments,

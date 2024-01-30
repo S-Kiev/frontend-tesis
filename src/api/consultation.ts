@@ -1,4 +1,4 @@
-import { consultationCreate } from 'models/Consultation';
+import { consultationCreate, consultationEdit } from 'models/Consultation';
 import { routes } from './apiRoutes';
 import { axiosDefaultConfig } from './axiosConfig';
 import { defaultPageSize } from './paginationConfig';
@@ -45,5 +45,21 @@ export const getHistoryConsultingRoomConsultation = async (consultationId: strin
     params: {
       'filters[$and][0][consultation][id][$eq]': consultationId,
     },
+  });
+};
+
+export const editConsultation = async (consultation: consultationEdit) => {
+  return await axiosDefaultConfig.put(routes.PUT_CONSULTATION, {
+    consultationId: consultation.consultationId,
+    responsibleUserId: consultation.responsibleUserId,
+    customerId: consultation.customerId,
+    dateSince: consultation.dateSince,
+    dateUntil: consultation.dateUntil,
+    treatments: consultation.treatments,
+    equitments: consultation.equitments,
+    consultingsRooms: consultation.consultingsRooms,
+    comments: consultation.comments,
+    notifyCustomer: true,
+    notifyUser: true,
   });
 };
