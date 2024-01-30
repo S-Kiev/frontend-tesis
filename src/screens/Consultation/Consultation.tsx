@@ -9,12 +9,16 @@ import { ChevronLeft, CloudLightningRain, PencilSquare, SlashCircle } from 'reac
 import { Button } from 'react-bootstrap';
 import { Role } from 'models/Roles';
 import ConsultationCard from 'components/consultationCard/consultationCard';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { QueryKeys } from 'api/QueryKeys';
 import { getConsultingRoomsHistoryByConsultation } from 'api/consultingRoom';
 import { ConsultationStatusEnum } from 'models/ConsultationStatus';
-import { getConsultationsInfoByConsultation } from 'api/consultation';
-import { getCustomersPayments, getCustomersPaymentsByConsultation } from 'api/customers';
+import { cancelConsultation, getConsultationsInfoByConsultation } from 'api/consultation';
+import { getCustomersPaymentsByConsultation } from 'api/customers';
+import { toast } from 'react-toastify';
+import SuccessToast from 'components/toast/successToast';
+import ErrorToast from 'components/toast/errorToast';
+import { AlertModal } from 'components/modals/alertModal';
 
 interface ConsultationProps {}
 
@@ -24,6 +28,8 @@ const Consultation: FC<ConsultationProps> = () => {
   const { id } = useParams();
   const user = useSelector(selectUser);
   const { data, isLoading, error } = useGetConsultationData(id || '');
+  const [isDisabled, setIsDisabled] = useState<boolean>(false);
+  const queryClient = useQueryClient();
 
   const {
     data: historyConsultingRoomData,
@@ -50,6 +56,27 @@ const Consultation: FC<ConsultationProps> = () => {
   } = useQuery({
     queryKey: [QueryKeys.CustomersPaymentsByConsultation, id],
     queryFn: () => getCustomersPaymentsByConsultation(id || ''),
+  });
+
+  const cancelConsultationMutation = useMutation({
+    mutationFn: cancelConsultation,
+    mutationKey: [QueryKeys.CancelConsultation, id],
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [QueryKeys.Cosnultation, id],
+      });
+      toast(<SuccessToast message={`Consulta cancelada con éxito`} hour />, {
+        style: { borderRadius: '10px' },
+      });
+      setIsDisabled(false);
+      setShowModalCancel(false);
+    },
+    onError: () => {
+      toast(<ErrorToast message={`Ha ocurrido un error al cancelar la consulta, intente nuevamente`} />, {
+        style: { borderRadius: '10px' },
+      });
+      setIsDisabled(false);
+    },
   });
 
   return (
@@ -143,6 +170,23 @@ const Consultation: FC<ConsultationProps> = () => {
                   </>
                 }
               </div>
+              {
+                <AlertModal
+                  show={showModalCancel}
+                  showModal={setShowModalCancel}
+                  title={'Cancelar consulta'}
+                  body={
+                    <>
+                      ¿Está seguro que quiere <strong>cancelar</strong> esta consulta?
+                    </>
+                  }
+                  confirmBtn="Confirmar"
+                  cancelBtn="Cancelar"
+                  onAction={() => cancelConsultationMutation.mutate(id || '')}
+                  isDisabled={isDisabled}
+                  setIsDisabled={setIsDisabled}
+                />
+              }
             </>
           )}
         </>

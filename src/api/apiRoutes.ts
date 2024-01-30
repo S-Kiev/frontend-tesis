@@ -56,4 +56,5 @@ export const routes = {
     'consulting-room-histories?populate[consultation][populate][0]=id&populate[consulting_room][populate][0]=id&$sort=since:desc',
   GET_CONSULTATION_INFO:
     'consultation-informations?populate[consultation][populate][0]=id&populate[images][populate][0]=id&populate[measurements][populate][0]=id',
+  PUT_CANCEL_CONSULTATION: 'consultation/simlpleCancelConsultation',
 };
