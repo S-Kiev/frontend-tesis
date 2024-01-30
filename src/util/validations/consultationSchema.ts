@@ -42,10 +42,22 @@ export const consultationSchema = {
   dateSinceConsultation: yup.string().required(REQUIREDMESSAGE),
   dateUntilConsultation: yup.string().required(REQUIREDMESSAGE),
   comments: yup.string().trim().max(500, MAX500),
-  dateSinceConsultingRoomOne: yup.string(),
-  dateUntilConsultingRoomOne: yup.string(),
-  dateSinceConsultingRoomTwo: yup.string(),
-  dateUntilConsultingRoomTwo: yup.string(),
-  dateSinceConsultingRoomThree: yup.string(),
-  dateUntilConsultingRoomThree: yup.string(),
+  dateSinceConsultingRoomOne: yup.string().when('consultingRooms', ([consultingRooms], schema) => {
+    return consultingRooms.length > 1 ? schema.required(REQUIREDMESSAGE) : schema;
+  }),
+  dateUntilConsultingRoomOne: yup.string().when('consultingRooms', ([consultingRooms], schema) => {
+    return consultingRooms.length > 1 ? schema.required(REQUIREDMESSAGE) : schema;
+  }),
+  dateSinceConsultingRoomTwo: yup.string().when('consultingRooms', ([consultingRooms], schema) => {
+    return consultingRooms.length > 1 ? schema.required(REQUIREDMESSAGE) : schema;
+  }),
+  dateUntilConsultingRoomTwo: yup.string().when('consultingRooms', ([consultingRooms], schema) => {
+    return consultingRooms.length > 1 ? schema.required(REQUIREDMESSAGE) : schema;
+  }),
+  dateSinceConsultingRoomThree: yup.string().when('consultingRooms', ([consultingRooms], schema) => {
+    return consultingRooms.length > 2 ? schema.required(REQUIREDMESSAGE) : schema;
+  }),
+  dateUntilConsultingRoomThree: yup.string().when('consultingRooms', ([consultingRooms], schema) => {
+    return consultingRooms.length > 2 ? schema.required(REQUIREDMESSAGE) : schema;
+  }),
 };

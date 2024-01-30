@@ -234,7 +234,12 @@ const ConsultationsCreateForm: FC<ConsultationsCreateFormProps> = () => {
               selected={dateParse(field?.value)}
               onChange={date => field.onChange(date)}
               minDate={new Date()}
-              minTime={new Date()}
+              minTime={
+                new Date(watch('dateSinceConsultation')).getDay() === new Date().getDay() &&
+                new Date(watch('dateSinceConsultation')).getMonth() === new Date().getMonth()
+                  ? new Date()
+                  : new Date(0, 0, 0)
+              }
               maxTime={new Date(0, 0, 0, 23, 30)}
               wrapperClassName={errors.dateSinceConsultation?.message ? styles.datepickerError : styles.datepicker}
             />
@@ -266,7 +271,12 @@ const ConsultationsCreateForm: FC<ConsultationsCreateFormProps> = () => {
               selected={dateParse(field?.value)}
               onChange={date => field.onChange(date)}
               minDate={new Date()}
-              minTime={new Date()}
+              minTime={
+                new Date(watch('dateSinceConsultation')).getDay() === new Date().getDay() &&
+                new Date(watch('dateSinceConsultation')).getMonth() === new Date().getMonth()
+                  ? new Date()
+                  : new Date(0, 0, 0)
+              }
               maxTime={new Date(0, 0, 0, 23, 30)}
               wrapperClassName={errors.dateUntilConsultation?.message ? styles.datepickerError : styles.datepicker}
             />
@@ -387,9 +397,9 @@ const ConsultationsCreateForm: FC<ConsultationsCreateFormProps> = () => {
                         locale="es"
                         selected={dateParse(field?.value)}
                         onChange={date => field.onChange(date)}
-                        minDate={new Date()}
-                        minTime={new Date()}
-                        maxTime={new Date(0, 0, 0, 23, 30)}
+                        minDate={new Date(watch('dateSinceConsultation'))}
+                        minTime={new Date(watch('dateSinceConsultation'))}
+                        maxTime={new Date(watch('dateUntilConsultation'))}
                         wrapperClassName={
                           errors.dateSinceConsultingRoomOne?.message ? styles.datepickerError : styles.datepicker
                         }
@@ -421,9 +431,9 @@ const ConsultationsCreateForm: FC<ConsultationsCreateFormProps> = () => {
                         locale="es"
                         selected={dateParse(field?.value)}
                         onChange={date => field.onChange(date)}
-                        minDate={new Date()}
-                        minTime={new Date()}
-                        maxTime={new Date(0, 0, 0, 23, 30)}
+                        minDate={new Date(watch('dateSinceConsultation'))}
+                        minTime={new Date(watch('dateSinceConsultation'))}
+                        maxTime={new Date(watch('dateUntilConsultation'))}
                         wrapperClassName={
                           errors.dateUntilConsultingRoomOne?.message ? styles.datepickerError : styles.datepicker
                         }
@@ -465,9 +475,9 @@ const ConsultationsCreateForm: FC<ConsultationsCreateFormProps> = () => {
                       locale="es"
                       selected={dateParse(field?.value)}
                       onChange={date => field.onChange(date)}
-                      minDate={new Date()}
-                      minTime={new Date()}
-                      maxTime={new Date(0, 0, 0, 23, 30)}
+                      minDate={new Date(watch('dateSinceConsultation'))}
+                      minTime={new Date(watch('dateSinceConsultation'))}
+                      maxTime={new Date(watch('dateUntilConsultation'))}
                       wrapperClassName={
                         errors.dateSinceConsultingRoomTwo?.message ? styles.datepickerError : styles.datepicker
                       }
@@ -499,9 +509,9 @@ const ConsultationsCreateForm: FC<ConsultationsCreateFormProps> = () => {
                       locale="es"
                       selected={dateParse(field?.value)}
                       onChange={date => field.onChange(date)}
-                      minDate={new Date()}
-                      minTime={new Date()}
-                      maxTime={new Date(0, 0, 0, 23, 30)}
+                      minDate={new Date(watch('dateSinceConsultation'))}
+                      minTime={new Date(watch('dateSinceConsultation'))}
+                      maxTime={new Date(watch('dateUntilConsultation'))}
                       wrapperClassName={
                         errors.dateUntilConsultingRoomTwo?.message ? styles.datepickerError : styles.datepicker
                       }
@@ -545,9 +555,9 @@ const ConsultationsCreateForm: FC<ConsultationsCreateFormProps> = () => {
                       locale="es"
                       selected={dateParse(field?.value)}
                       onChange={date => field.onChange(date)}
-                      minDate={new Date()}
-                      minTime={new Date()}
-                      maxTime={new Date(0, 0, 0, 23, 30)}
+                      minDate={new Date(watch('dateSinceConsultation'))}
+                      minTime={new Date(watch('dateSinceConsultation'))}
+                      maxTime={new Date(watch('dateUntilConsultation'))}
                       wrapperClassName={
                         errors.dateSinceConsultingRoomThree?.message ? styles.datepickerError : styles.datepicker
                       }
@@ -579,9 +589,9 @@ const ConsultationsCreateForm: FC<ConsultationsCreateFormProps> = () => {
                       locale="es"
                       selected={dateParse(field?.value)}
                       onChange={date => field.onChange(date)}
-                      minDate={new Date()}
-                      minTime={new Date()}
-                      maxTime={new Date(0, 0, 0, 23, 30)}
+                      minDate={new Date(watch('dateSinceConsultation'))}
+                      minTime={new Date(watch('dateSinceConsultation'))}
+                      maxTime={new Date(watch('dateUntilConsultation'))}
                       wrapperClassName={
                         errors.dateUntilConsultingRoomThree?.message ? styles.datepickerError : styles.datepicker
                       }
