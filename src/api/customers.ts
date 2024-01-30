@@ -56,3 +56,12 @@ export const editCustomerMedicalInfo = async (medicalInfo: CustomerMedicalInfoEd
     },
   );
 };
+
+export const getCustomersPayments = async (customerId: string) => {
+  return await axiosDefaultConfig.get(routes.GET_CUSTOMER_PAYMENT, {
+    params: {
+      'filters[$and][0][customer][id][$eq]': customerId,
+      'pagination[pageSize]': 100,
+    },
+  });
+};
