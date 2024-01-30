@@ -10,6 +10,7 @@ import { QueryKeys } from 'api/QueryKeys';
 import { getConsultationsByCustomer } from 'api/consultation';
 import { getCustomersPayments } from 'api/customers';
 import { parseCustumerHistoryData } from 'util/parseCustumerHistoryData';
+import CustomerHistoryTable from 'components/customerHistoryTable/customerHistoryTable';
 
 interface CustomerHistoryProps {}
 
@@ -70,7 +71,7 @@ const CustomerHistory: FC<CustomerHistoryProps> = () => {
       ) : null}
       {!isLoading && !error && !isLoadingPayments && !errorPayments && data && data?.data?.data.length !== 0 ? (
         <>
-          {/*<ConsultingRoomtHistoryTable data={data?.data?.data} />*/}
+          {<CustomerHistoryTable data={parseCustumerHistoryData(data?.data?.data, dataPayments?.data?.data)} />}
           {data?.data?.meta?.pagination?.total > defaultPageSize && (
             <div className="d-flex justify-content-center mt-4">
               <PaginationComponent

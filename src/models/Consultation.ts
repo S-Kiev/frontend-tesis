@@ -17,6 +17,7 @@ export interface ConsultationData {
     until: string;
     notifyCustomer: boolean;
     notifyUser: boolean;
+    treatments: { data: TreatmentGetData[] };
     customer: {
       data: {
         id: number;
