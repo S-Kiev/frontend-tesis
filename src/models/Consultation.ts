@@ -11,11 +11,13 @@ export interface ConsultationData {
     createdAt: string;
     updatedAt: string;
     publishedAt: string;
+    customerPayment?: any;
     status: ConsultationStatusEnum;
     since: string;
     until: string;
     notifyCustomer: boolean;
     notifyUser: boolean;
+    treatments: { data: TreatmentGetData[] };
     customer: {
       data: {
         id: number;

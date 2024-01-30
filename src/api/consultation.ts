@@ -15,6 +15,16 @@ export const getConsultations = async (page: number, search: string) => {
   });
 };
 
+export const getConsultationsByCustomer = async (page: number, customerId: string) => {
+  return await axiosDefaultConfig.get(routes.GET_CONSULTATIONS, {
+    params: {
+      'filters[$and][0][customer][id][$eq]': customerId,
+      'pagination[page]': page,
+      'pagination[pageSize]': defaultPageSize,
+    },
+  });
+};
+
 export const createConsultation = async (consultation: consultationCreate) => {
   return await axiosDefaultConfig.post(routes.POST_CONSULTATION, {
     responsibleUserId: consultation.responsibleUserId,
