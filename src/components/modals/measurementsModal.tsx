@@ -2,8 +2,8 @@ import TableHeader from 'components/tableHeader/tableHeader';
 import { format } from 'date-fns';
 import { CustomerMeasurementsData } from 'models/CustomerMeasurements';
 import { FC } from 'react';
-import { Table } from 'react-bootstrap';
-import { Rulers } from 'react-bootstrap-icons';
+import { Alert, Table } from 'react-bootstrap';
+import { ExclamationTriangleFill, Rulers } from 'react-bootstrap-icons';
 import Modal from 'react-bootstrap/Modal';
 
 interface MeasurementsModalProps {
@@ -29,34 +29,42 @@ export const MeasurementsModal: FC<MeasurementsModalProps> = ({ show, showModal,
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Table responsive="md">
-            <TableHeader headersList={headersList} />
-            <tbody>
-              {customerMesurements.map(element => (
-                <tr>
-                  <td>
-                    <p>{`${
-                      element?.attributes?.consultation?.data?.attributes?.since
-                        ? format(new Date(element?.attributes?.consultation?.data?.attributes?.since), 'dd-MM-yyyy')
-                        : '---'
-                    }`}</p>
-                  </td>
-                  <td>
-                    <p>{element?.attributes?.highWaist}</p>
-                  </td>
-                  <td>
-                    <p>{element?.attributes?.mean}</p>
-                  </td>
-                  <td>
-                    <p>{element?.attributes?.navelLine}</p>
-                  </td>
-                  <td>
-                    <p>{element?.attributes?.lowerBelly}</p>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
+          {customerMesurements?.length === 0 ? (
+            <Alert variant="warning" className="mt-2">
+              <div className="d-flex align-items-center">
+                <ExclamationTriangleFill className="me-2" /> Este cliente no tiene medidas registradas
+              </div>
+            </Alert>
+          ) : (
+            <Table responsive="md">
+              <TableHeader headersList={headersList} />
+              <tbody>
+                {customerMesurements?.map(element => (
+                  <tr>
+                    <td>
+                      <p>{`${
+                        element?.attributes?.consultation?.data?.attributes?.since
+                          ? format(new Date(element?.attributes?.consultation?.data?.attributes?.since), 'dd-MM-yyyy')
+                          : '---'
+                      }`}</p>
+                    </td>
+                    <td>
+                      <p>{element?.attributes?.highWaist}</p>
+                    </td>
+                    <td>
+                      <p>{element?.attributes?.mean}</p>
+                    </td>
+                    <td>
+                      <p>{element?.attributes?.navelLine}</p>
+                    </td>
+                    <td>
+                      <p>{element?.attributes?.lowerBelly}</p>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          )}
         </Modal.Body>
       </Modal>
     </>
