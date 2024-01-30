@@ -1,7 +1,7 @@
 import { FC, useState } from 'react';
 import styles from './treatmentsTable.module.scss';
 import { useNavigate } from 'react-router-dom';
-import { ThreeDotsVertical, Eye, PencilSquare, Trash3, SlashCircle } from 'react-bootstrap-icons';
+import { ThreeDotsVertical, Eye, PencilSquare, SlashCircle } from 'react-bootstrap-icons';
 import Tooltip from 'components/Popup/tooltip';
 import { Role } from 'models/Roles';
 import { AlertModal } from 'components/modals/alertModal';
@@ -10,7 +10,6 @@ import { QueryKeys } from 'api/QueryKeys';
 import { toast } from 'react-toastify';
 import SuccessToast from 'components/toast/successToast';
 import ErrorToast from 'components/toast/errorToast';
-import { CustomerData } from 'models/Customer';
 import { useSelector } from 'react-redux';
 import { selectUser } from 'redux/reducers/userSlice';
 import { TreatmentsData } from 'models/Treatments';

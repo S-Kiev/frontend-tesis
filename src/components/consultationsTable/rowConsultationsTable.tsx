@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
 import { ThreeDotsVertical, Eye, PencilSquare } from 'react-bootstrap-icons';
 import Tooltip from 'components/Popup/tooltip';
-import { Role } from 'models/Roles';
 import { ConsultationData } from 'models/Consultation';
 import ConsultationStatus from 'components/consultationStatus/consultationStatus';
 import { useSelector } from 'react-redux';

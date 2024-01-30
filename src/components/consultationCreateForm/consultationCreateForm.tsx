@@ -616,7 +616,7 @@ const ConsultationsCreateForm: FC<ConsultationsCreateFormProps> = () => {
           </Card>
         </>
       ) : null}
-      {watch('consultingRooms').length == 3 && (
+      {watch('consultingRooms').length === 3 && (
         <>
           <Card className="mb-4">
             <Card.Header className="d-flex align-items-center">
