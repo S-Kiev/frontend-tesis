@@ -1,7 +1,7 @@
 import { FC, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import styles from './CustomerHistory.module.scss';
-import { ChevronLeft, CloudLightningRain, DatabaseSlash } from 'react-bootstrap-icons';
+import { BoxArrowInDown, ChevronLeft, CloudLightningRain, DatabaseSlash, Rulers } from 'react-bootstrap-icons';
 import { DotLoader } from 'react-spinners';
 import PaginationComponent from 'components/pagination/pagination';
 import { defaultPageSize } from 'api/paginationConfig';
@@ -11,11 +11,13 @@ import { getConsultationsByCustomer } from 'api/consultation';
 import { getCustomersPayments } from 'api/customers';
 import { parseCustumerHistoryData } from 'util/parseCustumerHistoryData';
 import CustomerHistoryTable from 'components/customerHistoryTable/customerHistoryTable';
+import { Button } from 'react-bootstrap';
 
 interface CustomerHistoryProps {}
 
 const CustomerHistory: FC<CustomerHistoryProps> = () => {
   const [page, setPage] = useState<number>(1);
+  const [showModal, setShowModal] = useState<boolean>(false);
   const navigate = useNavigate();
   const { id } = useParams();
 
@@ -50,6 +52,43 @@ const CustomerHistory: FC<CustomerHistoryProps> = () => {
             <p>Listado de todas las consultas registradas del cliente en el sistema</p>
           </div>
         </div>
+
+        <div className="d-flex gap-3">
+          <Button
+            variant="success"
+            onClick={() => navigate(`/app/equipments/${id}/edit`)}
+            className="d-none d-lg-block"
+          >
+            <BoxArrowInDown style={{ marginRight: '5px' }} />
+            Descargar
+          </Button>
+          <Button
+            variant="success"
+            onClick={() => {
+              setShowModal(true);
+            }}
+            className="d-none d-lg-block"
+          >
+            <Rulers style={{ marginRight: '5px' }} />
+            Resumen de medidas
+          </Button>
+        </div>
+      </div>
+      <div className="d-grid gap-2">
+        <Button variant="success" onClick={() => {}} className="d-lg-none mt-3">
+          <BoxArrowInDown style={{ marginRight: '5px' }} />
+          Descargar
+        </Button>
+        <Button
+          variant="success"
+          onClick={() => {
+            setShowModal(true);
+          }}
+          className="d-lg-none mt-3"
+        >
+          <Rulers style={{ marginRight: '5px' }} />
+          Resumen de medidas
+        </Button>
       </div>
       {data?.data?.data.length === 0 && !isLoading ? (
         <div className={styles.errorFilters}>
