@@ -31,7 +31,7 @@ const Customer: FC<CustomerProps> = () => {
   });
 
   const handleOnClickReport = (type: 'pdf' | 'jpeg') => {
-    const REPORT_NAME = `Reporte ${data?.data?.data?.attributes?.name} ${data?.data?.data?.attributes?.lastname}`;
+    const REPORT_NAME = `Ficha ${data?.data?.data?.attributes?.name} ${data?.data?.data?.attributes?.lastname}`;
     generateBlob('hiddenImageGeneratorCustomer').then(data => {
       if (data.error === undefined) {
         const imgUrl = URL.createObjectURL(data.blob!);

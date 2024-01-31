@@ -10,9 +10,10 @@ import PaymentStatus from 'components/paymentStatus/paymentStatus';
 
 interface RowConsultationHistoryTableProps {
   dataItem: ConsultationData;
+  report: boolean;
 }
 
-const RowConsultationHistoryTable: FC<RowConsultationHistoryTableProps> = ({ dataItem }) => {
+const RowConsultationHistoryTable: FC<RowConsultationHistoryTableProps> = ({ dataItem, report }) => {
   const navigate = useNavigate();
   const paymentTotal =
     dataItem?.attributes?.customerPayment?.attributes?.totalCost -
@@ -69,17 +70,19 @@ const RowConsultationHistoryTable: FC<RowConsultationHistoryTableProps> = ({ dat
         )}
       </td>
       <td className={styles.titleTd}>
-        <Button
-          variant="secondary"
-          type="button"
-          className="me-3"
-          onClick={() => {
-            navigate(`/app/consultations/${dataItem?.id}`);
-          }}
-        >
-          <Eye className="me-2" />
-          Ver detalle consulta
-        </Button>
+        {!report && (
+          <Button
+            variant="secondary"
+            type="button"
+            className="me-3"
+            onClick={() => {
+              navigate(`/app/consultations/${dataItem?.id}`);
+            }}
+          >
+            <Eye className="me-2" />
+            Ver detalle consulta
+          </Button>
+        )}
       </td>
     </tr>
   );

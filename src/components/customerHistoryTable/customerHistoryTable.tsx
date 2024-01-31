@@ -6,9 +6,10 @@ import RowConsultationHistoryTable from './rowCustomerHistoryTable';
 
 interface CustomerHistoryTableProps {
   data: ConsultationData[];
+  report?: boolean;
 }
 
-const CustomerHistoryTable: FC<CustomerHistoryTableProps> = ({ data }) => {
+const CustomerHistoryTable: FC<CustomerHistoryTableProps> = ({ data, report = false }) => {
   const headersList: { title: string; col: number }[] = [
     { title: 'Fecha de Comienzo', col: 0 },
     { title: 'Fecha de Fin', col: 1 },
@@ -24,7 +25,7 @@ const CustomerHistoryTable: FC<CustomerHistoryTableProps> = ({ data }) => {
       <TableHeader headersList={headersList} />
       <tbody>
         {data.map(element => (
-          <RowConsultationHistoryTable dataItem={element} />
+          <RowConsultationHistoryTable dataItem={element} report={report} />
         ))}
       </tbody>
     </Table>
