@@ -11,8 +11,14 @@ import { getConsultationsByCustomer } from 'api/consultation';
 import { getCustomersMesurments, getCustomersPayments } from 'api/customers';
 import { parseCustumerHistoryData } from 'util/parseCustumerHistoryData';
 import CustomerHistoryTable from 'components/customerHistoryTable/customerHistoryTable';
-import { Button } from 'react-bootstrap';
+import { Button, ButtonGroup, Dropdown } from 'react-bootstrap';
 import { MeasurementsModal } from 'components/modals/measurementsModal';
+import { generateBlob } from 'util/fileServices/generateBlob';
+import { generateLink } from 'util/fileServices/generateLink';
+import { NotificationToastExport } from 'components/toast/toastExport';
+import { toast } from 'react-toastify';
+import jsPDF from 'jspdf';
+import HiddenCustomerHistory from './HiddenCustomerHistory';
 
 interface CustomerHistoryProps {}
 
@@ -25,6 +31,11 @@ const CustomerHistory: FC<CustomerHistoryProps> = () => {
   const { data, error, isLoading } = useQuery({
     queryKey: [QueryKeys.CosnultationByCustomer, id, page],
     queryFn: () => getConsultationsByCustomer(page, id || ''),
+  });
+
+  const { data: dataHidden } = useQuery({
+    queryKey: [QueryKeys.CosnultationByCustomer, id, page],
+    queryFn: () => getConsultationsByCustomer(page, id || '', 100),
   });
 
   const {
@@ -45,6 +56,42 @@ const CustomerHistory: FC<CustomerHistoryProps> = () => {
     queryFn: () => getCustomersMesurments(id || ''),
   });
 
+  const handleOnClickReport = (type: 'pdf' | 'jpeg') => {
+    const REPORT_NAME = `Historial ${data?.data?.data[0].attributes?.customer?.data?.attributes?.name} ${data?.data?.data[0].attributes?.customer?.data?.attributes?.lastname}`;
+    generateBlob('hiddenImageGeneratorHistoryCustomer').then(data => {
+      if (data.error === undefined) {
+        const imgUrl = URL.createObjectURL(data.blob!);
+        notificationToastExportSuccess();
+        if (type === 'pdf') {
+          const pdf = new jsPDF({
+            orientation: 'landscape',
+            unit: 'px',
+            format: [data.dimensions.width, data.dimensions.height],
+          });
+          pdf.addImage(imgUrl, 'JPEG', 0, 0, data.dimensions.width, data.dimensions.height);
+          pdf.save(`${REPORT_NAME}.pdf`);
+        } else {
+          generateLink(imgUrl, REPORT_NAME, 'jpeg');
+        }
+        URL.revokeObjectURL(imgUrl);
+      } else {
+        notificationToastExportError();
+      }
+    });
+  };
+
+  const notificationToastExportError = () => {
+    toast(<NotificationToastExport type={'error'} reload={handleOnClickReport} />, {
+      style: { borderRadius: '10px' },
+    });
+  };
+
+  const notificationToastExportSuccess = () => {
+    toast(<NotificationToastExport type={'success'} />, {
+      style: { borderRadius: '10px' },
+    });
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.header}>
@@ -62,10 +109,29 @@ const CustomerHistory: FC<CustomerHistoryProps> = () => {
           </div>
         </div>
         <div className="d-flex gap-3">
-          <Button variant="success" onClick={() => {}} className="d-none d-lg-block">
-            <BoxArrowInDown style={{ marginRight: '5px' }} />
-            Descargar
-          </Button>
+          <Dropdown as={ButtonGroup} className="d-none d-lg-block">
+            <Button variant="success" onClick={() => {}}>
+              <BoxArrowInDown style={{ marginRight: '5px' }} />
+              Descargar
+            </Button>
+            <Dropdown.Toggle split variant="success" id="dropdown-split-basic" />
+            <Dropdown.Menu>
+              <Dropdown.Item
+                onClick={() => {
+                  handleOnClickReport('pdf');
+                }}
+              >
+                PDF
+              </Dropdown.Item>
+              <Dropdown.Item
+                onClick={() => {
+                  handleOnClickReport('jpeg');
+                }}
+              >
+                JPG
+              </Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
           <Button
             variant="success"
             onClick={() => {
@@ -79,10 +145,29 @@ const CustomerHistory: FC<CustomerHistoryProps> = () => {
         </div>
       </div>
       <div className="d-grid gap-2">
-        <Button variant="success" onClick={() => {}} className="d-lg-none mt-3">
-          <BoxArrowInDown style={{ marginRight: '5px' }} />
-          Descargar
-        </Button>
+        <Dropdown as={ButtonGroup} className="d-lg-none mt-3">
+          <Button variant="success" onClick={() => {}}>
+            <BoxArrowInDown style={{ marginRight: '5px' }} />
+            Descargar
+          </Button>
+          <Dropdown.Toggle split variant="success" id="dropdown-split-basic" />
+          <Dropdown.Menu>
+            <Dropdown.Item
+              onClick={() => {
+                handleOnClickReport('pdf');
+              }}
+            >
+              PDF
+            </Dropdown.Item>
+            <Dropdown.Item
+              onClick={() => {
+                handleOnClickReport('jpeg');
+              }}
+            >
+              JPG
+            </Dropdown.Item>
+          </Dropdown.Menu>
+        </Dropdown>
         <Button
           variant="success"
           onClick={() => {
@@ -128,6 +213,9 @@ const CustomerHistory: FC<CustomerHistoryProps> = () => {
         </>
       ) : null}
       <MeasurementsModal show={showModal} showModal={setShowModal} customerMesurements={dataMeasurements?.data?.data} />
+      <div style={{ marginTop: '500px' }}>
+        <HiddenCustomerHistory data={parseCustumerHistoryData(dataHidden?.data?.data, dataPayments?.data?.data)} />
+      </div>
     </div>
   );
 };

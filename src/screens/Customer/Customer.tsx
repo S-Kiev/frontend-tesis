@@ -6,11 +6,17 @@ import { ChevronLeft, ClockHistory, CloudLightningRain, PencilSquare, PersonFill
 import { useNavigate, useParams } from 'react-router-dom';
 import { DotLoader } from 'react-spinners';
 import styles from './Customer.module.scss';
-import { Button } from 'react-bootstrap';
+import { Button, ButtonGroup, Dropdown, DropdownButton } from 'react-bootstrap';
 import { selectUser } from 'redux/reducers/userSlice';
 import { useSelector } from 'react-redux';
 import { Role } from 'models/Roles';
 import CustomerInfo from 'components/customerInfo/customerInfo';
+import HiddenCustomer from './HiddenCustomer';
+import { generateBlob } from 'util/fileServices/generateBlob';
+import { generateLink } from 'util/fileServices/generateLink';
+import jsPDF from 'jspdf';
+import { NotificationToastExport } from 'components/toast/toastExport';
+import { toast } from 'react-toastify';
 
 interface CustomerProps {}
 
@@ -23,6 +29,42 @@ const Customer: FC<CustomerProps> = () => {
     queryKey: [QueryKeys.Customer, id],
     queryFn: () => getCustomerInfo(id || ''),
   });
+
+  const handleOnClickReport = (type: 'pdf' | 'jpeg') => {
+    const REPORT_NAME = `Ficha ${data?.data?.data?.attributes?.name} ${data?.data?.data?.attributes?.lastname}`;
+    generateBlob('hiddenImageGeneratorCustomer').then(data => {
+      if (data.error === undefined) {
+        const imgUrl = URL.createObjectURL(data.blob!);
+        notificationToastExportSuccess();
+        if (type === 'pdf') {
+          const pdf = new jsPDF({
+            orientation: 'portrait',
+            unit: 'px',
+            format: [data.dimensions.width, data.dimensions.height],
+          });
+          pdf.addImage(imgUrl, 'JPEG', 0, 0, data.dimensions.width, data.dimensions.height);
+          pdf.save(`${REPORT_NAME}.pdf`);
+        } else {
+          generateLink(imgUrl, REPORT_NAME, 'jpeg');
+        }
+        URL.revokeObjectURL(imgUrl);
+      } else {
+        notificationToastExportError();
+      }
+    });
+  };
+
+  const notificationToastExportError = () => {
+    toast(<NotificationToastExport type={'error'} reload={handleOnClickReport} />, {
+      style: { borderRadius: '10px' },
+    });
+  };
+
+  const notificationToastExportSuccess = () => {
+    toast(<NotificationToastExport type={'success'} />, {
+      style: { borderRadius: '10px' },
+    });
+  };
 
   return (
     <div className={styles.container}>
@@ -75,10 +117,29 @@ const Customer: FC<CustomerProps> = () => {
                     <ClockHistory style={{ marginRight: '5px' }} />
                     Ver Historial Consultas
                   </Button>
-                  <Button variant="success" onClick={() => {}} className="d-none d-lg-block">
-                    <PersonFillDown style={{ marginRight: '5px' }} />
-                    Descargar Ficha
-                  </Button>
+                  <Dropdown as={ButtonGroup} className="d-none d-lg-block">
+                    <Button variant="success" onClick={() => {}}>
+                      <PersonFillDown style={{ marginRight: '5px' }} />
+                      Descargar Ficha
+                    </Button>
+                    <Dropdown.Toggle split variant="success" id="dropdown-split-basic" />
+                    <Dropdown.Menu>
+                      <Dropdown.Item
+                        onClick={() => {
+                          handleOnClickReport('pdf');
+                        }}
+                      >
+                        PDF
+                      </Dropdown.Item>
+                      <Dropdown.Item
+                        onClick={() => {
+                          handleOnClickReport('jpeg');
+                        }}
+                      >
+                        JPG
+                      </Dropdown.Item>
+                    </Dropdown.Menu>
+                  </Dropdown>
                 </div>
               </div>
               <div className="d-grid gap-2">
@@ -100,12 +161,34 @@ const Customer: FC<CustomerProps> = () => {
                   <ClockHistory style={{ marginRight: '5px' }} />
                   Ver Historial Consultas
                 </Button>
-                <Button variant="success" onClick={() => {}} className="d-lg-none mt-3">
-                  <PersonFillDown style={{ marginRight: '5px' }} />
-                  Descargar Ficha
-                </Button>
+                <Dropdown as={ButtonGroup} className="d-lg-none mt-3">
+                  <Button variant="success" onClick={() => {}}>
+                    <PersonFillDown style={{ marginRight: '5px' }} />
+                    Descargar Ficha
+                  </Button>
+                  <Dropdown.Toggle split variant="success" id="dropdown-split-basic" />
+                  <Dropdown.Menu>
+                    <Dropdown.Item
+                      onClick={() => {
+                        handleOnClickReport('pdf');
+                      }}
+                    >
+                      PDF
+                    </Dropdown.Item>
+                    <Dropdown.Item
+                      onClick={() => {
+                        handleOnClickReport('jpeg');
+                      }}
+                    >
+                      JPEG
+                    </Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
               </div>
-              <div className={styles.form}>{<CustomerInfo customerData={data?.data?.data} />}</div>
+              <div className={styles.form}>
+                {<CustomerInfo customerData={data?.data?.data} defaultActiveKey={['0']} />}
+              </div>
+              <div style={{ marginTop: '500px' }}>{<HiddenCustomer data={data?.data?.data} />}</div>
             </>
           )}
         </>

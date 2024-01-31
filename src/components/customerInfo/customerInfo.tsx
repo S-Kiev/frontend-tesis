@@ -6,16 +6,19 @@ import styles from './customerInfo.module.scss';
 import { format } from 'date-fns';
 import { CheckCircle, XCircle } from 'react-bootstrap-icons';
 import ModalImage from 'react-modal-image';
+import { faIR } from 'date-fns/locale';
 
 interface CustomerInfoProps {
   customerData: CustomerGetData;
+  defaultActiveKey: any;
+  report?: boolean;
 }
 
-const CustomerInfo: FC<CustomerInfoProps> = ({ customerData }) => {
+const CustomerInfo: FC<CustomerInfoProps> = ({ customerData, defaultActiveKey, report = false }) => {
   const informedConsent = customerData?.attributes?.medicalInformation?.data?.attributes?.informedConsent?.data;
   return (
     <div className={styles.conteiner}>
-      <Accordion alwaysOpen>
+      <Accordion alwaysOpen defaultActiveKey={defaultActiveKey}>
         <Accordion.Item eventKey="0">
           <Accordion.Header>Información personal</Accordion.Header>
           <Accordion.Body>
@@ -188,7 +191,7 @@ const CustomerInfo: FC<CustomerInfoProps> = ({ customerData }) => {
               <strong>Consentimiento informado:</strong>
               <p>{informedConsent?.id ? 'Cargado en el sistema' : 'Aun no fue cargado en el sistema'}</p>
             </div>
-            {informedConsent?.id && (
+            {informedConsent?.id && report === false && (
               <ModalImage
                 small={
                   informedConsent?.attributes?.formats?.small?.url
