@@ -8,24 +8,29 @@ import { useQuery } from '@tanstack/react-query';
 import { QueryKeys } from 'api/QueryKeys';
 import { getConsultations } from 'api/consultation';
 import { Role } from 'models/Roles';
-import { CloudLightningRain, DatabaseSlash, SendSlash } from 'react-bootstrap-icons';
+import { CloudLightningRain, DatabaseSlash, FunnelFill, SendSlash } from 'react-bootstrap-icons';
 import Search from 'components/search/search';
 import { DotLoader } from 'react-spinners';
 import PaginationComponent from 'components/pagination/pagination';
 import { defaultPageSize } from 'api/paginationConfig';
 import ConsultationsTable from 'components/consultationsTable/consultationsTable';
+import { ConsultationsFilterModal } from 'components/modals/consultationsFilterModal';
 
 interface ConsultationsProps {}
 
 const Consultations: FC<ConsultationsProps> = () => {
   const [search, setSearch] = useState<string>('');
   const [page, setPage] = useState<number>(1);
+  const [showFilter, setShowFilter] = useState<boolean>(false);
+  const [filter, setFilter] = useState<{ name: null | string }>({
+    name: null,
+  });
   const navigate = useNavigate();
   const user = useSelector(selectUser);
 
   const { data, error, isLoading } = useQuery({
-    queryKey: [QueryKeys.Consultations, search, page],
-    queryFn: () => getConsultations(page, search),
+    queryKey: [QueryKeys.Consultations, search, page, filter],
+    queryFn: () => getConsultations(page, search, filter),
   });
 
   return (
@@ -56,6 +61,17 @@ const Consultations: FC<ConsultationsProps> = () => {
           {!error ? (
             <div className={styles.filters}>
               <Search placeholder="Buscar por nombre cliente o id consulta" onChange={e => setSearch(e)} width={320} />
+              <div>
+                <Button
+                  variant="success"
+                  onClick={() => {
+                    setShowFilter(true);
+                  }}
+                  className="d-none d-lg-block me-3"
+                >
+                  <FunnelFill /> Filtrar Consultas
+                </Button>
+              </div>
             </div>
           ) : null}
         </>
@@ -89,14 +105,15 @@ const Consultations: FC<ConsultationsProps> = () => {
       ) : (
         !error &&
         !isLoading &&
-        search.length !== 0 && (
+        (search.length !== 0 || filter.name !== null) && (
           <div className={styles.errorFilters}>
             <SendSlash size={80} />
             <h3 className="mt-3">No encontramos resultados</h3>
-            <h5 className="mb-3 text-center">Puedes intentarlo nuevamente modificando la busqueda</h5>
+            <h5 className="mb-3 text-center">Puedes intentarlo nuevamente modificando la busqueda o filtros</h5>
           </div>
         )
       )}
+      <ConsultationsFilterModal show={showFilter} showModal={setShowFilter} filter={filter} setFilter={setFilter} />
     </div>
   );
 };

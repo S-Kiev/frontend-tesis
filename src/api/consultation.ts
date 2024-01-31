@@ -5,7 +5,7 @@ import { defaultPageSize } from './paginationConfig';
 import { MeasurementsCreate, MeasurementsEdit, ObservationCreate, ObservationEdit } from 'models/Observations';
 import { PaymentStatusEnum } from 'models/paymentStatus';
 
-export const getConsultations = async (page: number, search: string) => {
+export const getConsultations = async (page: number, search: string, filter: { name: string | null }) => {
   return await axiosDefaultConfig.get(routes.GET_CONSULTATIONS, {
     params: {
       'filters[$or][0][customer][name][$containsi]': search,
@@ -13,6 +13,7 @@ export const getConsultations = async (page: number, search: string) => {
       'filters[$or][2][id][$containsi]': search,
       'pagination[page]': page,
       'pagination[pageSize]': defaultPageSize,
+      'filters[$and][3][status][$eq]': filter.name,
     },
   });
 };
