@@ -15,6 +15,8 @@ import HiddenCustomer from './HiddenCustomer';
 import { generateBlob } from 'util/fileServices/generateBlob';
 import { generateLink } from 'util/fileServices/generateLink';
 import jsPDF from 'jspdf';
+import { NotificationToastExport } from 'components/toast/toastExport';
+import { toast } from 'react-toastify';
 
 interface CustomerProps {}
 
@@ -33,7 +35,7 @@ const Customer: FC<CustomerProps> = () => {
     generateBlob('hiddenImageGeneratorCustomer').then(data => {
       if (data.error === undefined) {
         const imgUrl = URL.createObjectURL(data.blob!);
-        //notificationToastExportSuccess();
+        notificationToastExportSuccess();
         if (type === 'pdf') {
           const pdf = new jsPDF({
             orientation: 'portrait',
@@ -47,8 +49,20 @@ const Customer: FC<CustomerProps> = () => {
         }
         URL.revokeObjectURL(imgUrl);
       } else {
-        //notificationToastExportError();
+        notificationToastExportError();
       }
+    });
+  };
+
+  const notificationToastExportError = () => {
+    toast(<NotificationToastExport type={'error'} reload={handleOnClickReport} />, {
+      style: { borderRadius: '10px' },
+    });
+  };
+
+  const notificationToastExportSuccess = () => {
+    toast(<NotificationToastExport type={'success'} />, {
+      style: { borderRadius: '10px' },
     });
   };
 
