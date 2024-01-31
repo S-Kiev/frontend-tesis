@@ -3,7 +3,7 @@ import { CustomerPayment } from 'models/CustomerPayment';
 
 export const parseCustumerHistoryData = (consultations: ConsultationData[], paymentsData: CustomerPayment[]) => {
   let ConsultationPayments: any[] = [];
-  if (consultations.length > 0) {
+  if (consultations?.length > 0) {
     consultations?.map(consultation => {
       if (paymentsData?.length > 0) {
         paymentsData?.map(payment => {
