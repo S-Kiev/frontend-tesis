@@ -8,22 +8,27 @@ import { Role } from 'models/Roles';
 import { useQuery } from '@tanstack/react-query';
 import { QueryKeys } from 'api/QueryKeys';
 import { getConsultingsRooms } from 'api/consultingRoom';
-import { BuildingFillSlash, CloudLightningRain } from 'react-bootstrap-icons';
+import { BuildingFillSlash, CloudLightningRain, FunnelFill } from 'react-bootstrap-icons';
 import { DotLoader } from 'react-spinners';
 import { defaultPageSize } from 'api/paginationConfig';
 import PaginationComponent from 'components/pagination/pagination';
 import ConsultingRoomTable from 'components/consultingRoomTable/consultingRoomTable';
+import { ConsultingsRoomsFilterModal } from 'components/modals/consultingsRoomsFilterModal';
 
 interface ConsultingsRoomsProps {}
 
 const ConsultingsRooms: FC<ConsultingsRoomsProps> = () => {
   const [page, setPage] = useState<number>(1);
+  const [showFilter, setShowFilter] = useState<boolean>(false);
+  const [filter, setFilter] = useState<{ name: null | string }>({
+    name: null,
+  });
   const navigate = useNavigate();
   const user = useSelector(selectUser);
 
   const { data, error, isLoading } = useQuery({
-    queryKey: [QueryKeys.ConsultingsRooms, page],
-    queryFn: () => getConsultingsRooms(page),
+    queryKey: [QueryKeys.ConsultingsRooms, page, filter],
+    queryFn: () => getConsultingsRooms(page, filter),
   });
 
   return (
@@ -48,10 +53,34 @@ const ConsultingsRooms: FC<ConsultingsRoomsProps> = () => {
           + Crear nuevo consultorio
         </Button>
       )}
-      {data?.data?.data.length === 0 && !isLoading && (
+      {data?.data?.data.length === 0 && !isLoading && filter.name === null ? (
         <div className={styles.errorFilters}>
           <BuildingFillSlash size={80} />
           <h3 className="mt-3">Aún no existen consultorios</h3>
+        </div>
+      ) : (
+        <>
+          {!error ? (
+            <div className={styles.filters}>
+              <div>
+                <Button
+                  variant="success"
+                  onClick={() => {
+                    setShowFilter(true);
+                  }}
+                  className="d-none d-lg-block me-3"
+                >
+                  <FunnelFill /> Filtrar Consultorios
+                </Button>
+              </div>
+            </div>
+          ) : null}
+        </>
+      )}
+      {data?.data?.data.length === 0 && !isLoading && filter.name && (
+        <div className={styles.errorFilters}>
+          <BuildingFillSlash size={80} />
+          <h3 className="mt-3">No se encontraron resultados, pruebe cambiar de filtro</h3>
         </div>
       )}
       {error ? (
@@ -81,6 +110,7 @@ const ConsultingsRooms: FC<ConsultingsRoomsProps> = () => {
           )}
         </>
       )}
+      <ConsultingsRoomsFilterModal show={showFilter} showModal={setShowFilter} filter={filter} setFilter={setFilter} />
     </div>
   );
 };
