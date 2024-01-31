@@ -125,3 +125,9 @@ export const createPayment = async (payment: {
     data: payment,
   });
 };
+
+export const SettleDebtPayment = async (paymentId: string | number) => {
+  return await axiosDefaultConfig.put(routes.PUT_PAYMENT.replace('{id}', paymentId.toString()), {
+    data: { paymentStatus: PaymentStatusEnum.total },
+  });
+};
