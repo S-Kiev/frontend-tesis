@@ -69,7 +69,7 @@ const Equipments: FC<EquipmentsProps> = () => {
                   }}
                   className="d-none d-lg-block me-3"
                 >
-                  <FunnelFill /> Filtros Equipos
+                  <FunnelFill /> Filtrar Equipos
                 </Button>
               </div>
             </div>
@@ -105,11 +105,11 @@ const Equipments: FC<EquipmentsProps> = () => {
       ) : (
         !error &&
         !isLoading &&
-        search.length !== 0 && (
+        (search.length !== 0 || filter.name !== null) && (
           <div className={styles.errorFilters}>
             <SendSlash size={80} />
             <h3 className="mt-3">No encontramos resultados</h3>
-            <h5 className="mb-3 text-center">Puedes intentarlo nuevamente modificando la busqueda</h5>
+            <h5 className="mb-3 text-center">Puedes intentarlo nuevamente modificando la busqueda o filtros</h5>
           </div>
         )
       )}

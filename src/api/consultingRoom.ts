@@ -4,11 +4,12 @@ import { axiosDefaultConfig } from './axiosConfig';
 import { defaultPageSize } from './paginationConfig';
 import { ConsultingRoomStatusEnum } from 'models/ConsultingRoomStatus';
 
-export const getConsultingsRooms = async (page: number) => {
+export const getConsultingsRooms = async (page: number, filter: { name: string | null }) => {
   return await axiosDefaultConfig.get(routes.GET_CONSULTINGS_ROOMS, {
     params: {
       'pagination[page]': page,
       'pagination[pageSize]': defaultPageSize,
+      'filters[$and][0][status][$eq]': filter.name,
     },
   });
 };
