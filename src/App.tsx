@@ -2,7 +2,7 @@ import './App.scss';
 import { Route, RouterProvider, createBrowserRouter, createRoutesFromElements } from 'react-router-dom';
 import Welcome from 'screens/Welcome';
 import Login from 'screens/Login/Login';
-import ResetPassword from 'screens/ResetPassword';
+import ResetPassword from 'screens/ResetPassword/ResetPassword';
 import Layout from 'screens/Layout';
 
 function App() {
