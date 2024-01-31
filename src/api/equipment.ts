@@ -4,17 +4,14 @@ import { axiosDefaultConfig } from './axiosConfig';
 import { defaultPageSize } from './paginationConfig';
 import { EquipmentStatusEnum } from 'models/EquipmentStatus';
 
-export const getEquipments = async (
-  page: number,
-  search: string,
-  filters: { available: boolean; occupied: boolean; rented: boolean; broken: boolean; outOfUse: boolean },
-) => {
+export const getEquipments = async (page: number, search: string, filter: { name: string | null }) => {
   return await axiosDefaultConfig.get(routes.GET_EQUIPMENTS, {
     params: {
       'filters[$or][0][name][$containsi]': search,
       'filters[$or][1][id][$containsi]': search,
       'pagination[page]': page,
       'pagination[pageSize]': defaultPageSize,
+      'filters[$and][2][status][$eq]': filter.name,
     },
   });
 };

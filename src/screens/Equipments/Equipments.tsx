@@ -22,12 +22,8 @@ const Equipments: FC<EquipmentsProps> = () => {
   const [search, setSearch] = useState<string>('');
   const [page, setPage] = useState<number>(1);
   const [showFilter, setShowFilter] = useState<boolean>(false);
-  const [filter, setFilter] = useState<any>({
-    available: true,
-    occupied: true,
-    rented: true,
-    broken: true,
-    outOfUse: true,
+  const [filter, setFilter] = useState<{ name: null | string }>({
+    name: null,
   });
   const navigate = useNavigate();
   const user = useSelector(selectUser);
@@ -118,7 +114,7 @@ const Equipments: FC<EquipmentsProps> = () => {
         )
       )}
       <>
-        <EquipmentsFilterModal show={showFilter} showModal={setShowFilter} filters={filter} setFilters={setFilter} />
+        <EquipmentsFilterModal show={showFilter} showModal={setShowFilter} filter={filter} setFilter={setFilter} />
       </>
     </div>
   );

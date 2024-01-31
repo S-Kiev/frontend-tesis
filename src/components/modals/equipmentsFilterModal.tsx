@@ -4,53 +4,50 @@ import { Form } from 'react-bootstrap';
 import { Funnel } from 'react-bootstrap-icons';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import Switch from 'react-switch';
+import Select from 'react-select';
 import { Controller, useForm } from 'react-hook-form';
 import * as yup from 'yup';
+import { EquipmentStatusEnum } from 'models/EquipmentStatus';
 
 interface EquipmentsFilterModalProps {
   show: boolean;
   showModal: (state: boolean) => void;
-  setFilters: (state: any) => void;
-  filters: any;
+  setFilter: (state: any) => void;
+  filter: any;
 }
 
 const schema = yup.object().shape({
-  available: yup.boolean().required(),
-  occupied: yup.boolean().required(),
-  rented: yup.boolean().required(),
-  broken: yup.boolean().required(),
-  outOfUse: yup.boolean().required(),
+  filterSelect: yup.string().nullable(),
 });
 
-export const EquipmentsFilterModal: FC<EquipmentsFilterModalProps> = ({ show, showModal, setFilters, filters }) => {
-  const { handleSubmit, control } = useForm({
+export const EquipmentsFilterModal: FC<EquipmentsFilterModalProps> = ({ show, showModal, setFilter, filter }) => {
+  const {
+    handleSubmit,
+    formState: { errors },
+    control,
+  } = useForm({
     criteriaMode: 'all',
     mode: 'onBlur',
     resolver: yupResolver(schema),
     defaultValues: {
-      available: filters.available,
-      occupied: filters.occupied,
-      rented: filters.rented,
-      broken: filters.broken,
-      outOfUse: filters.outOfUse,
+      filterSelect: filter.name,
     },
   });
 
-  const onSubmit = async (dataForm: {
-    available: boolean;
-    occupied: boolean;
-    rented: boolean;
-    broken: boolean;
-    outOfUse: boolean;
-  }) => {
-    setFilters({
-      available: dataForm.available,
-      occupied: dataForm.occupied,
-      rented: dataForm.rented,
-      broken: dataForm.broken,
-      outOfUse: dataForm.outOfUse,
+  const options = [
+    { value: null, label: 'Ninguno' },
+    { value: EquipmentStatusEnum.available, label: 'Disponible' },
+    { value: EquipmentStatusEnum.broken, label: 'Averiado' },
+    { value: EquipmentStatusEnum.occupied, label: 'Ocupado' },
+    { value: EquipmentStatusEnum.outOfUse, label: 'Fuera de uso' },
+    { value: EquipmentStatusEnum.rented, label: 'Alquilado' },
+  ];
+
+  const onSubmit = async (dataForm: { filterSelect?: string | null }) => {
+    setFilter({
+      name: dataForm?.filterSelect,
     });
+    showModal(false);
   };
 
   return (
@@ -58,50 +55,48 @@ export const EquipmentsFilterModal: FC<EquipmentsFilterModalProps> = ({ show, sh
       <Modal onHide={() => showModal(false)} show={show} centered>
         <Modal.Header closeButton>
           <Modal.Title>
-            <Funnel color="rgba(8, 135, 93, 1)" size={30} className="me-2" /> Filtros equipos
+            <Funnel color="rgba(8, 135, 93, 1)" size={30} className="me-2" /> Filtros Equipos
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={handleSubmit(onSubmit)} style={{ marginTop: '20px' }}>
-            <Form.Group className="d-flex align-items-center mb-4">
+            <Form.Group className="form-outline mb-4">
+              <Form.Label>
+                Filtrar por estado <strong className="text-danger me-2">*</strong>
+              </Form.Label>
               <Controller
-                name="available"
+                name="filterSelect"
                 control={control}
-                render={({ field }) => <Switch onChange={value => field.onChange(value)} checked={field.value} />}
+                render={({ field }) => (
+                  <Select
+                    options={options}
+                    value={options.find(o => o.value === field.value)}
+                    onChange={val => field.onChange(val?.value)}
+                    styles={{
+                      control: baseStyles => ({
+                        ...baseStyles,
+                        borderColor: !!filter.filterSelect ? '#dc3545' : '#dee2e6',
+                        borderRadius: '0.375rem',
+                        visibility: 'visible',
+                        height: '40px',
+                        fontSize: '14px',
+                        alignContent: 'center',
+                      }),
+                    }}
+                    menuPlacement="auto"
+                    isSearchable={false}
+                    name="filterSelect"
+                    placeholder={'Seleccione un filtro'}
+                  />
+                )}
               />
-              <Form.Label className="mb-0 ms-2">Disponible</Form.Label>
-            </Form.Group>
-            <Form.Group className="d-flex align-items-center mb-4">
-              <Controller
-                name="occupied"
-                control={control}
-                render={({ field }) => <Switch onChange={value => field.onChange(value)} checked={field.value} />}
-              />
-              <Form.Label className="mb-0 ms-2">Ocupado</Form.Label>
-            </Form.Group>
-            <Form.Group className="d-flex align-items-center mb-4">
-              <Controller
-                name="rented"
-                control={control}
-                render={({ field }) => <Switch onChange={value => field.onChange(value)} checked={field.value} />}
-              />
-              <Form.Label className="mb-0 ms-2">Alquilado</Form.Label>
-            </Form.Group>
-            <Form.Group className="d-flex align-items-center mb-4">
-              <Controller
-                name="broken"
-                control={control}
-                render={({ field }) => <Switch onChange={value => field.onChange(value)} checked={field.value} />}
-              />
-              <Form.Label className="mb-0 ms-2">Averiado</Form.Label>
-            </Form.Group>
-            <Form.Group className="d-flex align-items-center mb-4">
-              <Controller
-                name="outOfUse"
-                control={control}
-                render={({ field }) => <Switch onChange={value => field.onChange(value)} checked={field.value} />}
-              />
-              <Form.Label className="mb-0 ms-2">Fuera de uso</Form.Label>
+              {errors.filterSelect?.message && (
+                <div className="d-flex align-items-center">
+                  <span className="text-danger mt-1 ms-2" style={{ fontSize: '0.875em' }}>
+                    {errors.filterSelect?.message && 'Este campo es requerido'}
+                  </span>
+                </div>
+              )}
             </Form.Group>
             <div className="d-flex align-items-center justify-content-end" style={{ marginTop: '30px' }}>
               <Button
