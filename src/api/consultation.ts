@@ -3,6 +3,7 @@ import { routes } from './apiRoutes';
 import { axiosDefaultConfig } from './axiosConfig';
 import { defaultPageSize } from './paginationConfig';
 import { MeasurementsCreate, MeasurementsEdit, ObservationCreate, ObservationEdit } from 'models/Observations';
+import { PaymentStatusEnum } from 'models/paymentStatus';
 
 export const getConsultations = async (page: number, search: string) => {
   return await axiosDefaultConfig.get(routes.GET_CONSULTATIONS, {
@@ -110,5 +111,17 @@ export const editObservation = async (observation: ObservationEdit) => {
 export const editMeasurements = async (measurements: MeasurementsEdit) => {
   return await axiosDefaultConfig.put(routes.PUT_MEASUREMENTS.replace('{id}', measurements.measurementsId.toString()), {
     data: measurements,
+  });
+};
+
+export const createPayment = async (payment: {
+  consultation: number;
+  customer: number;
+  totalCost: number;
+  paid: number;
+  paymentStatus: PaymentStatusEnum | string;
+}) => {
+  return await axiosDefaultConfig.post(routes.POST_PAYMENT, {
+    data: payment,
   });
 };

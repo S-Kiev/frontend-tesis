@@ -6,8 +6,10 @@ import { selectUser } from 'redux/reducers/userSlice';
 import styles from './Consultation.module.scss';
 import { DotLoader } from 'react-spinners';
 import {
+  CashStack,
   ChevronLeft,
   CloudLightningRain,
+  CurrencyDollar,
   JournalCheck,
   Journals,
   PencilSquare,
@@ -26,11 +28,13 @@ import { toast } from 'react-toastify';
 import SuccessToast from 'components/toast/successToast';
 import ErrorToast from 'components/toast/errorToast';
 import { AlertModal } from 'components/modals/alertModal';
+import { PaymentConsultationModal } from 'components/modals/paymentConsultationModal';
 
 interface ConsultationProps {}
 
 const Consultation: FC<ConsultationProps> = () => {
   const [showModalCancel, setShowModalCancel] = useState<boolean>(false);
+  const [showModalPayment, setShowModalPayment] = useState<boolean>(false);
   const navigate = useNavigate();
   const { id } = useParams();
   const user = useSelector(selectUser);
@@ -166,6 +170,23 @@ const Consultation: FC<ConsultationProps> = () => {
                           Agregar Observaciones
                         </Button>
                       )}
+                      {dataPayments?.data?.data.length >= 1 ? (
+                        <Button variant="success" onClick={() => {}} className="d-none d-lg-block">
+                          <CashStack style={{ marginRight: '5px' }} />
+                          Liquidar deuda
+                        </Button>
+                      ) : (
+                        <Button
+                          variant="success"
+                          onClick={() => {
+                            setShowModalPayment(true);
+                          }}
+                          className="d-none d-lg-block"
+                        >
+                          <CurrencyDollar style={{ marginRight: '5px' }} />
+                          Agregar Pago
+                        </Button>
+                      )}
                     </>
                   ) : null}
                 </div>
@@ -220,6 +241,23 @@ const Consultation: FC<ConsultationProps> = () => {
                         Agregar Observaciones
                       </Button>
                     )}
+                    {dataPayments?.data?.data.length >= 1 ? (
+                      <Button variant="success" onClick={() => {}} className="d-lg-none mt-3">
+                        <CashStack style={{ marginRight: '5px' }} />
+                        Liquidar deuda
+                      </Button>
+                    ) : (
+                      <Button
+                        variant="success"
+                        onClick={() => {
+                          setShowModalPayment(true);
+                        }}
+                        className="d-lg-none mt-3"
+                      >
+                        <CurrencyDollar style={{ marginRight: '5px' }} />
+                        Agregar Pago
+                      </Button>
+                    )}
                   </>
                 ) : null}
               </div>
@@ -236,21 +274,29 @@ const Consultation: FC<ConsultationProps> = () => {
                 }
               </div>
               {
-                <AlertModal
-                  show={showModalCancel}
-                  showModal={setShowModalCancel}
-                  title={'Cancelar consulta'}
-                  body={
-                    <>
-                      ¿Está seguro que quiere <strong>cancelar</strong> esta consulta?
-                    </>
-                  }
-                  confirmBtn="Confirmar"
-                  cancelBtn="Cancelar"
-                  onAction={() => cancelConsultationMutation.mutate(id || '')}
-                  isDisabled={isDisabled}
-                  setIsDisabled={setIsDisabled}
-                />
+                <>
+                  <AlertModal
+                    show={showModalCancel}
+                    showModal={setShowModalCancel}
+                    title={'Cancelar consulta'}
+                    body={
+                      <>
+                        ¿Está seguro que quiere <strong>cancelar</strong> esta consulta?
+                      </>
+                    }
+                    confirmBtn="Confirmar"
+                    cancelBtn="Cancelar"
+                    onAction={() => cancelConsultationMutation.mutate(id || '')}
+                    isDisabled={isDisabled}
+                    setIsDisabled={setIsDisabled}
+                  />
+                  <PaymentConsultationModal
+                    show={showModalPayment}
+                    showModal={setShowModalPayment}
+                    consultatonId={id || ''}
+                    customerId={data?.customer?.data?.id || ''}
+                  />
+                </>
               }
             </>
           )}

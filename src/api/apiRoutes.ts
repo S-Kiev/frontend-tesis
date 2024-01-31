@@ -61,4 +61,5 @@ export const routes = {
   POST_MEASUREMENTS: 'measurements-customers',
   PUT_OBSERVATION: 'consultation-informations/{id}',
   PUT_MEASUREMENTS: 'measurements-customers/{id}',
+  POST_PAYMENT: 'customer-payments',
 };
