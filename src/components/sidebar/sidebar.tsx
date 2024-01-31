@@ -3,7 +3,6 @@ import { Menu, MenuItem, Sidebar, menuClasses } from 'react-pro-sidebar';
 import {
   ChevronDoubleLeft,
   ChevronDoubleRight,
-  HouseDoorFill,
   CalendarWeek,
   PersonFillGear,
   PeopleFill,
@@ -65,9 +64,6 @@ const SidebarMenu = ({ collapsed, toggled, handleToggleSidebar, handleCollapsedC
               </div>
             </MenuItem>
           )}
-          <MenuItem component={<Link to="/app/home" className="link" />} icon={<HouseDoorFill />}>
-            Home
-          </MenuItem>
           <MenuItem component={<Link to="/app/consultations" />} icon={<CalendarWeek />}>
             Consultas
           </MenuItem>

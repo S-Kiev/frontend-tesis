@@ -3,7 +3,6 @@ import { Route, Routes } from 'react-router-dom';
 import { isLoggedIn, resetStorageData } from 'util/auth';
 import NoMatch from './NoMatch';
 import SidebarMenu from 'components/sidebar/sidebar';
-import Home from './Home';
 import Consultations from './Consultations/Consultations';
 import Equipments from './Equipments/Equipments';
 import Treatments from './Treatments/Treatments';
@@ -67,7 +66,6 @@ const Layout: FC<LayoutProps> = () => {
             />
           }
         >
-          <Route path="home" element={<Home />} />
           <Route path="consultations" element={<Consultations />} />
           <Route path="consultations/create" element={<ConsultationCreate />} />
           <Route path="consultations/:id" element={<Consultation />} />

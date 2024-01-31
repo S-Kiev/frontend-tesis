@@ -54,7 +54,7 @@ const Login: FC<LoginProps> = () => {
 
   useEffect(() => {
     if (isLoggedIn()) {
-      navigate('/app/home');
+      navigate('/app/consultations');
     }
   }, [navigate]);
 
@@ -85,7 +85,7 @@ const Login: FC<LoginProps> = () => {
           role: data.data.role.name,
         };
         dispatch(setUser(authUser));
-        navigate('/app/home');
+        navigate('/app/consultations');
       }
     },
   });
