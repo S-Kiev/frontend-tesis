@@ -63,4 +63,6 @@ export const routes = {
   PUT_MEASUREMENTS: 'measurements-customers/{id}',
   POST_PAYMENT: 'customer-payments',
   PUT_PAYMENT: 'customer-payments/{id}',
+  SEND_CODE: 'user/sendCode',
+  RESET_PASSWORD: 'user/changePasswordByWhatsapp',
 };
