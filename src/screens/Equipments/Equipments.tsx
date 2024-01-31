@@ -8,24 +8,33 @@ import { Role } from 'models/Roles';
 import { QueryKeys } from 'api/QueryKeys';
 import { useQuery } from '@tanstack/react-query';
 import { getEquipments } from 'api/equipment';
-import { CloudLightningRain, DatabaseSlash, SendSlash } from 'react-bootstrap-icons';
+import { CloudLightningRain, DatabaseSlash, FunnelFill, SendSlash } from 'react-bootstrap-icons';
 import Search from 'components/search/search';
 import { DotLoader } from 'react-spinners';
 import PaginationComponent from 'components/pagination/pagination';
 import { defaultPageSize } from 'api/paginationConfig';
 import EquipmentsTable from 'components/equipmentsTable/equipmentsTable';
+import { EquipmentsFilterModal } from 'components/modals/equipmentsFilterModal';
 
 interface EquipmentsProps {}
 
 const Equipments: FC<EquipmentsProps> = () => {
   const [search, setSearch] = useState<string>('');
   const [page, setPage] = useState<number>(1);
+  const [showFilter, setShowFilter] = useState<boolean>(false);
+  const [filter, setFilter] = useState<any>({
+    available: true,
+    occupied: true,
+    rented: true,
+    broken: true,
+    outOfUse: true,
+  });
   const navigate = useNavigate();
   const user = useSelector(selectUser);
 
   const { data, error, isLoading } = useQuery({
-    queryKey: [QueryKeys.Equipments, search, page],
-    queryFn: () => getEquipments(page, search),
+    queryKey: [QueryKeys.Equipments, search, page, filter],
+    queryFn: () => getEquipments(page, search, filter),
   });
 
   return (
@@ -56,6 +65,17 @@ const Equipments: FC<EquipmentsProps> = () => {
           {!error ? (
             <div className={styles.filters}>
               <Search placeholder="Buscar por nombre o id equipo" onChange={e => setSearch(e)} width={300} />
+              <div>
+                <Button
+                  variant="success"
+                  onClick={() => {
+                    setShowFilter(true);
+                  }}
+                  className="d-none d-lg-block me-3"
+                >
+                  <FunnelFill /> Filtros Equipos
+                </Button>
+              </div>
             </div>
           ) : null}
         </>
@@ -97,6 +117,9 @@ const Equipments: FC<EquipmentsProps> = () => {
           </div>
         )
       )}
+      <>
+        <EquipmentsFilterModal show={showFilter} showModal={setShowFilter} filters={filter} setFilters={setFilter} />
+      </>
     </div>
   );
 };
