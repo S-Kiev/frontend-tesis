@@ -15,7 +15,7 @@ const PaymentStatus: FC<PaymentStatusProps> = ({ status }) => {
   const statusColorMapper = {
     0: green,
     1: yellow,
-    3: red,
+    2: red,
   };
 
   return (

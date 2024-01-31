@@ -6,8 +6,10 @@ import { selectUser } from 'redux/reducers/userSlice';
 import styles from './Consultation.module.scss';
 import { DotLoader } from 'react-spinners';
 import {
+  CashStack,
   ChevronLeft,
   CloudLightningRain,
+  CurrencyDollar,
   JournalCheck,
   Journals,
   PencilSquare,
@@ -20,17 +22,22 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { QueryKeys } from 'api/QueryKeys';
 import { getConsultingRoomsHistoryByConsultation } from 'api/consultingRoom';
 import { ConsultationStatusEnum } from 'models/ConsultationStatus';
-import { cancelConsultation, getConsultationsInfoByConsultation } from 'api/consultation';
+import { SettleDebtPayment, cancelConsultation, getConsultationsInfoByConsultation } from 'api/consultation';
 import { getCustomersPaymentsByConsultation } from 'api/customers';
 import { toast } from 'react-toastify';
 import SuccessToast from 'components/toast/successToast';
 import ErrorToast from 'components/toast/errorToast';
 import { AlertModal } from 'components/modals/alertModal';
+import { PaymentConsultationModal } from 'components/modals/paymentConsultationModal';
+import { PaymentStatusEnum } from 'models/paymentStatus';
 
 interface ConsultationProps {}
 
 const Consultation: FC<ConsultationProps> = () => {
   const [showModalCancel, setShowModalCancel] = useState<boolean>(false);
+  const [showModalPayment, setShowModalPayment] = useState<boolean>(false);
+  const [showModalSettleDebt, setShowModalSettleDebt] = useState<boolean>(false);
+  const [isDisabledSettleDebt, setIsDisabledSettleDebt] = useState<boolean>(false);
   const navigate = useNavigate();
   const { id } = useParams();
   const user = useSelector(selectUser);
@@ -83,6 +90,27 @@ const Consultation: FC<ConsultationProps> = () => {
         style: { borderRadius: '10px' },
       });
       setIsDisabled(false);
+    },
+  });
+
+  const settleDebtPaymentMutation = useMutation({
+    mutationFn: SettleDebtPayment,
+    mutationKey: [QueryKeys.SettleDebtPayment, id],
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [QueryKeys.CustomersPaymentsByConsultation, id],
+      });
+      toast(<SuccessToast message={`Pago liquidado con éxito`} hour />, {
+        style: { borderRadius: '10px' },
+      });
+      setIsDisabledSettleDebt(false);
+      setShowModalSettleDebt(false);
+    },
+    onError: () => {
+      toast(<ErrorToast message={`Ha ocurrido un error al liquidar el pago, vuelva a intentarlo`} />, {
+        style: { borderRadius: '10px' },
+      });
+      setIsDisabledSettleDebt(false);
     },
   });
 
@@ -166,6 +194,31 @@ const Consultation: FC<ConsultationProps> = () => {
                           Agregar Observaciones
                         </Button>
                       )}
+                      {dataPayments?.data?.data.length >= 1 ? (
+                        dataPayments?.data?.data[0]?.attributes?.paymentStatus !== PaymentStatusEnum.total && (
+                          <Button
+                            variant="success"
+                            onClick={() => {
+                              setShowModalSettleDebt(true);
+                            }}
+                            className="d-none d-lg-block"
+                          >
+                            <CashStack style={{ marginRight: '5px' }} />
+                            Liquidar deuda
+                          </Button>
+                        )
+                      ) : (
+                        <Button
+                          variant="success"
+                          onClick={() => {
+                            setShowModalPayment(true);
+                          }}
+                          className="d-none d-lg-block"
+                        >
+                          <CurrencyDollar style={{ marginRight: '5px' }} />
+                          Agregar Pago
+                        </Button>
+                      )}
                     </>
                   ) : null}
                 </div>
@@ -220,6 +273,31 @@ const Consultation: FC<ConsultationProps> = () => {
                         Agregar Observaciones
                       </Button>
                     )}
+                    {dataPayments?.data?.data.length >= 1 ? (
+                      dataPayments?.data?.data[0]?.attributes?.paymentStatus !== PaymentStatusEnum.total && (
+                        <Button
+                          variant="success"
+                          onClick={() => {
+                            setShowModalSettleDebt(true);
+                          }}
+                          className="d-lg-none mt-3"
+                        >
+                          <CashStack style={{ marginRight: '5px' }} />
+                          Liquidar deuda
+                        </Button>
+                      )
+                    ) : (
+                      <Button
+                        variant="success"
+                        onClick={() => {
+                          setShowModalPayment(true);
+                        }}
+                        className="d-lg-none mt-3"
+                      >
+                        <CurrencyDollar style={{ marginRight: '5px' }} />
+                        Agregar Pago
+                      </Button>
+                    )}
                   </>
                 ) : null}
               </div>
@@ -236,21 +314,44 @@ const Consultation: FC<ConsultationProps> = () => {
                 }
               </div>
               {
-                <AlertModal
-                  show={showModalCancel}
-                  showModal={setShowModalCancel}
-                  title={'Cancelar consulta'}
-                  body={
-                    <>
-                      ¿Está seguro que quiere <strong>cancelar</strong> esta consulta?
-                    </>
-                  }
-                  confirmBtn="Confirmar"
-                  cancelBtn="Cancelar"
-                  onAction={() => cancelConsultationMutation.mutate(id || '')}
-                  isDisabled={isDisabled}
-                  setIsDisabled={setIsDisabled}
-                />
+                <>
+                  <AlertModal
+                    show={showModalCancel}
+                    showModal={setShowModalCancel}
+                    title={'Cancelar consulta'}
+                    body={
+                      <>
+                        ¿Está seguro que quiere <strong>cancelar</strong> esta consulta?
+                      </>
+                    }
+                    confirmBtn="Confirmar"
+                    cancelBtn="Cancelar"
+                    onAction={() => cancelConsultationMutation.mutate(id || '')}
+                    isDisabled={isDisabled}
+                    setIsDisabled={setIsDisabled}
+                  />
+                  <PaymentConsultationModal
+                    show={showModalPayment}
+                    showModal={setShowModalPayment}
+                    consultatonId={id || ''}
+                    customerId={data?.customer?.data?.id || ''}
+                  />
+                  <AlertModal
+                    show={showModalSettleDebt}
+                    showModal={setShowModalSettleDebt}
+                    title={'Liquidar deuda'}
+                    body={
+                      <>
+                        ¿Está seguro que quiere <strong>liquidar</strong> esta deuda?
+                      </>
+                    }
+                    confirmBtn="Aceptar"
+                    cancelBtn="Cancelar"
+                    onAction={() => settleDebtPaymentMutation.mutate(dataPayments?.data?.data[0]?.id || '')}
+                    isDisabled={isDisabledSettleDebt}
+                    setIsDisabled={setIsDisabledSettleDebt}
+                  />
+                </>
               }
             </>
           )}
