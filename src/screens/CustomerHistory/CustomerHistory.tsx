@@ -197,7 +197,7 @@ const CustomerHistory: FC<CustomerHistoryProps> = () => {
           <DotLoader color="rgb(159,213,177)" />
         </div>
       ) : null}
-      {!isLoading && !error && !isLoadingPayments && !errorPayments && data && data?.data?.data.length !== 0 ? (
+      {!isLoading && !error && !isLoadingPayments && !errorPayments && data && data?.data?.data?.length !== 0 ? (
         <>
           {<CustomerHistoryTable data={parseCustumerHistoryData(data?.data?.data, dataPayments?.data?.data)} />}
           {data?.data?.meta?.pagination?.total > defaultPageSize && (
