@@ -1,0 +1,60 @@
+@import 'colors.scss';
+
+.titleTd {
+  vertical-align: middle;
+}
+
+p {
+  font-size: 0.833rem;
+  line-height: 16.6px;
+  font-weight: 400;
+  margin: 0;
+}
+
+p.fw600 {
+  font-weight: 600;
+}
+
+p.opacity07 {
+  opacity: 0.7;
+}
+
+.textEllipsis {
+  display: inline !important;
+  width: 220px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.divPopup {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.popup {
+  width: 150px;
+
+  .option {
+    display: flex;
+    align-items: center;
+
+    p {
+      margin-left: 13px;
+      white-space: nowrap;
+    }
+  }
+
+  .optionDelete {
+    @extend .option;
+
+    p {
+      color: $danger;
+    }
+  }
+}

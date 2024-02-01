@@ -1,0 +1,72 @@
+//Neutrals and colors
+$neutral_900: rgba(35, 51, 69, 1); // #233345
+$neutral_800: rgba(53, 72, 93, 1); // #35485D
+$neutral_800_01: rgba(53, 72, 93, 0.1); //#35485D opacity 0.1
+$neutral_700: rgba(68, 90, 115, 1);
+$neutral_600: rgba(126, 126, 126, 1); //#7E7E7E
+$neutral_500: rgba(180, 192, 214, 1); // #B4C0D6
+$neutral_400: rgba(209, 217, 233, 1);
+$neutral_300: rgba(225, 230, 239, 1); // #e1e6ef
+$neutral_200: rgba(241, 243, 249, 1); //#f1f3f9
+$neutral_200_linear_gradient: linear-gradient(0deg, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.25)), $neutral_200;
+$neutral_100: rgba(248, 249, 252, 1);
+$neutral_50: rgba(250, 252, 254, 1);
+$neutral: rgba(255, 255, 255, 1);
+$neutral_65: rgba(255, 255, 255, 0.65);
+$neutral_20: #dee2e6;
+
+$primary: rgba(47, 111, 237, 1); //#2f6fed
+$primary_50: #eff6ff;
+$primary_100: rgba(228, 243, 255, 1); // #E4F3FF
+$primary_700: rgb(46, 110, 237, 1); // #2e6eed
+$primary_800: rgba(29, 91, 214, 1);
+$primary_900: rgba(30, 78, 174, 1);
+
+$primary_green: rgba(59, 143, 55, 1);
+$secondary: rgba(0, 185, 107, 1);
+$secondary_100: rgba(232, 245, 232, 1);
+$secondary_200: rgb(203, 245, 203);
+$secondary_800: rgba(0, 167, 94, 1); //#00A75E
+$secondary_900: rgba(0, 134, 71, 1);
+
+$success: rgba(8, 135, 93, 1);
+$success_100: rgba(237, 253, 248, 1);
+$success_200: #4db178;
+$success_800: #04724d;
+$success_900: #066042;
+
+$warning: rgba(178, 94, 9, 1);
+$warning_100: rgba(255, 248, 235, 1);
+$warning_700: rgb(179, 94, 9);
+$warning_800: #96530f;
+$warning_900: #80460d;
+
+$danger: #dc3545;
+$danger_100: rgba(254, 241, 242, 1);
+$danger_800: #ba2532;
+$danger_900: #981b25;
+
+$info: #0dcaf0;
+$light: #f8f9fa;
+$dark: #212529;
+
+$accent_1_light: #56a2f8;
+$accent_2_dark: #e67223;
+
+//Text
+$text_primary: #111112;
+$text_secondary: rgb(64, 68, 72);
+$text_disabled: rgba(39, 44, 48, 0.55);
+
+//Elevations
+$elevation_50: 0px 3px 3px rgba(0, 0, 0, 0.04);
+$elevation_100: 0px 2px 8px rgba(0, 0, 0, 0.09);
+$elevation_200: 0px 4px 12px rgba(0, 0, 0, 0.09);
+$elevation_300: 0px 8px 16px rgba(0, 0, 0, 0.09);
+$elevation_400: 0px 8px 32px rgba(0, 0, 0, 0.09);
+$elevation-datepicker: 0 2px 6px 0 rgba(0, 0, 0, 0.3);
+
+//Gradients
+$gradient_primary: linear-gradient(to right, #79d19f, #4db178, rgb(81, 131, 102));
+$gradient_primary_webkit: -webkit-linear-gradient(to right, #79d19f, #4db178, rgb(81, 131, 102));
+$neutral_50_linear_gradient: linear-gradient(0deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), $primary_100;

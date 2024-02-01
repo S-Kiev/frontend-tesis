@@ -1,0 +1,14 @@
+@import 'colors.scss';
+
+.cardEquipment {
+  max-width: 450px;
+
+  .text {
+    font-size: 18px;
+    color: $text_secondary;
+  }
+
+  p {
+    font-size: 17px;
+  }
+}

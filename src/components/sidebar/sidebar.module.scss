@@ -1,0 +1,12 @@
+.titleText {
+  padding: 9px;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.conteiner {
+  width: calc(100% - 210px);
+  height: calc(100vh - 50px);
+  overflow-y: auto;
+  margin-top: 50px;
+}

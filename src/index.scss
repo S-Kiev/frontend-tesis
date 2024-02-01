@@ -1,0 +1,71 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@100;200;300;400;500;600&display=swap');
+@import 'colors.scss';
+
+body {
+  div {
+    font-family: 'Noto Sans', sans-serif;
+  }
+  margin: 0;
+  font-family: 'Noto Sans', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: $text_primary;
+
+  p {
+    font-family: 'Noto Sans', sans-serif;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5 {
+    color: $text_primary;
+    font-family: 'Noto Sans', sans-serif;
+    font-weight: 400;
+    strong {
+      font-weight: 600;
+    }
+  }
+  h1 {
+    font-size: 39.81px;
+  }
+  h2 {
+    font-size: 33.18px;
+  }
+  h3 {
+    font-size: 27.65px;
+  }
+  h4 {
+    font-size: 23.04px;
+  }
+  h5 {
+    font-size: 19.2px;
+  }
+
+  //base clases for elevation
+
+  .elevation-100 {
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.09);
+    border-radius: 8px;
+  }
+
+  .elevation-200 {
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.09);
+    border-radius: 8px;
+  }
+
+  .elevation-300 {
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.09);
+    border-radius: 8px;
+  }
+
+  .elevation-400 {
+    box-shadow: 0px 8px 32px rgba(0, 0, 0, 0.09);
+    border-radius: 8px;
+  }
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
