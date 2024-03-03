@@ -6,7 +6,7 @@ import { ChevronLeft, ClockHistory, CloudLightningRain, PencilSquare, PersonFill
 import { useNavigate, useParams } from 'react-router-dom';
 import { DotLoader } from 'react-spinners';
 import styles from './Customer.module.scss';
-import { Button, ButtonGroup, Dropdown, DropdownButton } from 'react-bootstrap';
+import { Button, ButtonGroup, Dropdown } from 'react-bootstrap';
 import { selectUser } from 'redux/reducers/userSlice';
 import { useSelector } from 'react-redux';
 import { Role } from 'models/Roles';
@@ -109,14 +109,6 @@ const Customer: FC<CustomerProps> = () => {
                       Editar
                     </Button>
                   ) : null}
-                  <Button
-                    variant="success"
-                    onClick={() => navigate(`/app/customers/${id}/history`)}
-                    className="d-none d-lg-block"
-                  >
-                    <ClockHistory style={{ marginRight: '5px' }} />
-                    Ver Historial Consultas
-                  </Button>
                   <Dropdown as={ButtonGroup} className="d-none d-lg-block">
                     <Button variant="success" onClick={() => {}}>
                       <PersonFillDown style={{ marginRight: '5px' }} />
@@ -140,6 +132,14 @@ const Customer: FC<CustomerProps> = () => {
                       </Dropdown.Item>
                     </Dropdown.Menu>
                   </Dropdown>
+                  <Button
+                    variant="success"
+                    onClick={() => navigate(`/app/customers/${id}/history`)}
+                    className="d-none d-lg-block"
+                  >
+                    <ClockHistory style={{ marginRight: '5px' }} />
+                    Ver Historial Consultas
+                  </Button>
                 </div>
               </div>
               <div className="d-grid gap-2">

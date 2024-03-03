@@ -79,15 +79,17 @@ const RowTreatmentsTable: FC<RowTreatmentsTableProps> = ({ treatmentData, search
                   <PencilSquare />
                   <p>Editar tratamiento</p>
                 </div>
-                <div
-                  className={`${styles.optionDelete} mt-3`}
-                  onClick={() => {
-                    setShowModal(true);
-                  }}
-                >
-                  <SlashCircle color="#dc3545" />
-                  <p>Desactivar tratamiento</p>
-                </div>
+                {!treatmentData?.attributes?.deactivationDate && (
+                  <div
+                    className={`${styles.optionDelete} mt-3`}
+                    onClick={() => {
+                      setShowModal(true);
+                    }}
+                  >
+                    <SlashCircle color="#dc3545" />
+                    <p>Desactivar tratamiento</p>
+                  </div>
+                )}
               </>
             )}
           </Tooltip>

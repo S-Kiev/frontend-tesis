@@ -93,16 +93,18 @@ const Treatment: FC<TreatmentProps> = () => {
                         <PencilSquare style={{ marginRight: '5px' }} />
                         Editar
                       </Button>
-                      <Button
-                        variant="danger"
-                        onClick={() => {
-                          setShowModal(true);
-                        }}
-                        className="d-none d-lg-block"
-                      >
-                        <SlashCircle style={{ marginRight: '5px' }} />
-                        Descativar tratamiento
-                      </Button>
+                      {!data?.data?.data?.attributes?.deactivationDate && (
+                        <Button
+                          variant="danger"
+                          onClick={() => {
+                            setShowModal(true);
+                          }}
+                          className="d-none d-lg-block"
+                        >
+                          <SlashCircle style={{ marginRight: '5px' }} />
+                          Desactivar tratamiento
+                        </Button>
+                      )}
                     </>
                   ) : null}
                 </div>
@@ -118,16 +120,18 @@ const Treatment: FC<TreatmentProps> = () => {
                       <PencilSquare style={{ marginRight: '5px' }} />
                       Editar
                     </Button>
-                    <Button
-                      variant="danger"
-                      onClick={() => {
-                        setShowModal(true);
-                      }}
-                      className="d-lg-none mt-3"
-                    >
-                      <SlashCircle style={{ marginRight: '5px' }} />
-                      Descativar tratamiento
-                    </Button>
+                    {!data?.data?.data?.attributes?.deactivationDate && (
+                      <Button
+                        variant="danger"
+                        onClick={() => {
+                          setShowModal(true);
+                        }}
+                        className="d-lg-none mt-3"
+                      >
+                        <SlashCircle style={{ marginRight: '5px' }} />
+                        Desactivar tratamiento
+                      </Button>
+                    )}
                   </>
                 ) : null}
               </div>
