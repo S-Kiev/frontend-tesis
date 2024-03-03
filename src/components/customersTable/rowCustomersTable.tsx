@@ -1,15 +1,9 @@
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import styles from './customersTable.module.scss';
 import { useNavigate } from 'react-router-dom';
-import { ThreeDotsVertical, Eye, PencilSquare, Trash3 } from 'react-bootstrap-icons';
+import { ThreeDotsVertical, Eye, PencilSquare } from 'react-bootstrap-icons';
 import Tooltip from 'components/Popup/tooltip';
 import { Role } from 'models/Roles';
-import { AlertModal } from 'components/modals/alertModal';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { QueryKeys } from 'api/QueryKeys';
-import { toast } from 'react-toastify';
-import SuccessToast from 'components/toast/successToast';
-import ErrorToast from 'components/toast/errorToast';
 import { CustomerData } from 'models/Customer';
 import { useSelector } from 'react-redux';
 import { selectUser } from 'redux/reducers/userSlice';
@@ -20,35 +14,8 @@ interface RowCustomersTableProps {
 }
 
 const RowCustomersTable: FC<RowCustomersTableProps> = ({ customerData, search }) => {
-  //const [showBlockedModal, setShowBlockedModal] = useState(false);
-  //const [isDisabled, setIsDisabled] = useState(false);
   const navigate = useNavigate();
   const user = useSelector(selectUser);
-  //const queryClient = useQueryClient();
-
-  /*const blockedUserMutation = useMutation({
-    mutationFn: changeStateUser,
-    mutationKey: [QueryKeys.PutUser, userData?.id],
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: [QueryKeys.Users, search],
-      });
-      toast(<SuccessToast message={`Usuario ${userData?.blocked ? 'habilitado' : 'bloqueado'} con éxito`} hour />, {
-        style: { borderRadius: '10px' },
-      });
-      setIsDisabled(false);
-      setShowBlockedModal(false);
-    },
-    onError: () => {
-      toast(
-        <ErrorToast message={`Ha ocurrido un error al ${userData?.blocked ? 'habilitar' : 'bloquear'} el usuario`} />,
-        {
-          style: { borderRadius: '10px' },
-        },
-      );
-      setIsDisabled(false);
-    },
-  });*/
 
   return (
     <tr key={customerData?.id}>
@@ -95,30 +62,11 @@ const RowCustomersTable: FC<RowCustomersTableProps> = ({ customerData, search })
                   <PencilSquare />
                   <p>Editar cliente</p>
                 </div>
-                <div className={`${styles.optionDelete} mt-3`} onClick={() => {}}>
-                  <Trash3 color="#dc3545" />
-                  <p>Eliminar cliente</p>
-                </div>
               </>
             )}
           </Tooltip>
         </div>
       </td>
-      {/*<AlertModal
-        show={showBlockedModal}
-        showModal={setShowBlockedModal}
-        title={userData?.blocked ? 'Habilitar usuario' : 'Bloquear usuario'}
-        body={
-          <>
-            ¿Está seguro que quiere <strong>{`${userData?.blocked ? 'habilitar' : 'bloquear'}`}</strong> este usuario?
-          </>
-        }
-        confirmBtn="Aceptar"
-        cancelBtn="Cancelar"
-        onAction={() => blockedUserMutation.mutate({ userId: userData?.id || '', blocked: !userData?.blocked })}
-        isDisabled={isDisabled}
-        setIsDisabled={setIsDisabled}
-    />*/}
     </tr>
   );
 };

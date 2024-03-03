@@ -6,7 +6,6 @@ import styles from './customerInfo.module.scss';
 import { format } from 'date-fns';
 import { CheckCircle, XCircle } from 'react-bootstrap-icons';
 import ModalImage from 'react-modal-image';
-import { faIR } from 'date-fns/locale';
 
 interface CustomerInfoProps {
   customerData: CustomerGetData;

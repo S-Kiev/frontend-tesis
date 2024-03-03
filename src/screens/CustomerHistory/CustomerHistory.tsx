@@ -213,7 +213,7 @@ const CustomerHistory: FC<CustomerHistoryProps> = () => {
         </>
       ) : null}
       <MeasurementsModal show={showModal} showModal={setShowModal} customerMesurements={dataMeasurements?.data?.data} />
-      <div style={{ marginTop: '500px' }}>
+      <div style={{ marginTop: '1000px' }}>
         <HiddenCustomerHistory data={parseCustumerHistoryData(dataHidden?.data?.data, dataPayments?.data?.data)} />
       </div>
     </div>
