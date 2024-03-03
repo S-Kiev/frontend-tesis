@@ -1,5 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { QueryKeys } from 'api/QueryKeys';
 import { createPayment } from 'api/consultation';
 import ErrorToast from 'components/toast/errorToast';
 import SuccessToast from 'components/toast/successToast';
@@ -43,12 +44,16 @@ export const PaymentConsultationModal: FC<PaymentConsultationModalProps> = ({
       customerPayment: 0,
     },
   });
+  const queryClient = useQueryClient();
 
   const mutationCreatePayment = useMutation({
     mutationFn: createPayment,
     onSuccess: () => {
       toast(<SuccessToast message={`Pago registrado con éxito`} hour />, {
         style: { borderRadius: '10px' },
+      });
+      queryClient.invalidateQueries({
+        queryKey: [QueryKeys.CustomersPaymentsByConsultation, consultatonId],
       });
       setIsDisabled(false);
       showModal(false);
