@@ -188,7 +188,7 @@ const Customer: FC<CustomerProps> = () => {
               <div className={styles.form}>
                 {<CustomerInfo customerData={data?.data?.data} defaultActiveKey={['0']} />}
               </div>
-              <div style={{ marginTop: '500px' }}>{<HiddenCustomer data={data?.data?.data} />}</div>
+              <div style={{ marginTop: '1000px' }}>{<HiddenCustomer data={data?.data?.data} />}</div>
             </>
           )}
         </>
