@@ -16,7 +16,13 @@ const customContentType = (config: AxiosRequestConfig) => {
 
 axiosDefaultConfig.interceptors.request.use(
   function (config: any) {
-    if (!config.url?.includes('auth/local')) {
+    if (
+      !(
+        config.url?.includes('auth/local') ||
+        config.url?.includes('user/sendCode') ||
+        config.url?.includes('user/changePasswordByWhatsapp')
+      )
+    ) {
       const newConf = {
         ...config,
         headers: {

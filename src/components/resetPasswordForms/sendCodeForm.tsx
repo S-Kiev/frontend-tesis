@@ -40,7 +40,7 @@ const SendCodeForm: FC<SendCodeFormProps> = ({ setStep, setUser }) => {
   const sendCodeMutation = useMutation({
     mutationFn: sendCode,
     onSuccess: (data: any) => {
-      setUser(data?.response?.data?.id);
+      setUser(data?.data?.userId);
       toast(<SuccessToast message={`Código enviado con éxito`} hour />, {
         style: { borderRadius: '10px' },
       });

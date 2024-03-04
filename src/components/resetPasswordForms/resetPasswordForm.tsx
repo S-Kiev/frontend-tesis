@@ -68,10 +68,10 @@ const ResetPasswordForm: FC<ResetPasswordFormProps> = ({ user, setStep }) => {
       navigate(`/login`);
     },
     onError: (data: any) => {
-      if (data?.response?.data?.message === 'Codigo incorrecto') {
+      if (data?.response?.data?.message === 'código incorrecto') {
         setAlert({ alert: true, message: 'El codigo ingresado es incorrecto, pruebe nuevamente' });
       }
-      if (data?.response?.data?.message === 'Codigo expirado') {
+      if (data?.response?.data?.message === 'Su código ha expirado, vuelva a solicitar otro') {
         setAlert({
           alert: true,
           message: 'El codigo ingresado ya expiro, solicité el envio de otro codigo de seguridad',
